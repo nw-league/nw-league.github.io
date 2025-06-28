@@ -115,15 +115,15 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                         const rowClass = index % 2 === 0 ? faction === 'Marauder'
                             ? 'bg-green-800'
                             : faction === 'Syndicate'
-                                ? 'bg-yellow-800'
+                                ? 'bg-purple-800'
                                 : faction === 'Covenant'
-                                    ? 'bg-purple-800'
+                                    ? 'bg-yellow-800'
                                     : 'bg-gray-800' : faction === 'Marauder'
                             ? 'bg-green-900'
                             : faction === 'Syndicate'
-                                ? 'bg-yellow-900'
+                                ? 'bg-purple-900'
                                 : faction === 'Covenant'
-                                    ? 'bg-purple-900'
+                                    ? 'bg-yellow-900'
                                     : 'bg-gray-800';
 
                         return (
