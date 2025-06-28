@@ -1,4 +1,4 @@
-import { Handshake, Skull, Sword, FirstAid, Fire } from "phosphor-react";
+import { Handshake, Skull, Sword, FirstAid, Fire, Crown } from "phosphor-react";
 import StatWithIcon from "./statwithicon";
 import type { StatSummary } from "../../types/leaderboard";
 import type { Faction } from "../../types/faction";
@@ -8,9 +8,10 @@ interface WarResultsSummaryProp {
     summary: StatSummary,
     faction: Faction,
     isAttacker: boolean,
+    isWinner: boolean
 }
 
-const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, isAttacker }) => {
+const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, isAttacker, isWinner }) => {
     const border = false ? "border-3" : "border-none"
     let color = 'bg-gray-700';
     if (faction === 'Marauder') {
@@ -21,10 +22,11 @@ const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, 
         color = 'bg-purple-700'
     }
     const label = isAttacker ? "Attacker" : "Defender"
+    const glow = isWinner ? "shadow-[inset_0_0_50px_rgba(255,215,0,0.6)]" : "";
     return (
         <div className={``}>
-            <div className="bg-gray-700 rounded-lg">
-                <div className="text-gray-200 p-2 text-center">{label}</div>
+            <div className={`bg-gray-700 rounded-lg ${glow}`}>
+                <div className="flex w-full text-gray-200 p-2 justify-center items-center">{isWinner && <Crown weight={"fill"} />}   {label}</div>
                 <div className={`rounded-lg ${color} ${border} border-yellow-500 text-center text-gray-200 p-1`}>
                     <div className="text-3xl font-bold">{summary.name}</div>
                     <div>{faction}</div>

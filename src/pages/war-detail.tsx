@@ -42,10 +42,10 @@ const WarDetail: React.FC = () => {
 
                 <div className="grid grid-cols-2 w-full gap-8">
                     <div className="h-fit">
-                        <WarResultsCompany summary={attackerSummary} faction={attackerFaction} isAttacker={true} />
+                        <WarResultsCompany summary={attackerSummary} faction={attackerFaction} isAttacker={true} isWinner={war.winner === war.attacker} />
                     </div>
                     <div className="h-fit">
-                        <WarResultsCompany summary={defenderSummary} faction={defenderFaction} isAttacker={false} />
+                        <WarResultsCompany summary={defenderSummary} faction={defenderFaction} isAttacker={false} isWinner={war.winner === war.defender} />
                     </div>
                 </div>
                 <GroupsSummary attackerName={attacker} attackerGroups={attackerGroupSummary} defenderName={defender} defenderGroups={defenderGroupSummary} />
