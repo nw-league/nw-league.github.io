@@ -43,7 +43,7 @@ const WarDetail: React.FC = () => {
                     map={war.map}
                 />
 
-                <div className="grid grid-cols-2 w-full gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-8">
                     <div className="h-fit">
                         <WarResultsCompany summary={attackerSummary} faction={attackerFaction} isAttacker={true} isWinner={war.winner === war.attacker} />
                     </div>
