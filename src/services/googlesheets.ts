@@ -7,7 +7,7 @@ const kQuery = "{query}"
 
 
 
-export type DataType = string | number | boolean | null;
+export type DataType = string | number | boolean | Date | null;
 
 export async function fetchTableFromGoogleSheets(
     sheetId: string,

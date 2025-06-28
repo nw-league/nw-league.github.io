@@ -1,7 +1,9 @@
 import type { Faction } from "../types/faction";
 import type { Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
-import type { Roster } from "../types/roster";
+import type { Group, Roster } from "../types/roster";
+import type { War } from "../types/war";
 import { joinCondition } from "../utils/querybuilder";
+import { convertFromGoogleSheetsDateString } from "../utils/time";
 import { fetchTableFromGoogleSheets } from "./googlesheets";
 
 const kLeaderboardSheetName = "leaderboards";
@@ -61,17 +63,23 @@ export async function getCompanyFaction(companyNames: string[]): Promise<Map<str
     return companyFactions;
 }
 
-export async function getRoster(warId: number): Promise<Roster> {
+export async function getRosters(warId: number): Promise<Map<string, Roster>> {
     const warStr = `${warId}`;
     const query = `SELECT A, B, C, D, E WHERE B=${warStr}`;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'groups', query);
 
-    const roster: Roster = { groups: new Map() };
-
+    const rosters = new Map<string, Roster>();
     for (const row of data) {
         const name = row[0] as string;
         const role = row[4] as string;
         const group = row[2] as number;
+        const company = row[3] as string;
+
+        let roster = rosters.get(company);
+        if (!roster) {
+            roster = { groups: new Map<number, Group>() };
+            rosters.set(company, roster);
+        }
 
         let rosterGroup = roster.groups.get(group);
         if (!rosterGroup) {
@@ -81,9 +89,23 @@ export async function getRoster(warId: number): Promise<Roster> {
         rosterGroup.players.push({ name, role });
     }
 
-    return roster;
+    return rosters;
 }
 
+export async function getWar(warId: number): Promise<War> {
+    const warStr = `${warId}`;
+    const query = `SELECT B, C, D, E, F, I WHERE A=${warStr}`;
+    const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
+
+    const date = convertFromGoogleSheetsDateString(data[0][0] as string)!;
+    const map = data[0][1] as string;
+    const attacker = data[0][2] as string;
+    const defender = data[0][3] as string;
+    const winner = data[0][4] as string;
+    const duration = data[0][5] as number;
+
+    return { date, map, attacker, defender, winner, duration };
+}
 
 export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, StatSummary> {
     const summaries = new Map<string, StatSummary>();
@@ -114,34 +136,33 @@ export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, Stat
     return summaries;
 }
 
-export function summarizeGroups(leaderboard: Leaderboard, roster: Roster): Map<number, StatSummary> {
-    const groupSummaries = new Map();
+export function summarizeGroups(leaderboard: Leaderboard, rosters: Map<string, Roster>): Map<string, Map<number, StatSummary>> {
+    const companyGroupSummaries = new Map();
 
-    for (let [n, _] of roster.groups) {
-        groupSummaries.set(n, {
-            name: `${n}`,
-            score: 0,
-            kills: 0,
-            deaths: 0,
-            assists: 0,
-            healing: 0,
-            damage: 0,
-        })
-    }
-
-    for (const entry of leaderboard.entries) {
-        for (const [n, group] of roster.groups) {
-            if (group.players.map(item => item.name).includes(entry.name)) {
-                const summary = groupSummaries.get(n);
-                summary.score += entry.score;
-                summary.kills += entry.kills;
-                summary.deaths += entry.deaths;
-                summary.assists += entry.assists;
-                summary.healing += entry.healing;
-                summary.damage += entry.damage;
+    for (const [company, roster] of rosters) {
+        let groupSummary = companyGroupSummaries.get(company);
+        if (!groupSummary) {
+            groupSummary = new Map<number, StatSummary>();
+            companyGroupSummaries.set(company, groupSummary);
+        }
+        for (const entry of leaderboard.entries) {
+            for (const [n, group] of roster.groups) {
+                if (group.players.some(player => player.name === entry.name)) {
+                    let summary = groupSummary.get(n);
+                    if (!summary) {
+                        summary = { name: `${n}`, score: 0, kills: 0, deaths: 0, assists: 0, healing: 0, damage: 0 };
+                        groupSummary.set(n, summary);
+                    }
+                    summary.score += entry.score;
+                    summary.kills += entry.kills;
+                    summary.deaths += entry.deaths;
+                    summary.assists += entry.assists;
+                    summary.healing += entry.healing;
+                    summary.damage += entry.damage;
+                }
             }
         }
     }
 
-    return groupSummaries;
+    return companyGroupSummaries;
 }

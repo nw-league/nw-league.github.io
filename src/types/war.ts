@@ -1,18 +1,9 @@
-import type { CaptureTimes } from "./captures";
-import type { Company } from "./company";
-import type { Leaderboard } from "./leaderboard";
-import type { Roster } from "./roster";
 
 export interface War {
-    id: number;
-    date: string;
+    date: Date;
     map: string;
-    attacker: Company;
-    attackerRoster: Roster;
+    attacker: string;
     defender: string;
-    defenderRoster: Roster;
-    winner: string | null;
+    winner: string;
     duration: number;
-    captures: CaptureTimes;
-    leaderboard: Leaderboard;
 }

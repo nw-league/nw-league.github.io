@@ -8,12 +8,14 @@ import {
     type ColumnDef,
     type SortingState,
 } from '@tanstack/react-table';
+import type { Faction } from "../../types/faction";
 
 type LeaderboardProps = {
-    leaderboard: Leaderboard
+    leaderboard: Leaderboard,
+    companies: Map<string, Faction>,
 };
 
-const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard }) => {
+const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies }) => {
     const [sorting, setSorting] = React.useState<SortingState>([
         { id: 'score', desc: true },
     ]);
@@ -107,21 +109,36 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard }) => {
                     }
                 </thead >
                 <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr
-                            key={row.id}
-                            className={row.index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800'}
-                        >
-                            {row.getVisibleCells().map(cell => (
-                                <td
-                                    key={cell.id}
-                                    className="p-3 border-b border-gray-700 text-sm"
-                                >
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
+                    {table.getRowModel().rows.map((row, index) => {
+                        const faction = companies.get(row.original.company);
+
+                        const rowClass = index % 2 === 0 ? faction === 'Marauder'
+                            ? 'bg-green-800'
+                            : faction === 'Syndicate'
+                                ? 'bg-yellow-800'
+                                : faction === 'Covenant'
+                                    ? 'bg-purple-800'
+                                    : 'bg-gray-800' : faction === 'Marauder'
+                            ? 'bg-green-900'
+                            : faction === 'Syndicate'
+                                ? 'bg-yellow-900'
+                                : faction === 'Covenant'
+                                    ? 'bg-purple-900'
+                                    : 'bg-gray-800';
+
+                        return (
+                            <tr key={row.id} className={rowClass}>
+                                {row.getVisibleCells().map(cell => (
+                                    <td
+                                        key={cell.id}
+                                        className="p-3 border-b border-gray-700 text-sm"
+                                    >
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
+                        );
+                    })}
                     {table.getRowModel().rows.length === 0 && (
                         <tr>
                             <td

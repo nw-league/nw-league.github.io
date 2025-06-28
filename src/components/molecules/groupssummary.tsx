@@ -8,19 +8,19 @@ import {
 import type { StatSummary } from '../../types/leaderboard';
 
 interface GroupsSummaryProps {
-    company1Name: string,
-    company2Name: string,
-    company1Groups?: Map<number, StatSummary>;
-    company2Groups?: Map<number, StatSummary>;
+    attackerName: string,
+    defenderName: string,
+    attackerGroups?: Map<number, StatSummary>;
+    defenderGroups?: Map<number, StatSummary>;
 }
 const GroupsSummary: React.FC<GroupsSummaryProps> = ({
-    company1Groups,
-    company2Groups,
-    company1Name,
-    company2Name,
+    attackerName,
+    defenderName,
+    attackerGroups,
+    defenderGroups,
 }) => {
     const [company, setCompany] = useState<number>(0);
-    const selectedGroups = company === 0 ? company1Groups : company2Groups;
+    const selectedGroups = company === 0 ? attackerGroups : defenderGroups;
 
     const groups: Array<StatSummary & { groupId: number }> = React.useMemo(() => {
         if (!selectedGroups) return [];
@@ -30,7 +30,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
                 groupId,
             }))
             .sort((a, b) => a.groupId - b.groupId);
-    }, [company, company1Groups, company2Groups]);
+    }, [company, attackerGroups, defenderGroups]);
 
     const columns = React.useMemo<ColumnDef<StatSummary & { groupId: number }>[]>(
         () => [
@@ -87,13 +87,13 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
                     onClick={() => setCompany(0)}
                     className={`px-4 py-2 rounded ${company === 0 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'}`}
                 >
-                    {company1Name}
+                    {attackerName}
                 </button>
                 <button
                     onClick={() => setCompany(1)}
                     className={`px-4 py-2 rounded ${company === 1 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'}`}
                 >
-                    {company2Name}
+                    {defenderName}
                 </button>
             </div>
             {selectedGroups ? (

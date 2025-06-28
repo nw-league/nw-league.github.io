@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Leaderboard, StatSummary } from "../types/leaderboard";
 import type { Faction } from "../types/faction";
-import { getCompanyFaction, getLeaderboard, getRoster, summarizeGroups, summarizeLeaderboard } from "../services/wardbservice";
+import { getCompanyFaction, getLeaderboard, getRosters, getWar, summarizeGroups, summarizeLeaderboard } from "../services/wardbservice";
 import type { Roster } from "../types/roster";
+import type { War } from "../types/war";
 
 export function useWarData(warId: number) {
     const [loading, setLoading] = useState(true);
@@ -10,8 +11,9 @@ export function useWarData(warId: number) {
     const [leaderboard, setLeaderboard] = useState<Leaderboard | null>(null);
     const [factions, setFactions] = useState<Map<string, Faction>>(new Map());
     const [summary, setSummary] = useState<Map<string, StatSummary>>(new Map());
-    const [roster, setRoster] = useState<Roster | null>(null);
-    const [groupSummary, setGroupSummary] = useState<Map<number, StatSummary>>(new Map());
+    const [rosters, setRosters] = useState<Map<string, Roster>>(new Map());
+    const [groupSummary, setGroupSummary] = useState<Map<string, Map<number, StatSummary>>>(new Map());
+    const [war, SetWar] = useState<War | null>(null);
 
     useEffect(() => {
         let cancelled = false;
@@ -24,15 +26,17 @@ export function useWarData(warId: number) {
                 const sum = summarizeLeaderboard(lb);
                 const companies = [...sum.keys()];
                 const f = await getCompanyFaction(companies);
-                const g = await getRoster(warId);
+                const g = await getRosters(warId);
                 const gs = summarizeGroups(lb, g);
+                const w = await getWar(warId);
                 if (cancelled) return;
 
                 setLeaderboard(lb);
                 setSummary(sum);
                 setFactions(f);
-                setRoster(g);
+                setRosters(g);
                 setGroupSummary(gs);
+                SetWar(w);
             } catch (err) {
                 if (!cancelled) setError(err);
             } finally {
@@ -44,5 +48,5 @@ export function useWarData(warId: number) {
         return () => { cancelled = true; };
     }, [warId]);
 
-    return { loading, error, leaderboard, factions, summary, groupSummary, roster };
+    return { loading, error, war, leaderboard, factions, summary, groupSummary, roster: rosters };
 }
