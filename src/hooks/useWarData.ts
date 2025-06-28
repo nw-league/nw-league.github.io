@@ -44,5 +44,5 @@ export function useWarData(warId: number) {
         return () => { cancelled = true; };
     }, [warId]);
 
-    return { loading, error, leaderboard, factions, summary, groupSummary };
+    return { loading, error, leaderboard, factions, summary, groupSummary, roster };
 }

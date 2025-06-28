@@ -32,7 +32,3 @@ export function useLeaderboard(warId: number) {
 
     return { leaderboard, loading, error };
 }
-
-export function useLeaderboardSummary(leaderboard: Leaderboard) {
-
-}

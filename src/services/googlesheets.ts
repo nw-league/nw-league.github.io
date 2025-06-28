@@ -1,10 +1,10 @@
-import type { LeaderboardEntry } from "../types/leaderboard";
+
 
 const kBaseUrl: string = `https://docs.google.com/spreadsheets/d/{sheetId}/gviz/tq?tqx=out:json&sheet={sheetName}&tq={query}`;
 const kSheetId = "{sheetId}"
 const kSheetName = "{sheetName}"
 const kQuery = "{query}"
-const kWardId = "{warId}"
+
 
 
 export type DataType = string | number | boolean | null;

@@ -3,8 +3,6 @@ import GroupsSummary from "../components/molecules/groupssummary";
 import LeaderboardDisplay from "../components/molecules/leaderboarddisplay";
 import WarResultsCompany from "../components/molecules/warresultscompany";
 import WarStatsPanel from "../components/molecules/warstatspanel";
-import { groupStats, company2Groups } from "../context/datacontext";
-import type { Faction } from "../types/faction";
 import { useWarData } from "../hooks/useWarData";
 
 
