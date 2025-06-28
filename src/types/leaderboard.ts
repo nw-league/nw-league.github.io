@@ -23,3 +23,13 @@ export interface GroupStats {
     damage: number;
     kpar: number;
 }
+
+export interface StatSummary {
+    name: string;
+    score: number;
+    kills: number;
+    deaths: number;
+    assists: number;
+    healing: number;
+    damage: number;
+}

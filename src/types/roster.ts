@@ -6,5 +6,5 @@ export interface Group {
 }
 
 export interface Roster {
-    groups: Group[];
+    groups: Map<number, Group>;
 }

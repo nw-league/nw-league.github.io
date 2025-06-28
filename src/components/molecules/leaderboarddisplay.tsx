@@ -74,7 +74,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard }) => {
     });
 
     return (
-        <div className="flex-1 overflow-x-auto bg-gray-800 rounded-lg shadow-lg text-white">
+        <div className="bg-gray-800 rounded-lg shadow-lg text-white">
             <h2 className="text-xl font-bold p-2">Leaderboard</h2>
             <table className="w-full h-full table-auto border-collapse">
                 < thead className="bg-gray-700" >

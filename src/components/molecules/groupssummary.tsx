@@ -5,27 +5,38 @@ import {
     getCoreRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import type { GroupStats } from '../../types/leaderboard';
+import type { StatSummary } from '../../types/leaderboard';
 
 interface GroupsSummaryProps {
-    company1Groups: GroupStats[];
-    company2Groups: GroupStats[];
+    company1Name: string,
+    company2Name: string,
+    company1Groups?: Map<number, StatSummary>;
+    company2Groups?: Map<number, StatSummary>;
 }
 const GroupsSummary: React.FC<GroupsSummaryProps> = ({
     company1Groups,
     company2Groups,
+    company1Name,
+    company2Name,
 }) => {
-    // 0 for company 1, 1 for company 2
     const [company, setCompany] = useState<number>(0);
+    const selectedGroups = company === 0 ? company1Groups : company2Groups;
 
-    // Choose groups based on selected company, fallback to empty array
-    const groups = company === 0 ? company1Groups : company2Groups || [];
+    const groups: Array<StatSummary & { groupId: number }> = React.useMemo(() => {
+        if (!selectedGroups) return [];
+        return Array.from(selectedGroups.entries())
+            .map(([groupId, stats]) => ({
+                ...stats,
+                groupId,
+            }))
+            .sort((a, b) => a.groupId - b.groupId);
+    }, [company, company1Groups, company2Groups]);
 
-    const columns = React.useMemo<ColumnDef<GroupStats>[]>(
+    const columns = React.useMemo<ColumnDef<StatSummary & { groupId: number }>[]>(
         () => [
             {
-                header: 'Group Name',
-                accessorKey: 'name',
+                header: 'Group',
+                accessorKey: 'groupId',
             },
             {
                 header: 'Score',
@@ -57,11 +68,6 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
                 accessorKey: 'damage',
                 cell: info => info.getValue<number>().toLocaleString(),
             },
-            {
-                header: 'KPAR',
-                accessorKey: 'kpar',
-                cell: info => info.getValue<number>().toLocaleString(),
-            },
         ],
         []
     );
@@ -73,73 +79,70 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
     });
 
     return (
-        <div className="bg-gray-800 text-white rounded-lg shadow-md overflow-x-auto p-4">
-            <h2 className="text-xl font-bold mb-4">Group Summary</h2>
+        <div className="bg-gray-800 text-white rounded-lg shadow-md overflow-x-auto">
+            <h2 className="text-xl font-bold p-2">Group Summary</h2>
 
-            {/* Company Selection Buttons */}
-            <div className="mb-4 flex space-x-4">
+            <div className="flex space-x-4 p-2">
                 <button
                     onClick={() => setCompany(0)}
-                    className={`px-4 py-2 rounded ${company === 0 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'
-                        }`}
+                    className={`px-4 py-2 rounded ${company === 0 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'}`}
                 >
-                    Company 1
+                    {company1Name}
                 </button>
                 <button
                     onClick={() => setCompany(1)}
-                    className={`px-4 py-2 rounded ${company === 1 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'
-                        }`}
+                    className={`px-4 py-2 rounded ${company === 1 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'}`}
                 >
-                    Company 2
+                    {company2Name}
                 </button>
             </div>
-
-            {/* Table */}
-            <table className="w-full table-auto border-collapse">
-                <thead className="bg-gray-700">
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map(header => (
-                                <th
-                                    key={header.id}
-                                    className="p-3 border-b border-gray-600 text-left"
-                                >
-                                    {flexRender(header.column.columnDef.header, header.getContext())}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-
-                <tbody>
-                    {table.getRowModel().rows.length === 0 ? (
-                        <tr>
-                            <td
-                                colSpan={columns.length}
-                                className="text-center p-4 text-gray-400"
-                            >
-                                No groups available
-                            </td>
-                        </tr>
-                    ) : (
-                        table.getRowModel().rows.map(row => (
-                            <tr
-                                key={row.id}
-                                className={row.index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800'}
-                            >
-                                {row.getVisibleCells().map(cell => (
-                                    <td
-                                        key={cell.id}
-                                        className="p-3 border-b border-gray-700 text-sm"
+            {selectedGroups ? (
+                <table className="w-full table-auto border-collapse">
+                    <thead className="bg-gray-700">
+                        {table.getHeaderGroups().map(headerGroup => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map(header => (
+                                    <th
+                                        key={header.id}
+                                        className="p-3 border-b border-gray-600 text-left"
                                     >
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </td>
+                                        {flexRender(header.column.columnDef.header, header.getContext())}
+                                    </th>
                                 ))}
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        ))}
+                    </thead>
+
+                    <tbody>
+                        {table.getRowModel().rows.length === 0 ? (
+                            <tr>
+                                <td
+                                    colSpan={columns.length}
+                                    className="text-center p-4 text-gray-400"
+                                >
+                                    No groups available
+                                </td>
+                            </tr>
+                        ) : (
+                            table.getRowModel().rows.map(row => (
+                                <tr
+                                    key={row.id}
+                                    className={row.index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800'}
+                                >
+                                    {row.getVisibleCells().map(cell => (
+                                        <td
+                                            key={cell.id}
+                                            className="p-3 border-b border-gray-700 text-sm"
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            ) : (<div className='text-gray-500 p-2'>No data</div>)}
         </div>
     );
 };
