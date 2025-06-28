@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     type ColumnDef,
     flexRender,
@@ -8,29 +8,20 @@ import {
 import type { StatSummary } from '../../types/leaderboard';
 
 interface GroupsSummaryProps {
-    attackerName: string,
-    defenderName: string,
-    attackerGroups?: Map<number, StatSummary>;
-    defenderGroups?: Map<number, StatSummary>;
+    groups?: Map<number, StatSummary>;
 }
 const GroupsSummary: React.FC<GroupsSummaryProps> = ({
-    attackerName,
-    defenderName,
-    attackerGroups,
-    defenderGroups,
+    groups
 }) => {
-    const [company, setCompany] = useState<number>(0);
-    const selectedGroups = company === 0 ? attackerGroups : defenderGroups;
-
-    const groups: Array<StatSummary & { groupId: number }> = React.useMemo(() => {
-        if (!selectedGroups) return [];
-        return Array.from(selectedGroups.entries())
+    const tableGroups: Array<StatSummary & { groupId: number }> = React.useMemo(() => {
+        if (!groups) return [];
+        return Array.from(groups.entries())
             .map(([groupId, stats]) => ({
                 ...stats,
                 groupId,
             }))
             .sort((a, b) => a.groupId - b.groupId);
-    }, [company, attackerGroups, defenderGroups]);
+    }, [groups]);
 
     const columns = React.useMemo<ColumnDef<StatSummary & { groupId: number }>[]>(
         () => [
@@ -73,7 +64,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
     );
 
     const table = useReactTable({
-        data: groups,
+        data: tableGroups,
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
@@ -82,21 +73,8 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
         <div className="bg-gray-800 text-white rounded-lg shadow-md overflow-x-auto">
             <h2 className="text-xl font-bold p-2">Group Summary</h2>
 
-            <div className="flex space-x-4 p-2">
-                <button
-                    onClick={() => setCompany(0)}
-                    className={`px-4 py-2 rounded ${company === 0 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'}`}
-                >
-                    {attackerName}
-                </button>
-                <button
-                    onClick={() => setCompany(1)}
-                    className={`px-4 py-2 rounded ${company === 1 ? 'bg-blue-600' : 'bg-gray-600 hover:bg-gray-700'}`}
-                >
-                    {defenderName}
-                </button>
-            </div>
-            {selectedGroups ? (
+
+            {groups ? (
                 <table className="w-full table-auto border-collapse">
                     <thead className="bg-gray-700">
                         {table.getHeaderGroups().map(headerGroup => (

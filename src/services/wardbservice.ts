@@ -107,6 +107,35 @@ export async function getWar(warId: number): Promise<War> {
     return { date, map, attacker, defender, winner, duration };
 }
 
+export function splitIntoGroups(leaderboard: Leaderboard, groups: Map<string, Roster>): Map<string, Map<number, LeaderboardEntry[]>> {
+    const warGroupStats = new Map<string, Map<number, LeaderboardEntry[]>>();
+
+    for (const [company, roster] of groups) {
+        let companyGroupStats = warGroupStats.get(company);
+        if (!companyGroupStats) {
+            companyGroupStats = new Map<number, LeaderboardEntry[]>();
+            warGroupStats.set(company, companyGroupStats);
+        }
+
+        for (const [n, group] of roster.groups) {
+            let groupStats = companyGroupStats.get(n);
+            if (!groupStats) {
+                groupStats = [];
+                companyGroupStats.set(n, groupStats);
+            }
+            for (const player of group.players) {
+                for (const entry of leaderboard.entries) {
+                    if (entry.name === player.name) {
+                        groupStats.push(entry);
+                    }
+                }
+            }
+        }
+    }
+
+    return warGroupStats;
+}
+
 export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, StatSummary> {
     const summaries = new Map<string, StatSummary>();
 

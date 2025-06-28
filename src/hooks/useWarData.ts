@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { Leaderboard, StatSummary } from "../types/leaderboard";
+import type { Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
 import type { Faction } from "../types/faction";
-import { getCompanyFaction, getLeaderboard, getRosters, getWar, summarizeGroups, summarizeLeaderboard } from "../services/wardbservice";
+import { getCompanyFaction, getLeaderboard, getRosters, getWar, splitIntoGroups, summarizeGroups, summarizeLeaderboard } from "../services/wardbservice";
 import type { Roster } from "../types/roster";
 import type { War } from "../types/war";
 
@@ -14,6 +14,7 @@ export function useWarData(warId: number) {
     const [rosters, setRosters] = useState<Map<string, Roster>>(new Map());
     const [groupSummary, setGroupSummary] = useState<Map<string, Map<number, StatSummary>>>(new Map());
     const [war, SetWar] = useState<War | null>(null);
+    const [groupDetails, setGroupDetails] = useState<Map<string, Map<number, LeaderboardEntry[]>>>(new Map());
 
     useEffect(() => {
         let cancelled = false;
@@ -27,6 +28,7 @@ export function useWarData(warId: number) {
                 const companies = [...sum.keys()];
                 const f = await getCompanyFaction(companies);
                 const g = await getRosters(warId);
+                const gd = await splitIntoGroups(lb, g);
                 const gs = summarizeGroups(lb, g);
                 const w = await getWar(warId);
                 if (cancelled) return;
@@ -37,6 +39,7 @@ export function useWarData(warId: number) {
                 setRosters(g);
                 setGroupSummary(gs);
                 SetWar(w);
+                setGroupDetails(gd);
             } catch (err) {
                 if (!cancelled) setError(err);
             } finally {
@@ -48,5 +51,5 @@ export function useWarData(warId: number) {
         return () => { cancelled = true; };
     }, [warId]);
 
-    return { loading, error, war, leaderboard, factions, summary, groupSummary, roster: rosters };
+    return { loading, error, war, leaderboard, factions, summary, groupSummary, groupDetails, roster: rosters };
 }

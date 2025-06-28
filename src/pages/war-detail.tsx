@@ -1,16 +1,17 @@
 import { useParams } from "react-router-dom";
-import GroupsSummary from "../components/molecules/groupssummary";
 import LeaderboardDisplay from "../components/molecules/leaderboarddisplay";
 import WarResultsCompany from "../components/molecules/warresultscompany";
 import WarStatsPanel from "../components/molecules/warstatspanel";
 import { useWarData } from "../hooks/useWarData";
+import GroupsComponent from "../components/molecules/groupscomponent";
+
 
 
 const WarDetail: React.FC = () => {
 
     const { warId } = useParams<{ warId: string }>();
     const warIdNum = Number(warId);
-    const { loading, error, war, leaderboard, summary, factions, groupSummary } = useWarData(warIdNum);
+    const { loading, error, war, leaderboard, summary, factions, groupSummary, groupDetails } = useWarData(warIdNum);
 
     if (loading) return <div className="text-white p-8">Loading leaderboard...</div>;
     if (error || !leaderboard || !war) return <div className="text-red-500 p-8">Error loading leaderboard.</div>;
@@ -27,6 +28,8 @@ const WarDetail: React.FC = () => {
     const defenderFaction = factions.get(defender);
     const attackerGroupSummary = groupSummary.get(attacker);
     const defenderGroupSummary = groupSummary.get(defender);
+    const attackerGroups = groupDetails.get(attacker);
+    const defenderGroups = groupDetails.get(defender);
 
     if (!attackerSummary || !attackerFaction || !defenderSummary || !defenderFaction) {
         return <div className="text-gray-500 p-8">Error loading leaderboard.</div>;
@@ -48,7 +51,8 @@ const WarDetail: React.FC = () => {
                         <WarResultsCompany summary={defenderSummary} faction={defenderFaction} isAttacker={false} isWinner={war.winner === war.defender} />
                     </div>
                 </div>
-                <GroupsSummary attackerName={attacker} attackerGroups={attackerGroupSummary} defenderName={defender} defenderGroups={defenderGroupSummary} />
+
+                <GroupsComponent attackerName={attacker} attackerSummary={attackerGroupSummary} defenderName={defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />
                 <LeaderboardDisplay leaderboard={leaderboard} companies={factions} />
                 <div className="mb-8" />
             </div>
