@@ -92,19 +92,38 @@ export async function getRosters(warId: number): Promise<Map<string, Roster>> {
     return rosters;
 }
 
-export async function getWar(warId: number): Promise<War> {
-    const warStr = `${warId}`;
-    const query = `SELECT B, C, D, E, F, I WHERE A=${warStr}`;
+export async function getWars(): Promise<War[]> {
+    const query = 'SELECT A, B, C, D, E, F, I';
     const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
 
-    const date = convertFromGoogleSheetsDateString(data[0][0] as string)!;
-    const map = data[0][1] as string;
-    const attacker = data[0][2] as string;
-    const defender = data[0][3] as string;
-    const winner = data[0][4] as string;
-    const duration = data[0][5] as number;
+    const wars = [];
+    for (const row of data) {
+        const id = row[0] as number;
+        const date = convertFromGoogleSheetsDateString(row[1] as string)!;
+        const map = row[2] as string;
+        const attacker = row[3] as string;
+        const defender = row[4] as string;
+        const winner = row[5] as string;
+        const duration = row[6] as number;
+        wars.push({ id, date, map, attacker, defender, winner, duration });
+    }
+    return wars;
+}
 
-    return { date, map, attacker, defender, winner, duration };
+export async function getWar(warId: number): Promise<War> {
+    const warStr = `${warId}`;
+    const query = `SELECT A, B, C, D, E, F, I WHERE A=${warStr}`;
+    const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
+
+    const id = data[0][0] as number;
+    const date = convertFromGoogleSheetsDateString(data[0][1] as string)!;
+    const map = data[0][2] as string;
+    const attacker = data[0][3] as string;
+    const defender = data[0][4] as string;
+    const winner = data[0][5] as string;
+    const duration = data[0][6] as number;
+
+    return { id, date, map, attacker, defender, winner, duration };
 }
 
 export function splitIntoGroups(leaderboard: Leaderboard, groups: Map<string, Roster>): Map<string, Map<number, LeaderboardEntry[]>> {

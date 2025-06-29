@@ -16,24 +16,19 @@ const WarDetail: React.FC = () => {
     if (loading) return <div className="text-white p-8">Loading leaderboard...</div>;
     if (error || !leaderboard || !war) return <div className="text-red-500 p-8">Error loading leaderboard.</div>;
 
-    const companies = [...summary.keys()];
-    const company1 = companies[0];
-    const company2 = companies[1];
-
-    const attacker = war.attacker === company1 ? company1 : company2;
-    const defender = company1 === attacker ? company2 : company1;
-    const attackerSummary = summary.get(attacker);
-    const defenderSummary = summary.get(defender);
-    const attackerFaction = factions.get(attacker);
-    const defenderFaction = factions.get(defender);
-    const attackerGroupSummary = groupSummary.get(attacker);
-    const defenderGroupSummary = groupSummary.get(defender);
-    const attackerGroups = groupDetails.get(attacker);
-    const defenderGroups = groupDetails.get(defender);
+    const attackerSummary = summary.get(war.attacker);
+    const defenderSummary = summary.get(war.defender);
+    const attackerFaction = factions.get(war.attacker);
+    const defenderFaction = factions.get(war.defender);
+    const attackerGroupSummary = groupSummary.get(war.attacker);
+    const defenderGroupSummary = groupSummary.get(war.defender);
+    const attackerGroups = groupDetails.get(war.attacker);
+    const defenderGroups = groupDetails.get(war.defender);
 
     if (!attackerSummary || !attackerFaction || !defenderSummary || !defenderFaction) {
         return <div className="text-gray-500 p-8">Error loading leaderboard.</div>;
     }
+
     return (
         <div className="bg-gray-900 flex justify-center"> {/* fills screen & centers children */}
             <div className="flex flex-col w-full gap-4 p-4">
@@ -48,7 +43,7 @@ const WarDetail: React.FC = () => {
                 </div>
 
                 <div className="hidden md:block text-center text-gray-400">
-                    <GroupsComponent attackerName={attacker} attackerSummary={attackerGroupSummary} defenderName={defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />
+                    <GroupsComponent attackerName={war.attacker} attackerSummary={attackerGroupSummary} defenderName={war.defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />
                     <LeaderboardDisplay leaderboard={leaderboard} companies={factions} />
                 </div>
                 <div className="block md:hidden text-center text-gray-400">

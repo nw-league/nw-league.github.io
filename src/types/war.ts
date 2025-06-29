@@ -1,5 +1,6 @@
 
 export interface War {
+    id: number;
     date: Date;
     map: string;
     attacker: string;

@@ -3,6 +3,7 @@ import Navbar from './components/organisms/navbar';
 
 
 import WarDetail from './pages/war-detail'
+import Wars from './pages/wars';
 
 const App: React.FC = () => {
   return (
@@ -13,7 +14,7 @@ const App: React.FC = () => {
         <main className="flex-grow  pt-16">
           <Routes>
 
-
+            <Route path="/wars" element={<Wars />} />
             <Route path="/wars/:warId" element={<WarDetail />} />
 
 
