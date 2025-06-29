@@ -9,6 +9,9 @@ import {
     type SortingState,
 } from '@tanstack/react-table';
 import type { Faction } from "../../types/faction";
+import NumberCell from "../atom/numbercell";
+import LabelIcon from "../atom/labelicon";
+import { Fire, FirstAid, Handshake, PlusCircle, Skull, Sword, UserList, UsersThree } from "phosphor-react";
 
 type LeaderboardProps = {
     leaderboard: Leaderboard,
@@ -24,41 +27,70 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
         () => [
             {
                 accessorKey: 'name',
-                header: 'Name',
+                header: () => (<LabelIcon text={"Player"} icon={<UserList weight="fill" />} />),
+                cell: info => (
+                    <div className="text-left">
+                        {info.getValue<string>()}
+                    </div>
+                )
             },
             {
                 accessorKey: 'company',
-                header: 'Company',
+                header: () => (<LabelIcon text='Company' icon={<UsersThree weight="fill" />} />),
             },
             {
                 accessorKey: 'score',
-                header: 'Score',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => (<LabelIcon text={'Score'} icon={<PlusCircle weight="fill" />} />),
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
                 accessorKey: 'kills',
-                header: 'Kills',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Kills' icon={<Sword weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
                 accessorKey: 'deaths',
-                header: 'Deaths',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Deaths' icon={<Skull weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
                 accessorKey: 'assists',
-                header: 'Assists',
-                cell: info => info.getValue<number>().toLocaleString(),
-            },
-            {
-                accessorKey: 'damage',
-                header: 'Damage',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Assists' icon={<Handshake weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
                 accessorKey: 'healing',
-                header: 'Healing',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Healing' icon={<FirstAid weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'damage',
+                header: () => <LabelIcon text='Damage' icon={<Fire weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
         ],
         []
@@ -91,7 +123,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                                             onClick={header.column.getToggleSortingHandler()}
                                             className="cursor-pointer select-none p-3 border-b border-gray-600 text-left"
                                         >
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex justify-center w-full items-center space-x-2">
                                                 <span>
                                                     {flexRender(
                                                         header.column.columnDef.header,

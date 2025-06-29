@@ -2,6 +2,7 @@ import { Handshake, Skull, Sword, FirstAid, Fire, Crown } from "phosphor-react";
 import StatWithIcon from "./statwithicon";
 import type { StatSummary } from "../../types/leaderboard";
 import type { Faction } from "../../types/faction";
+import NumberCell from "../atom/numbercell";
 
 
 interface WarResultsSummaryProp {
@@ -36,8 +37,8 @@ const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, 
                         <StatWithIcon icon={<Handshake size={32} weight="fill" />} value={summary.assists} />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                        <StatWithIcon icon={<FirstAid size={32} weight="fill" />} value={summary.healing} />
-                        <StatWithIcon icon={<Fire size={32} weight="fill" />} value={summary.damage} />
+                        <StatWithIcon icon={<FirstAid size={32} weight="fill" />} value={<NumberCell value={summary.healing} />} />
+                        <StatWithIcon icon={<Fire size={32} weight="fill" />} value={<NumberCell value={summary.damage} />} />
                     </div>
                 </div>
             </div>

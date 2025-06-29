@@ -30,8 +30,8 @@ const WarDetail: React.FC = () => {
     }
 
     return (
-        <div className="bg-gray-900 flex justify-center"> {/* fills screen & centers children */}
-            <div className="flex flex-col w-full gap-4 p-4">
+        <div className="bg-gray-900 flex justify-center px-4"> {/* fills screen & centers children */}
+            <div className="flex flex-col w-full max-w-6xl gap-4 p-4">
                 <WarStatsPanel date={war.date} captures={{}} map={war.map} />
                 <div className="flex flex-col md:flex-row gap-4 w-full">
                     <div className="w-full md:w-1/2">
@@ -42,13 +42,13 @@ const WarDetail: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="hidden md:block text-center text-gray-400">
-                    <GroupsComponent attackerName={war.attacker} attackerSummary={attackerGroupSummary} defenderName={war.defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />
-                    <LeaderboardDisplay leaderboard={leaderboard} companies={factions} />
-                </div>
-                <div className="block md:hidden text-center text-gray-400">
-                    Leaderboard hidden on small screens
-                </div>
+                {/* <div className="hidden md:block text-center text-gray-400"> */}
+                <GroupsComponent attackerName={war.attacker} attackerSummary={attackerGroupSummary} defenderName={war.defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />
+                <LeaderboardDisplay leaderboard={leaderboard} companies={factions} />
+                {/* </div> */}
+                {/* <div className="block md:hidden text-center text-gray-400"> */}
+                {/* Leaderboard hidden on small screens */}
+                {/* </div> */}
                 <div className="mb-" />
             </div>
         </div>

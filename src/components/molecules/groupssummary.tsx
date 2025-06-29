@@ -6,6 +6,9 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import type { StatSummary } from '../../types/leaderboard';
+import NumberCell from '../atom/numbercell';
+import LabelIcon from '../atom/labelicon';
+import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 
 interface GroupsSummaryProps {
     groups?: Map<number, StatSummary>;
@@ -26,38 +29,67 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
     const columns = React.useMemo<ColumnDef<StatSummary & { groupId: number }>[]>(
         () => [
             {
-                header: 'Group',
-                accessorKey: 'groupId',
+                accessorKey: 'name',
+                header: () => (<LabelIcon text={"Group"} icon={<UserList weight="fill" />} />),
+                cell: info => (
+                    <div className="text-left">
+                        {info.getValue<string>()}
+                    </div>
+                )
             },
             {
-                header: 'Score',
                 accessorKey: 'score',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => (<LabelIcon text={'Score'} icon={<PlusCircle weight="fill" />} />),
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
-                header: 'Kills',
                 accessorKey: 'kills',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Kills' icon={<Sword weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
-                header: 'Deaths',
                 accessorKey: 'deaths',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Deaths' icon={<Skull weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
-                header: 'Assists',
                 accessorKey: 'assists',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Assists' icon={<Handshake weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
-                header: 'Healing',
                 accessorKey: 'healing',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Healing' icon={<FirstAid weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
             {
-                header: 'Damage',
                 accessorKey: 'damage',
-                cell: info => info.getValue<number>().toLocaleString(),
+                header: () => <LabelIcon text='Damage' icon={<Fire weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
             },
         ],
         []
@@ -72,8 +104,6 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
     return (
         <div className="bg-gray-800 text-white rounded-lg shadow-md overflow-x-auto">
             <h2 className="text-xl font-bold p-2">Group Summary</h2>
-
-
             {groups ? (
                 <table className="w-full table-auto border-collapse">
                     <thead className="bg-gray-700">
@@ -110,7 +140,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
                                     {row.getVisibleCells().map(cell => (
                                         <td
                                             key={cell.id}
-                                            className="p-3 border-b border-gray-700 text-sm"
+                                            className="p-2 border border-gray-700 text-sm"
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
