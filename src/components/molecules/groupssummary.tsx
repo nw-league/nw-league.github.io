@@ -8,7 +8,7 @@ import {
 import type { StatSummary } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
-import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
+import { Fire, FirstAid, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 
 interface GroupsSummaryProps {
     groups?: Map<number, StatSummary>;

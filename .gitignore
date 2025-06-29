@@ -56,7 +56,7 @@ Thumbs.db
 *.tsbuildinfo
 
 # Tailwind generated files (optional)
-tailwind.config.js
+#tailwind.config.js
 postcss.config.js
 
 # Optional coverage folder for testing
