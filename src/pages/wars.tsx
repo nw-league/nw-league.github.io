@@ -3,9 +3,9 @@ import { useWars } from "../hooks/useWars";
 
 const Wars: React.FC = () => {
     const { loading, err, wars } = useWars();
-
     if (loading) return <div className="text-white">List is loading</div>
     if (err) return <div className="text-white">Problem loading wars</div>
+
 
     const warCards = []
     for (let i = wars.length - 1; i >= 0; i--) {

@@ -8,6 +8,7 @@ import Companies from './pages/companies';
 import Players from './pages/players';
 import NotFound from './pages/notfound';
 import Home from './pages/home';
+import CompanyDetail from './pages/company-detail';
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/players" element={<Players />} />
             <Route path="/companies" element={<Companies />} />
+            <Route path="/companies/:companyName" element={<CompanyDetail />} />
             <Route path="/wars" element={<Wars />} />
             <Route path="/wars/:warId" element={<WarDetail />} />
             <Route path="*" element={<NotFound />} />

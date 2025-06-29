@@ -1,3 +1,4 @@
+import type { Company } from "../types/company";
 import type { Faction } from "../types/faction";
 import type { Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
 import type { Group, Roster } from "../types/roster";
@@ -124,6 +125,32 @@ export async function getWar(warId: number): Promise<War> {
     const duration = data[0][6] as number;
 
     return { id, date, map, attacker, defender, winner, duration };
+}
+
+export async function getCompanies(): Promise<Company[]> {
+    const query = `SELECT D, E`;
+    const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
+
+    const companiesSet = new Set<string>();
+    for (const row of data) {
+        companiesSet.add(row[0] as string);
+        companiesSet.add(row[1] as string);
+    }
+
+    const companies = Array.from(companiesSet);
+    const factions = await getCompanyFaction(companies);
+
+    const c: Company[] = [];
+    for (const company of companies) {
+        let f = factions.get(company);
+        if (!f) { f = 'Gray' };
+        c.push({
+            name: company,
+            faction: f,
+        });
+    }
+
+    return c.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 }
 
 export function splitIntoGroups(leaderboard: Leaderboard, groups: Map<string, Roster>): Map<string, Map<number, LeaderboardEntry[]>> {

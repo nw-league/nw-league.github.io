@@ -32,7 +32,7 @@ const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, 
             {/* <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md">{isWinner && <Crown weight={"fill"} />} {label} {isWinner && <Crown weight={"fill"} />}</div> */}
             <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md color"> {isWinner && <Crown weight={"fill"} className="text-yellow-500" />} {label}</div>
             {/* <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md"> {label}  </div> */}
-            <div className={`rounded-lg ${color} text-center text-gray-200 p-1`}>
+            <div className={`rounded-b-lg ${color} text-center text-gray-200 p-1`}>
                 <div className="text-3xl font-bold">{summary.name}</div>
                 <div>{faction}</div>
                 <div className="grid gap-4">
@@ -47,14 +47,14 @@ const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, 
                     </div>
                 </div>
             </div>
-            <div className="flex w-full justify-center p-2 text-shadow-lh text-gray-200">
-                {/* <div className="w-full flex justify-center text-xl" style={{ fontFamily: '"IM Fell English", serif' }}>
+            {/* <div className="flex w-full justify-center p-2 text-shadow-lh text-gray-200"> */}
+            {/* <div className="w-full flex justify-center text-xl" style={{ fontFamily: '"IM Fell English", serif' }}>
                     {isWinner ? "Victory" : "Defeat"}
                 </div> */}
-                {/* <div className="font-imfell flex w-full justify-center">
+            {/* <div className="font-imfell flex w-full justify-center">
                     {isWinner ? "Victory" : "Defeat"}
                 </div> */}
-            </div>
+            {/* </div> */}
         </div>
     );
 };
