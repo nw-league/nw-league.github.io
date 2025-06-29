@@ -35,8 +35,7 @@ const WarDetail: React.FC = () => {
         return <div className="text-gray-500 p-8">Error loading leaderboard.</div>;
     }
     return (
-        <div className="min-h-screen bg-gray-900 flex justify-center"> {/* fills screen & centers children */}
-            {/* <div className="grid grid-rows-[auto_1fr] p-8 gap-8 max-w-480 w-full"> centered content with max width */}
+        <div className="bg-gray-900 flex justify-center"> {/* fills screen & centers children */}
             <div className="flex flex-col w-full gap-4 p-4">
                 <WarStatsPanel date={war.date} captures={{}} map={war.map} />
                 <div className="flex flex-col md:flex-row gap-4 w-full">
@@ -55,7 +54,7 @@ const WarDetail: React.FC = () => {
                 <div className="block md:hidden text-center text-gray-400">
                     Leaderboard hidden on small screens
                 </div>
-                <div className="mb-8" />
+                <div className="mb-" />
             </div>
         </div>
     );

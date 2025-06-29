@@ -10,7 +10,7 @@ const App: React.FC = () => {
     <HashRouter>
       <div className="flex flex-col h-screen">
         <Navbar />
-        <main className="flex-grow overflow-y-auto pt-16">
+        <main className="flex-grow  pt-16">
           <Routes>
 
 
