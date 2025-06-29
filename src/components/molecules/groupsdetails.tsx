@@ -17,7 +17,7 @@ const GroupsDetail: React.FC<GroupsDetailProps> = ({ groups }) => {
             )
         }
     }
-    return <div className="rounded-lg grid grid-cols-1 md:grid-cols-2 mt-8 mb-8 gap-16">
+    return <div className="rounded-lg grid grid-cols-1 lg:grid-cols-2 mt-8 mb-8 gap-16">
         {rows}
     </div>;
 };

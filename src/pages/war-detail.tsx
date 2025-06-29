@@ -36,24 +36,25 @@ const WarDetail: React.FC = () => {
     }
     return (
         <div className="min-h-screen bg-gray-900 flex justify-center"> {/* fills screen & centers children */}
-            <div className="grid grid-rows-[auto_1fr] p-8 gap-8 max-w-480 w-full"> {/* centered content with max width */}
-                <WarStatsPanel
-                    date={war.date}
-                    captures={{}}
-                    map={war.map}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-8">
-                    <div className="h-fit">
+            {/* <div className="grid grid-rows-[auto_1fr] p-8 gap-8 max-w-480 w-full"> centered content with max width */}
+            <div className="flex flex-col w-full gap-4 p-4">
+                <WarStatsPanel date={war.date} captures={{}} map={war.map} />
+                <div className="flex flex-col md:flex-row gap-4 w-full">
+                    <div className="w-full md:w-1/2">
                         <WarResultsCompany summary={attackerSummary} faction={attackerFaction} isAttacker={true} isWinner={war.winner === war.attacker} />
                     </div>
-                    <div className="h-fit">
+                    <div className="w-full md:w-1/2">
                         <WarResultsCompany summary={defenderSummary} faction={defenderFaction} isAttacker={false} isWinner={war.winner === war.defender} />
                     </div>
                 </div>
 
-                <GroupsComponent attackerName={attacker} attackerSummary={attackerGroupSummary} defenderName={defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />
-                <LeaderboardDisplay leaderboard={leaderboard} companies={factions} />
+                <div className="hidden md:block text-center text-gray-400">
+                    <GroupsComponent attackerName={attacker} attackerSummary={attackerGroupSummary} defenderName={defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />
+                    <LeaderboardDisplay leaderboard={leaderboard} companies={factions} />
+                </div>
+                <div className="block md:hidden text-center text-gray-400">
+                    Leaderboard hidden on small screens
+                </div>
                 <div className="mb-8" />
             </div>
         </div>

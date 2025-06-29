@@ -7,7 +7,7 @@ const Navbar: React.FC = () => {
     const toggleMenu = () => setIsOpen(!isOpen);
 
     return (
-        <nav className="bg-gray-800 p-4 text-white fixed w-full top-0 z-10 sticky shadow-md">
+        <nav className="bg-gray-800 p-4 text-white w-full top-0 z-10 fixed shadow-md">
             <div className="container mx-auto flex justify-between items-center">
                 <h2 className="text-xl font-bold text-blue-400">New World League</h2>
                 <div className="hidden md:flex space-x-4">

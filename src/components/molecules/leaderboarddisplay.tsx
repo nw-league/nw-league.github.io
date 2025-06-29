@@ -78,79 +78,81 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
     return (
         <div className="bg-gray-800 rounded-lg shadow-lg text-white">
             <h2 className="text-xl font-bold p-2">Leaderboard</h2>
-            <table className="w-full h-full table-auto border-collapse">
-                < thead className="bg-gray-700" >
-                    {
-                        table.getHeaderGroups().map(headerGroup => (
-                            <tr key={headerGroup.id}>
-                                {headerGroup.headers.map(header => (
-                                    <th
-                                        key={header.id}
-                                        colSpan={header.colSpan}
-                                        onClick={header.column.getToggleSortingHandler()}
-                                        className="cursor-pointer select-none p-3 border-b border-gray-600 text-left"
-                                    >
-                                        <div className="flex items-center space-x-2">
-                                            <span>
-                                                {flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                            </span>
-                                            {{
-                                                asc: '⬆',
-                                                desc: '⬇',
-                                            }[header.column.getIsSorted() as string] ?? null}
-                                        </div>
-                                    </th>
-                                ))}
-                            </tr>
-                        ))
-                    }
-                </thead >
-                <tbody>
-                    {table.getRowModel().rows.map((row, index) => {
-                        const faction = companies.get(row.original.company);
+            <div className="overflow-x-auto">
+                <table className="min-w-full table-auto border-collapse">
+                    < thead className="bg-gray-700" >
+                        {
+                            table.getHeaderGroups().map(headerGroup => (
+                                <tr key={headerGroup.id}>
+                                    {headerGroup.headers.map(header => (
+                                        <th
+                                            key={header.id}
+                                            colSpan={header.colSpan}
+                                            onClick={header.column.getToggleSortingHandler()}
+                                            className="cursor-pointer select-none p-3 border-b border-gray-600 text-left"
+                                        >
+                                            <div className="flex items-center space-x-2">
+                                                <span>
+                                                    {flexRender(
+                                                        header.column.columnDef.header,
+                                                        header.getContext()
+                                                    )}
+                                                </span>
+                                                {{
+                                                    asc: '⬆',
+                                                    desc: '⬇',
+                                                }[header.column.getIsSorted() as string] ?? null}
+                                            </div>
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))
+                        }
+                    </thead >
+                    <tbody>
+                        {table.getRowModel().rows.map((row, index) => {
+                            const faction = companies.get(row.original.company);
 
-                        const rowClass = index % 2 === 0 ? faction === 'Marauder'
-                            ? 'bg-green-800'
-                            : faction === 'Syndicate'
-                                ? 'bg-purple-800'
-                                : faction === 'Covenant'
-                                    ? 'bg-yellow-800'
-                                    : 'bg-gray-800' : faction === 'Marauder'
-                            ? 'bg-green-900'
-                            : faction === 'Syndicate'
-                                ? 'bg-purple-900'
-                                : faction === 'Covenant'
-                                    ? 'bg-yellow-900'
-                                    : 'bg-gray-800';
+                            const rowClass = index % 2 === 0 ? faction === 'Marauder'
+                                ? 'bg-green-800'
+                                : faction === 'Syndicate'
+                                    ? 'bg-purple-800'
+                                    : faction === 'Covenant'
+                                        ? 'bg-yellow-800'
+                                        : 'bg-gray-800' : faction === 'Marauder'
+                                ? 'bg-green-900'
+                                : faction === 'Syndicate'
+                                    ? 'bg-purple-900'
+                                    : faction === 'Covenant'
+                                        ? 'bg-yellow-900'
+                                        : 'bg-gray-800';
 
-                        return (
-                            <tr key={row.id} className={rowClass}>
-                                {row.getVisibleCells().map(cell => (
-                                    <td
-                                        key={cell.id}
-                                        className="p-3 border-b border-gray-700 text-sm"
-                                    >
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </td>
-                                ))}
+                            return (
+                                <tr key={row.id} className={rowClass}>
+                                    {row.getVisibleCells().map(cell => (
+                                        <td
+                                            key={cell.id}
+                                            className="p-3 border-b border-gray-700 text-sm"
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                        {table.getRowModel().rows.length === 0 && (
+                            <tr>
+                                <td
+                                    colSpan={columns.length}
+                                    className="text-center p-4 text-gray-400"
+                                >
+                                    No data available
+                                </td>
                             </tr>
-                        );
-                    })}
-                    {table.getRowModel().rows.length === 0 && (
-                        <tr>
-                            <td
-                                colSpan={columns.length}
-                                className="text-center p-4 text-gray-400"
-                            >
-                                No data available
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table >
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div >
     );
 };

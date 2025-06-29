@@ -16,7 +16,7 @@ const WarStatsPanel: React.FC<WarStatsPanelProps> = ({ date, map, captures }) =>
 
     return (
         <div className="bg-gray-800 text-white rounded-lg p-4 space-y-2">
-            <div className="grid grid-cols-2 w-full gap-4">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full gap-4">
 
                 {/* Left side: map + date */}
                 <div className="grid grid-rows-2 place-items-center w-full">

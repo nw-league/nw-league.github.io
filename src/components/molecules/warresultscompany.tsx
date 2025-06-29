@@ -24,32 +24,23 @@ const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, 
     const label = isAttacker ? "Attacker" : "Defender"
     const glow = isWinner ? "shadow-[inset_0_0_50px_rgba(255,215,0,0.6)]" : "";
     return (
-        <div className={``}>
-            <div className={`bg-gray-700 rounded-lg ${glow}`}>
-                <div className="flex w-full text-gray-200 p-2 justify-center items-center">{isWinner && <Crown weight={"fill"} />}   {label}</div>
-                <div className={`rounded-lg ${color} ${border} border-yellow-500 text-center text-gray-200 p-1`}>
-                    <div className="text-3xl font-bold">{summary.name}</div>
-                    <div>{faction}</div>
-                    <div className="grid gap-4">
-                        <div className="grid grid-cols-3 gap-1">
-                            <StatWithIcon icon={<Sword size={32} weight="fill" />} value={summary.kills} />
-                            <StatWithIcon icon={<Skull size={32} weight="fill" />} value={summary.deaths} />
-                            <StatWithIcon icon={<Handshake size={32} weight="fill" />} value={summary.assists} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                            <StatWithIcon icon={<FirstAid size={32} weight="fill" />} value={summary.healing} />
-                            <StatWithIcon icon={<Fire size={32} weight="fill" />} value={summary.damage} />
-                        </div>
-                        {/*
-                        <div className="grid grid-cols-3 gap-1">
-                            <StatWithIcon icon={<Sword size={32} weight="fill" />} value={summary.kills} />
-                            <StatWithIcon icon={<Skull size={32} weight="fill" />} value={summary.deaths} />
-                            <StatWithIcon icon={<Handshake size={32} weight="fill" />} value={summary.assists} />
-                        </div>
-                        */}
+        <div className={`bg-gray-700 rounded-lg ${glow}`}>
+            <div className="flex w-full text-gray-200 p-2 justify-center items-center">{isWinner && <Crown weight={"fill"} />}   {label}</div>
+            <div className={`rounded-lg ${color} ${border} border-yellow-500 text-center text-gray-200 p-1`}>
+                <div className="text-3xl font-bold">{summary.name}</div>
+                <div>{faction}</div>
+                <div className="grid gap-4">
+                    <div className="grid grid-cols-3 gap-1">
+                        <StatWithIcon icon={<Sword size={32} weight="fill" />} value={summary.kills} />
+                        <StatWithIcon icon={<Skull size={32} weight="fill" />} value={summary.deaths} />
+                        <StatWithIcon icon={<Handshake size={32} weight="fill" />} value={summary.assists} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        <StatWithIcon icon={<FirstAid size={32} weight="fill" />} value={summary.healing} />
+                        <StatWithIcon icon={<Fire size={32} weight="fill" />} value={summary.damage} />
                     </div>
                 </div>
-            </div >
+            </div>
         </div>
     );
 };
