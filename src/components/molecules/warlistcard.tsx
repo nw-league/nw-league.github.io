@@ -47,28 +47,6 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
             </div >
         </NavLink>
     );
-    return (
-        <div className="bg-gray-800 rounded-lg p-4 shadow-md text-white w-full max-w-md">
-            {/* Participants */}
-            <div className="grid grid-cols-3items-center justify-between text-xl font-semibold mb-2">
-                <div className="flex items-center gap-2">
-                    {attackerWins && <Crown weight="fill" className="text-yellow-400" />}
-                    <span className="text-green-300">{war.attacker}</span>
-                </div>
-                <span className="text-gray-400">vs</span>
-                <div className="flex items-center gap-2">
-                    <span className="text-purple-300">{war.defender}</span>
-                    {defenderWins && <Crown weight="fill" className="text-yellow-400" />}
-                </div>
-            </div>
-
-            {/* Subtle Metadata */}
-            <div className="text-sm text-gray-400 flex justify-between">
-                <span>{formatDate(war.date)}</span>
-                <span>{war.map}</span>
-            </div>
-        </div>
-    );
 };
 
 export default WarListCard;
