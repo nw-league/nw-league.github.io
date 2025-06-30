@@ -37,7 +37,7 @@ function StatsTable<T>({ columns, data, calc }: StatsTableProps<T>): JSX.Element
 
     const bottomRowCalc = useMemo(() => {
         if (calc) {
-            return calculateColumnSums(data, columns, calc.map((v) => v.column) as (keyof T)[]);
+            return calculateColumnSums(data, calc.map((v) => v.column) as (keyof T)[]);
         } else {
             return {} as Record<string, number>;
         }

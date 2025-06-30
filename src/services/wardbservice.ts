@@ -241,7 +241,3 @@ export function summarizeGroups(leaderboard: Leaderboard, rosters: Map<string, R
 
     return companyGroupSummaries;
 }
-
-async function createTheFullPicture(leaderboard: Leaderboard, rosters: Map<string, Roster>) {
-
-}

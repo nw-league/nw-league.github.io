@@ -1,9 +1,10 @@
+import Loading from "../components/atom/loading";
 import WarListCard from "../components/molecules/warlistcard";
 import { useWars } from "../hooks/useWars";
 
 const Wars: React.FC = () => {
     const { loading, err, wars } = useWars();
-    if (loading) return <div className="text-white">List is loading</div>
+    if (loading) return <div className="flex w-full justify-center text-white p-8" ><Loading /></div >;
     if (err) return <div className="text-white">Problem loading wars</div>
 
 
