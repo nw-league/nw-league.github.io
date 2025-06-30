@@ -1,4 +1,4 @@
-import { Crown, Shield, Sword, Truck } from "phosphor-react";
+import { Crown, Shield, Sword } from "phosphor-react";
 import type { War } from "../../types/war";
 import { formatDate } from "../../utils/time";
 import { Link } from "react-router-dom";
