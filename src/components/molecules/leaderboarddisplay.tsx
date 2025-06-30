@@ -166,7 +166,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                                     {row.getVisibleCells().map(cell => (
                                         <td
                                             key={cell.id}
-                                            className="p-3 border-b border-gray-700 text-sm"
+                                            className="p-3 border-b border-gray-700 text-sm text-nowrap"
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>

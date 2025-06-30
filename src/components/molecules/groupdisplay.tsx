@@ -1,14 +1,9 @@
 import React from 'react';
-import {
-    useReactTable,
-    getCoreRowModel,
-    flexRender,
-    type ColumnDef,
-} from '@tanstack/react-table';
+import { type ColumnDef } from '@tanstack/react-table';
 import type { LeaderboardEntry } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
-import { Fire, FirstAid, GameController, Handshake, Plus, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
+import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 import StatsTable from '../atom/statstble';
 
 interface GroupDisplayProps {
@@ -89,12 +84,6 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
         ],
         []
     );
-
-    const table = useReactTable({
-        data: group ?? [],
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    });
 
     return (
         <div className="text-white bg-gray-800 rounded-lg">

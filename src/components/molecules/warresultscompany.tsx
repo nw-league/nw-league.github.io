@@ -30,7 +30,7 @@ const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, 
     return (
         <div className={`${accent} rounded-lg`}>
             {/* <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md">{isWinner && <Crown weight={"fill"} />} {label} {isWinner && <Crown weight={"fill"} />}</div> */}
-            <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md color"> {isWinner && <Crown weight={"fill"} className="text-yellow-500" />} {label}</div>
+            <div className="flex w-full text-gray-200 p-2 justify-center items-center drop-shadow-lg font-bold"> {isWinner && <Crown weight={"fill"} className="text-yellow-500" />} {label}</div>
             {/* <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md"> {label}  </div> */}
             <div className={`rounded-b-lg ${color} text-center text-gray-200 p-1`}>
                 <div className="text-3xl font-bold">{summary.name}</div>

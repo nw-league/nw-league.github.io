@@ -1,4 +1,4 @@
-import React, { useState, type JSX } from "react";
+import { useState, type JSX } from "react";
 import {
     flexRender,
     getCoreRowModel,
@@ -36,11 +36,11 @@ function StatsTable<T>({ columns, data }: StatsTableProps<T>): JSX.Element {
                     onClick={header.column.getToggleSortingHandler()}
                     className="p-1 cursor-pointer select-none border-b border-gray-600 text-left"
                 >
-                    <div className="flex relative justify-center w-full space-x-2 text-gray-200">
+                    <div className="flex relative justify-center items-center w-full space-x-2 text-gray-200">
                         <span>
                             {flexRender(header.column.columnDef.header, header.getContext())}
                         </span>
-                        <span className="text-xs absolute right-0.5">
+                        <span className="text-xs top-1/2 -translate-y-1/2 right-0.5 absolute">
                             {{ asc: "▲", desc: "▼" }[header.column.getIsSorted() as string] ?? null}
                         </span>
                     </div>
@@ -55,7 +55,7 @@ function StatsTable<T>({ columns, data }: StatsTableProps<T>): JSX.Element {
         const rowCells: JSX.Element[] = [];
         for (const cell of row.getVisibleCells()) {
             rowCells.push(
-                <td key={cell.id} className={`p-1 border border-gray-800 ${sortedIndex % 2 === 0 ? "bg-gray-800" : "bg-gray-900"} text-gray-200`}>
+                <td key={cell.id} className={`p-1 border border-gray-700 ${sortedIndex % 2 === 0 ? "bg-gray-800" : "bg-gray-900"} text-gray-200 text-nowrap`}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
             );
@@ -64,7 +64,7 @@ function StatsTable<T>({ columns, data }: StatsTableProps<T>): JSX.Element {
     }
 
     return (
-        <table className="min-w-full table-auto border-collapse text-sm">
+        <table className="w-full table-auto border-collapse">
             <thead className="bg-gray-700">{headerRow}</thead>
             <tbody>{tableRows}</tbody>
         </table>
