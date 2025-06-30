@@ -1,4 +1,4 @@
-import { Crown, Shield, Sword } from "phosphor-react";
+import { Circle, Crown, Shield, Sword } from "phosphor-react";
 import type { War } from "../../types/war";
 import { formatDate } from "../../utils/time";
 import { Link } from "react-router-dom";
@@ -12,45 +12,39 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
 
     return (
         <Link to={`/wars/${war.id}`}>
-            <div className="bg-gray-800 rounded-lg p-4">
-                <div className="flex flex-row">
-                    <div className="grid grid-cols-3 w-full place-items-center">
-                        <div className="grid grid-rows2 place-items-center">
-                            {attackerWins ? (
-                                <Crown weight="fill" className="text-yellow-400" />
-                            ) : (
-                                <Crown weight="fill" className="invisible" />
-                            )}
-                            <span className="font-bold">{war.attacker}</span>
+            <div className="bg-gray-800 rounded-lg ">
+                <div className="grid grid-rows-[auto_1fr_auto] text-center text-gray-400">
+                    <div className="pt-1 text-xs">{war.map}</div>
 
-                        </div>
-                        <div className="flex flex-row h-full w-full items-center justify-center text-center">
-                            <Sword size={32} weight="fill" className="text-gray-500" />
-                            <span className="text-gray-500 ml-8 mr-8">vs</span>
-                            <Shield size={32} weight="fill" className="text-gray-500" />
-                        </div>
-                        <div className="grid grid-rows2 place-items-center">
-                            {defenderWins ? (
-                                <Crown weight="fill" className="text-yellow-400" />
-                            ) : (
-                                <Crown weight="fill" className="invisible" />
+                    <div className="grid grid-cols-3 place-items-center text-white font-bold relative">
+                        <div className="relative flex items-center justify-center">
+                            {war.winner === war.attacker && (
+                                <Crown
+                                    className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400"
+                                    weight="fill"
+                                    size={16}
+                                />
                             )}
-                            <span className="font-bold">{war.defender}</span>
+                            <span>{war.attacker}</span>
                         </div>
-                        <div className="text-sm text-gray-400">
-                            {formatDate(war.date)}
-                        </div>
-                        <div className="grid grid-cols-2 text-sm text-gray-400 text-nowrap">
-                            {/* <div>{war.map}</div>
-                    <div>{formatDate(war.date)}</div> */}
-                        </div>
-                        <div className="text-sm text-gray-400">
-                            {war.map}
+
+                        <div className="text-gray-400 font-normal">vs</div>
+
+                        <div className="relative flex items-center justify-center">
+                            {war.winner === war.defender && (
+                                <Crown
+                                    className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400"
+                                    weight="fill"
+                                    size={16}
+                                />
+                            )}
+                            <span>{war.defender}</span>
                         </div>
                     </div>
 
+                    <div className="pb-1 text-xs">{formatDate(war.date)}</div>
                 </div>
-            </div >
+            </div>
         </Link>
     );
     // return (
