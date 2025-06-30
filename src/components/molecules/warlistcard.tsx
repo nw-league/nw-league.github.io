@@ -1,4 +1,4 @@
-import { Circle, Crown, Shield, Sword } from "phosphor-react";
+import { Crown, Shield, Sword } from "phosphor-react";
 import type { War } from "../../types/war";
 import { formatDate } from "../../utils/time";
 import { Link } from "react-router-dom";
@@ -18,7 +18,7 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
 
                     <div className="grid grid-cols-3 place-items-center text-white font-bold relative">
                         <div className="relative flex items-center justify-center">
-                            {war.winner === war.attacker && (
+                            {attackerWins && (
                                 <Crown
                                     className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400"
                                     weight="fill"
@@ -28,10 +28,16 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
                             <span>{war.attacker}</span>
                         </div>
 
-                        <div className="text-gray-400 font-normal">vs</div>
+                        <div className="text-gray-400 font-normal">
+                            <div className="relative flex items-center justify-center">
+                                <Sword className="absolute right-full mr-4" weight="fill" />
+                                vs
+                                <Shield className="absolute left-full ml-4" weight="fill" />
+                            </div>
+                        </div>
 
                         <div className="relative flex items-center justify-center">
-                            {war.winner === war.defender && (
+                            {defenderWins && (
                                 <Crown
                                     className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400"
                                     weight="fill"
