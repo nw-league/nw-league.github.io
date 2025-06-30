@@ -121,19 +121,21 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                                             key={header.id}
                                             colSpan={header.colSpan}
                                             onClick={header.column.getToggleSortingHandler()}
-                                            className="cursor-pointer select-none p-3 border-b border-gray-600 text-left"
+                                            className="cursor-pointer select-none p-2 border-b border-gray-600 text-left"
                                         >
-                                            <div className="flex justify-center w-full items-center space-x-2">
+                                            <div className="flex relative justify-center w-full items-center space-x-2">
                                                 <span>
                                                     {flexRender(
                                                         header.column.columnDef.header,
                                                         header.getContext()
                                                     )}
                                                 </span>
-                                                {{
-                                                    asc: '⬆',
-                                                    desc: '⬇',
-                                                }[header.column.getIsSorted() as string] ?? null}
+                                                <span className="text-xs absolute right-0.5">
+                                                    {{
+                                                        asc: '▲',
+                                                        desc: '▼',
+                                                    }[header.column.getIsSorted() as string] ?? null}
+                                                </span>
                                             </div>
                                         </th>
                                     ))}

@@ -8,7 +8,8 @@ import {
 import type { LeaderboardEntry } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
-import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
+import { Fire, FirstAid, GameController, Handshake, Plus, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
+import StatsTable from '../atom/statstble';
 
 interface GroupDisplayProps {
     groupId: number;
@@ -97,8 +98,9 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
 
     return (
         <div className="text-white bg-gray-800 rounded-lg">
-            <h3 className="text-xl font-bold p-2">Group {groupId}</h3>
-            < table className="w-full table-auto border-collapse text-sm">
+            <div className="font-bold p-2">Group {groupId}</div>
+            <StatsTable columns={columns} data={group} />
+            {/* < table className="w-full tableborder-collapse text-sm table-auto">
                 <thead className="bg-gray-700">
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr key={headerGroup.id}>
@@ -129,7 +131,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
                         </tr>
                     ))}
                 </tbody>
-            </table >
+            </table > */}
         </div >
     );
 };
