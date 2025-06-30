@@ -1,4 +1,4 @@
-import { useState, type JSX } from "react";
+import { useMemo, useState, type JSX } from "react";
 import {
     flexRender,
     getCoreRowModel,
@@ -7,13 +7,22 @@ import {
     type ColumnDef,
     type SortingState,
 } from "@tanstack/react-table";
+import { calculateColumnSums } from "../../utils/tableFunctions";
+import NumberCell from "./numbercell";
+
+type BottomCalcFunction = "sum" | "average";
+export interface Calculation {
+    fn: BottomCalcFunction;
+    column: string;
+}
 
 interface StatsTableProps<T> {
     columns: ColumnDef<T>[];
     data: T[];
+    calc?: Calculation[];
 }
 
-function StatsTable<T>({ columns, data }: StatsTableProps<T>): JSX.Element {
+function StatsTable<T>({ columns, data, calc }: StatsTableProps<T>): JSX.Element {
     const [sorting, setSorting] = useState<SortingState>([]);
 
     const table = useReactTable({
@@ -24,6 +33,15 @@ function StatsTable<T>({ columns, data }: StatsTableProps<T>): JSX.Element {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
     });
+
+
+    const bottomRowCalc = useMemo(() => {
+        if (calc) {
+            return calculateColumnSums(data, columns, calc.map((v) => v.column) as (keyof T)[]);
+        } else {
+            return {} as Record<string, number>;
+        }
+    }, [data])
 
     const headerRow: JSX.Element[] = [];
     for (const headerGroup of table.getHeaderGroups()) {
@@ -62,11 +80,38 @@ function StatsTable<T>({ columns, data }: StatsTableProps<T>): JSX.Element {
         }
         tableRows.push(<tr key={row.id}>{rowCells}</tr>)
     }
+    // while (tableRows.length < 5) {
+    //     console.log(tableRows.length);
+    //     const cellId = tableRows.length;
+    //     tableRows.push(
+    //         <tr key={cellId}>
+    //             <td className={`p-1 border border-gray-700 ${true ? "bg-gray-800" : "bg-gray-900"} text-gray-200 text-nowrap`}>
+    //                 <span className="">TRUE</span>
+    //             </td>
+    //         </tr>
+    //     );
+    // }
+
+
+    const sumRowCells: JSX.Element[] = [];
+    for (const column of table.getVisibleFlatColumns()) {
+        const colId = column.id;
+        const sum = bottomRowCalc[colId];
+        sumRowCells.push(
+            <td key={colId} className="p1 border border-gray-800 bg-gray-700 border-t-3 border-t-gray-600 text-gray-200 text-right font-semibold">
+                {typeof sum === "number" ? <NumberCell value={sum} /> : null}
+            </td>
+        )
+    }
+    const summaryRow = <tr key="summary">{sumRowCells}</tr>;
 
     return (
         <table className="w-full table-auto border-collapse">
             <thead className="bg-gray-700">{headerRow}</thead>
-            <tbody>{tableRows}</tbody>
+            <tbody>
+                {tableRows}
+                {summaryRow}
+            </tbody>
         </table>
     );
 }

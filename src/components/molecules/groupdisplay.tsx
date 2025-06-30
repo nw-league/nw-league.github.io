@@ -4,7 +4,8 @@ import type { LeaderboardEntry } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
 import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
-import StatsTable from '../atom/statstble';
+import StatsTable, { type Calculation } from '../atom/statstble';
+
 
 interface GroupDisplayProps {
     groupId: number;
@@ -85,42 +86,19 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
         []
     );
 
+    const calcColumns: Calculation[] = [
+        { fn: "sum", column: "score" },
+        { fn: "sum", column: "kills" },
+        { fn: "sum", column: "deaths" },
+        { fn: "sum", column: "assists" },
+        { fn: "sum", column: "healing" },
+        { fn: "sum", column: "damage" },
+    ]
+
     return (
-        <div className="text-white bg-gray-800 rounded-lg">
-            <div className="font-bold p-2">Group {groupId}</div>
-            <StatsTable columns={columns} data={group} />
-            {/* < table className="w-full tableborder-collapse text-sm table-auto">
-                <thead className="bg-gray-700">
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map(header => (
-                                <th
-                                    key={header.id}
-                                    className=" p-2 border-b border-gray-600"
-                                >
-                                    <div className="flex justify-center items-center w-full">
-                                        {flexRender(header.column.columnDef.header, header.getContext())}
-                                    </div>
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr
-                            key={row.id}
-                            className={row.index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800'}
-                        >
-                            {row.getVisibleCells().map(cell => (
-                                <td key={cell.id} className="p-1 border border-gray-700">
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table > */}
+        <div className="text-white">
+            <div className="font-bold p-2 bg-gray-800 rounded-t-lg">Group {groupId}</div>
+            <StatsTable columns={columns} data={group} calc={calcColumns} />
         </div >
     );
 };

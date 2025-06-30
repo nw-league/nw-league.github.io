@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
                                 : 'px-3 py-2 hover:bg-gray-600 rounded'
                         }
                     >
-                        Player Stats
+                        Players
                     </NavLink>
                 </div>
                 {/* Mobile Menu Button */}

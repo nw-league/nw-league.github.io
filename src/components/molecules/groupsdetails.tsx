@@ -13,12 +13,15 @@ const GroupsDetail: React.FC<GroupsDetailProps> = ({ groups }) => {
         const sortedGroups = Array.from(groups.entries()).sort((a, b) => a[0] - b[0]);
         for (const [n, group] of sortedGroups) {
             rows.push(
-                <div className="w-full overflow-x-auto bg-gray-800 rounded-lg">
+                <div className="w-full overflow-x-auto">
                     <GroupDisplay group={group} groupId={n} />
                 </div>
             )
         }
     }
+
+
+
     return (
         <div className="rounded-lg grid grid-cols-1 lg:grid-cols-2 gap-8">
             {rows}
