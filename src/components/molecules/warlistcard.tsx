@@ -11,8 +11,8 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
     const defenderWins = war.defender === war.winner;
 
     return (
-        <Link to={`/wars/${war.id}`}>
-            <div className="bg-gray-800 rounded-lg ">
+        <Link to={`/wars/${war.id}`} className="w-full">
+            <div className="bg-gray-800 rounded-lg w-full">
                 <div className="grid grid-rows-[auto_1fr_auto] text-center text-gray-400">
                     <div className="pt-1 text-xs">{war.map}</div>
 

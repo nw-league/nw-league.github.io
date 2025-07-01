@@ -3,9 +3,9 @@ import type { Faction } from "../types/faction";
 import type { Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
 import type { Group, Roster } from "../types/roster";
 import type { War } from "../types/war";
-import { joinCondition } from "../utils/querybuilder";
+import { joinCondition, makeConditions } from "../utils/querybuilder";
 import { convertFromGoogleSheetsDateString } from "../utils/time";
-import { fetchTableFromGoogleSheets } from "./googlesheets";
+import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 
 const kLeaderboardSheetName = "leaderboards";
 const kLeadboardQuery = "SELECT D, B, E, F, G, H, I, J, K where C={warId}";
@@ -23,7 +23,18 @@ const kIdxCompany = 8;
 
 const kIdxCompanyName = 0;
 const kIdxFactiion = 1;
+export type QueryOperator = "=" | "<" | ">" | "<=" | ">=" | "<>" | 'IS NOT'
+export type OrderingOperator = "asc" | "desc";
+export interface QueryParameter {
+    column: string;
+    fn: QueryOperator;
+    value: DataType;
+}
 
+export interface Ordering {
+    column: string;
+    direction: OrderingOperator;
+}
 export async function getLeaderboard(warId: number): Promise<Leaderboard> {
     const warStr = `${warId}`;
     const query = kLeadboardQuery.replace(kWarId, warStr);
@@ -93,8 +104,11 @@ export async function getRosters(warId: number): Promise<Map<string, Roster>> {
     return rosters;
 }
 
-export async function getWars(): Promise<War[]> {
-    const query = 'SELECT A, B, C, D, E, F, I';
+export async function getWars(params?: QueryParameter[], limit?: number, order?: Ordering): Promise<War[]> {
+    const conditions = params ? ` WHERE ${makeConditions(params)}` : ''
+    const limitStr = limit ? ` LIMIT ${limit}` : '';
+    const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()}` : '';
+    const query = `SELECT A, B, C, D, E, F, I${conditions}${orderStr}${limitStr}`;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
 
     const wars = [];

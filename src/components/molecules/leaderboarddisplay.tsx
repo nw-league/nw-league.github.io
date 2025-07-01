@@ -12,6 +12,7 @@ import type { Faction } from "../../types/faction";
 import NumberCell from "../atom/numbercell";
 import LabelIcon from "../atom/labelicon";
 import { Fire, FirstAid, Handshake, PlusCircle, Skull, Sword, UserList, UsersThree } from "phosphor-react";
+import { Link } from "react-router-dom";
 
 type LeaderboardProps = {
     leaderboard: Leaderboard,
@@ -30,7 +31,9 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                 header: () => (<LabelIcon text={"Player"} icon={<UserList weight="fill" />} />),
                 cell: info => (
                     <div className="text-left">
-                        {info.getValue<string>()}
+                        <Link to={`/players/${info.getValue<string>()}`}>
+                            {info.getValue<string>()}
+                        </Link>
                     </div>
                 )
             },

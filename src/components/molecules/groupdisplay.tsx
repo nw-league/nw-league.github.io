@@ -5,6 +5,7 @@ import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
 import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 import StatsTable, { type Calculation } from '../atom/statstble';
+import { Link } from 'react-router-dom';
 
 
 interface GroupDisplayProps {
@@ -20,7 +21,9 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
                 header: () => (<LabelIcon text={"Player"} icon={<UserList weight="fill" />} />),
                 cell: info => (
                     <div className="text-left">
-                        {info.getValue<string>()}
+                        <Link to={`/players/${info.getValue<string>()}`}>
+                            {info.getValue<string>()}
+                        </Link>
                     </div>
                 )
             },

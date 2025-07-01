@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +9,9 @@ const Navbar: React.FC = () => {
     return (
         <nav className="bg-gray-800 p-4 text-white w-full top-0 z-10 fixed shadow-md">
             <div className="container mx-auto flex justify-between items-center">
-                <h2 className="text-xl font-bold text-blue-400">New World League</h2>
+                <Link to={''}>
+                    <h2 className="text-xl font-bold text-blue-400" style={{ fontFamily: '"IM Fell English", serif' }}>New World League</h2>
+                </Link>
                 <div className="hidden md:flex space-x-4">
                     <NavLink
                         to="/wars"
@@ -90,7 +92,7 @@ const Navbar: React.FC = () => {
                     Player Stats
                 </NavLink>
             </div>
-        </nav>
+        </nav >
     );
 };
 

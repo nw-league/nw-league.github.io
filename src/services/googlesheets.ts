@@ -23,7 +23,6 @@ export async function fetchTableFromGoogleSheets(
     const response = await fetch(fullurl);
     const text = await response.text();
     const json = JSON.parse(text.substring(47).slice(0, -2));
-
     const rows: DataType[][] = json.table.rows.map((row: any) =>
         row.c.map((cell: any) => cell?.v ?? null)
     );
