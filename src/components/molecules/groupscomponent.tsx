@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import type { GroupPerformance, LeaderboardEntry, StatSummary } from '../../types/leaderboard';
+import type { GroupPerformance, StatSummary } from '../../types/leaderboard';
 import GroupsDetail from './groupsdetails';
 import GroupsSummary from './groupssummary';
 

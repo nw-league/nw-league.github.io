@@ -1,12 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import { type ColumnDef, type SortingState } from '@tanstack/react-table';
+import React, { useMemo } from 'react';
+import { type ColumnDef } from '@tanstack/react-table';
 import type { GroupPerformance, LeaderboardEntry } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
 import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 import StatsTable, { type Calculation } from '../atom/statstble';
 import { Link } from 'react-router-dom';
-import LeaderboardDisplay from './leaderboarddisplay';
 import { kRoleOrder } from '../../constants/roleorder';
 
 

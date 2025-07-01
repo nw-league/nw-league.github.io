@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { GroupPerformance, Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
+import type { GroupPerformance, Leaderboard, StatSummary } from "../types/leaderboard";
 import type { Faction } from "../types/faction";
 import { getCompanyFaction, getLeaderboard, getRosters, getWar, splitIntoGroups, summarizeGroups, summarizeLeaderboard } from "../services/wardbservice";
 import type { Roster } from "../types/roster";

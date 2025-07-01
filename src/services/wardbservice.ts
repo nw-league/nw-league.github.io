@@ -1,6 +1,6 @@
 import type { Company } from "../types/company";
 import type { Faction } from "../types/faction";
-import type { GroupPerformance, GroupStats, Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
+import type { GroupPerformance, Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
 import type { Group, Roster } from "../types/roster";
 import type { War } from "../types/war";
 import { joinCondition, makeConditions } from "../utils/querybuilder";
