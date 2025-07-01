@@ -40,6 +40,11 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             {
                 accessorKey: 'company',
                 header: () => (<LabelIcon text='Company' icon={<UsersThree weight="fill" />} />),
+                cell: info => (
+                    <Link to={`/companies/${info.getValue<string>()}`}>
+                        {info.getValue<string>()}
+                    </Link>
+                )
             },
             {
                 accessorKey: 'score',
