@@ -30,7 +30,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                 accessorKey: 'name',
                 header: () => (<LabelIcon text={"Player"} icon={<UserList weight="fill" />} />),
                 cell: info => (
-                    <div className="text-left">
+                    <div className="text-left hover:underline">
                         <Link to={`/players/${info.getValue<string>()}`}>
                             {info.getValue<string>()}
                         </Link>
@@ -41,9 +41,11 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                 accessorKey: 'company',
                 header: () => (<LabelIcon text='Company' icon={<UsersThree weight="fill" />} />),
                 cell: info => (
-                    <Link to={`/companies/${info.getValue<string>()}`}>
-                        {info.getValue<string>()}
-                    </Link>
+                    <div className="hover:underline">
+                        <Link to={`/companies/${info.getValue<string>()}`}>
+                            {info.getValue<string>()}
+                        </Link>
+                    </div>
                 )
             },
             {

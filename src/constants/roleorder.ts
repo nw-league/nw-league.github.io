@@ -1,0 +1,16 @@
+export const kRoleOrder = [
+    "AoE Healer",
+    "ST Healer",
+    "Bruiser",
+    "VGIG",
+    "Flail",
+    "Tank",
+    "Caller",
+    "Bow",
+    "Disruptor",
+    "Firestaff",
+    "Holder",
+    "Quad Melee",
+    "Quad Range",
+    "Sender",
+];

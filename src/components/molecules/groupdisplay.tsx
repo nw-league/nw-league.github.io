@@ -1,26 +1,30 @@
-import React from 'react';
-import { type ColumnDef } from '@tanstack/react-table';
-import type { LeaderboardEntry } from '../../types/leaderboard';
+import React, { useMemo, useState } from 'react';
+import { type ColumnDef, type SortingState } from '@tanstack/react-table';
+import type { GroupPerformance, LeaderboardEntry } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
 import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 import StatsTable, { type Calculation } from '../atom/statstble';
 import { Link } from 'react-router-dom';
+import LeaderboardDisplay from './leaderboarddisplay';
+import { kRoleOrder } from '../../constants/roleorder';
 
 
 interface GroupDisplayProps {
     groupId: number;
-    group: LeaderboardEntry[];
+    group: GroupPerformance;
 }
 
 const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
+    const sort = [{ id: "role", desc: false }];
+
     const columns = React.useMemo<ColumnDef<LeaderboardEntry>[]>(
         () => [
             {
                 accessorKey: 'name',
                 header: () => (<LabelIcon text={"Player"} icon={<UserList weight="fill" />} />),
                 cell: info => (
-                    <div className="text-left">
+                    <div className="text-left hover:underline">
                         <Link to={`/players/${info.getValue<string>()}`}>
                             {info.getValue<string>()}
                         </Link>
@@ -30,6 +34,13 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             {
                 accessorKey: 'role',
                 header: () => <LabelIcon text={'Role'} icon={<GameController weight="fill" />} />,
+                sortingFn: (rowA, rowB) => {
+                    const a = rowA.getValue<string>('role');
+                    const b = rowB.getValue<string>('role');
+                    const ai = kRoleOrder.indexOf(a);
+                    const bi = kRoleOrder.indexOf(b);
+                    return ai - bi;
+                },
             },
             {
                 accessorKey: 'score',
@@ -98,10 +109,18 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
         { fn: "sum", column: "damage" },
     ]
 
+    const combinedData = useMemo(() => {
+        return group.stats.map(entry => {
+            const player = group.group.players.find(p => p.name === entry.name);
+            return { ...entry, role: player?.role ?? "Unknown" };
+        })
+    }, [group]);
+
+
     return (
         <div className="text-white">
             <div className="font-bold p-2 bg-gray-800 rounded-t-lg">Group {groupId}</div>
-            <StatsTable columns={columns} data={group} calc={calcColumns} />
+            <StatsTable columns={columns} data={combinedData} sort={sort} calc={calcColumns} />
         </div >
     );
 };

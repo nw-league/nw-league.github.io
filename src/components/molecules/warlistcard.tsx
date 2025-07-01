@@ -14,7 +14,7 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
         <Link to={`/wars/${war.id}`} className="w-full">
             <div className="bg-gray-800 rounded-lg w-full">
                 <div className="grid grid-rows-[auto_1fr_auto] text-center text-gray-400">
-                    <div className="pt-1 text-xs">{war.map}</div>
+                    <div className="pt-1 text-xs drop-shadow-lg">{war.map}</div>
 
                     <div className="grid grid-cols-3 place-items-center text-white font-bold relative">
                         <div className="relative flex items-center justify-center">
@@ -30,9 +30,9 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
 
                         <div className="text-gray-400 font-normal">
                             <div className="relative flex items-center justify-center">
-                                <Sword className="absolute right-full mr-4" weight="fill" />
-                                vs
-                                <Shield className="absolute left-full ml-4" weight="fill" />
+                                <Sword className="absolute right-full mr-4 drop-shadow-fuchsia-500 drop-shadow-2xl" weight="fill" />
+                                <span className="drop-shadow-lg">vs</span>
+                                <Shield className="absolute left-full ml-4 drop-shadow-lg" weight="fill" />
                             </div>
                         </div>
 

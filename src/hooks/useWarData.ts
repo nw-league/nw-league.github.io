@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
+import type { GroupPerformance, Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
 import type { Faction } from "../types/faction";
 import { getCompanyFaction, getLeaderboard, getRosters, getWar, splitIntoGroups, summarizeGroups, summarizeLeaderboard } from "../services/wardbservice";
 import type { Roster } from "../types/roster";
@@ -14,7 +14,7 @@ export function useWarData(warId: number) {
     const [rosters, setRosters] = useState<Map<string, Roster>>(new Map());
     const [groupSummary, setGroupSummary] = useState<Map<string, Map<number, StatSummary>>>(new Map());
     const [war, SetWar] = useState<War | null>(null);
-    const [groupDetails, setGroupDetails] = useState<Map<string, Map<number, LeaderboardEntry[]>>>(new Map());
+    const [groupDetails, setGroupDetails] = useState<Map<string, Map<number, GroupPerformance>>>(new Map());
 
     useEffect(() => {
         let cancelled = false;

@@ -12,7 +12,7 @@ const WarDetail: React.FC = () => {
 
     const { warId } = useParams<{ warId: string }>();
     const warIdNum = Number(warId);
-    const { loading, error, war, leaderboard, summary, factions, groupSummary, groupDetails } = useWarData(warIdNum);
+    const { loading, error, war, leaderboard, summary, factions, groupSummary, groupDetails: groupPerformance } = useWarData(warIdNum);
 
     if (loading) return <div className="flex w-full justify-center text-white p-8" ><Loading /></div >;
     if (error || !leaderboard || !war) return <div className="text-red-500 p-8">Error loading leaderboard.</div>;
@@ -23,8 +23,8 @@ const WarDetail: React.FC = () => {
     const defenderFaction = factions.get(war.defender);
     const attackerGroupSummary = groupSummary.get(war.attacker);
     const defenderGroupSummary = groupSummary.get(war.defender);
-    const attackerGroups = groupDetails.get(war.attacker);
-    const defenderGroups = groupDetails.get(war.defender);
+    const attackerGroups = groupPerformance.get(war.attacker);
+    const defenderGroups = groupPerformance.get(war.defender);
 
     if (!attackerSummary || !attackerFaction || !defenderSummary || !defenderFaction) {
         return <div className="text-gray-500 p-8">Error loading leaderboard.</div>;

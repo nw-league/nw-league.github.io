@@ -19,11 +19,12 @@ export interface Calculation {
 interface StatsTableProps<T> {
     columns: ColumnDef<T>[];
     data: T[];
+    sort?: SortingState;
     calc?: Calculation[];
 }
 
-function StatsTable<T>({ columns, data, calc }: StatsTableProps<T>): JSX.Element {
-    const [sorting, setSorting] = useState<SortingState>([]);
+function StatsTable<T>({ columns, data, calc, sort }: StatsTableProps<T>): JSX.Element {
+    const [sorting, setSorting] = useState<SortingState>(sort || []);
 
     const table = useReactTable({
         data,
@@ -54,7 +55,7 @@ function StatsTable<T>({ columns, data, calc }: StatsTableProps<T>): JSX.Element
                     onClick={header.column.getToggleSortingHandler()}
                     className="p-1 cursor-pointer select-none border-b border-gray-600 text-left"
                 >
-                    <div className="flex relative justify-center items-center w-full space-x-2 text-gray-200">
+                    <div className="flex relative justify-center items-center w-full space-x-2 text-white">
                         <span>
                             {flexRender(header.column.columnDef.header, header.getContext())}
                         </span>
@@ -73,32 +74,20 @@ function StatsTable<T>({ columns, data, calc }: StatsTableProps<T>): JSX.Element
         const rowCells: JSX.Element[] = [];
         for (const cell of row.getVisibleCells()) {
             rowCells.push(
-                <td key={cell.id} className={`p-1 border border-gray-700 ${sortedIndex % 2 === 0 ? "bg-gray-800" : "bg-gray-900"} text-gray-200 text-nowrap`}>
+                <td key={cell.id} className={`p-1 border border-gray-700 ${sortedIndex % 2 === 0 ? "bg-gray-800" : "bg-gray-900"} text-white text-nowrap`}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
             );
         }
         tableRows.push(<tr key={row.id}>{rowCells}</tr>)
     }
-    // while (tableRows.length < 5) {
-    //     console.log(tableRows.length);
-    //     const cellId = tableRows.length;
-    //     tableRows.push(
-    //         <tr key={cellId}>
-    //             <td className={`p-1 border border-gray-700 ${true ? "bg-gray-800" : "bg-gray-900"} text-gray-200 text-nowrap`}>
-    //                 <span className="">TRUE</span>
-    //             </td>
-    //         </tr>
-    //     );
-    // }
-
 
     const sumRowCells: JSX.Element[] = [];
     for (const column of table.getVisibleFlatColumns()) {
         const colId = column.id;
         const sum = bottomRowCalc[colId];
         sumRowCells.push(
-            <td key={colId} className="p1 border border-gray-800 bg-gray-700 border-t-3 border-t-gray-600 text-gray-200 text-right font-semibold">
+            <td key={colId} className="p1 border border-gray-800 bg-gray-700 border-t-3 border-t-gray-600 text-white text-right font-semibold">
                 {typeof sum === "number" ? <NumberCell value={sum} /> : null}
             </td>
         )

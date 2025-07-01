@@ -1,14 +1,14 @@
 
 import { useState } from 'react';
-import type { LeaderboardEntry, StatSummary } from '../../types/leaderboard';
+import type { GroupPerformance, LeaderboardEntry, StatSummary } from '../../types/leaderboard';
 import GroupsDetail from './groupsdetails';
 import GroupsSummary from './groupssummary';
 
 interface GroupsSummaryProps {
     attackerName: string,
     defenderName: string,
-    attackerGroups?: Map<number, LeaderboardEntry[]>;
-    defenderGroups?: Map<number, LeaderboardEntry[]>;
+    attackerGroups?: Map<number, GroupPerformance>;
+    defenderGroups?: Map<number, GroupPerformance>;
     attackerSummary?: Map<number, StatSummary>;
     defenderSummary?: Map<number, StatSummary>;
 }

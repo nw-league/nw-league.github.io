@@ -1,3 +1,5 @@
+import type { Group } from "./roster";
+
 export interface LeaderboardEntry {
     name: string;
     score: number;
@@ -32,4 +34,9 @@ export interface StatSummary {
     assists: number;
     healing: number;
     damage: number;
+}
+
+export interface GroupPerformance {
+    group: Group;
+    stats: LeaderboardEntry[];
 }

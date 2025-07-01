@@ -13,7 +13,7 @@ const Home: React.FC = () => {
 
     return (
         <div className="flex flex-col w-full max-w-5xl mx-auto px-4 mt-4">
-            <div className="text-gray-200 text-xl font-semibold">
+            <div className="text-white text-xl font-semibold">
                 Upcoming Wars
             </div>
             {/* <div className="grid grid-cols-1 gap-4 place-items-center mx-auto h-[120px] w-full mb-4 mt-4">
@@ -36,7 +36,7 @@ const Home: React.FC = () => {
 
             </div>
 
-            <div className="text-gray-200 text-xl font-semibold">Past Wars</div>
+            <div className="text-white text-xl font-semibold">Past Wars</div>
             <div className="grid gap-4 grid-cols-1 w-full max-w-180 mx-auto mt-4">
                 {loading ?
                     <Loading /> :

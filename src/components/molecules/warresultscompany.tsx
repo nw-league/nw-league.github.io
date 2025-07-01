@@ -3,6 +3,7 @@ import StatWithIcon from "./statwithicon";
 import type { StatSummary } from "../../types/leaderboard";
 import type { Faction } from "../../types/faction";
 import NumberCell from "../atom/numbercell";
+import { Link } from "react-router-dom";
 
 
 interface WarResultsSummaryProp {
@@ -29,33 +30,27 @@ const WarResultsCompany: React.FC<WarResultsSummaryProp> = ({ summary, faction, 
 
     return (
         <div className={`${accent} rounded-lg`}>
-            {/* <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md">{isWinner && <Crown weight={"fill"} />} {label} {isWinner && <Crown weight={"fill"} />}</div> */}
-            <div className="flex w-full text-gray-200 p-2 justify-center items-center drop-shadow-lg font-bold"> {isWinner && <Crown weight={"fill"} className="text-yellow-500" />} {label}</div>
-            {/* <div className="flex w-full text-gray-200 p-2 justify-center items-center text-shadow-md"> {label}  </div> */}
-            <div className={`rounded-b-lg ${color} text-center text-gray-200 p-1`}>
-                <div className="text-3xl font-bold">{summary.name}</div>
-                <div>{faction}</div>
+            <div className="flex w-full text-white p-2 justify-center items-center drop-shadow-lg font-bold"> {isWinner && <Crown weight={"fill"} className="text-yellow-500 drop-shadow-lg" />} {label}</div>
+            <div className={`rounded-b-lg ${color} text-center text-white p-1`}>
+                <div className="text-3xl font-bold drop-shadow-lg">
+                    <Link to={`/companies/${summary.name}`}>
+                        <span className="hover:underline">{summary.name}</span>
+                    </Link>
+                </div>
+                <div className="drop-shadow-lg">{faction}</div>
                 <div className="grid gap-4">
                     <div className="grid grid-cols-3 gap-1 drop-shadow-lg">
-                        <StatWithIcon icon={<Sword size={32} weight="fill" />} value={summary.kills} />
-                        <StatWithIcon icon={<Skull size={32} weight="fill" />} value={summary.deaths} />
-                        <StatWithIcon icon={<Handshake size={32} weight="fill" />} value={summary.assists} />
+                        <StatWithIcon icon={<Sword className="drop-shadow-lg" size={32} weight="fill" />} value={summary.kills} />
+                        <StatWithIcon icon={<Skull className="drop-shadow-lg" size={32} weight="fill" />} value={summary.deaths} />
+                        <StatWithIcon icon={<Handshake className="drop-shadow-lg" size={32} weight="fill" />} value={summary.assists} />
                     </div>
                     <div className="grid grid-cols-2 gap-2 drop-shadow-lg">
-                        <StatWithIcon icon={<FirstAid size={32} weight="fill" />} value={<NumberCell value={summary.healing} />} />
-                        <StatWithIcon icon={<Fire size={32} weight="fill" />} value={<NumberCell value={summary.damage} />} />
+                        <StatWithIcon icon={<FirstAid className="drop-shadow-lg" size={32} weight="fill" />} value={<NumberCell className="drop-shadow-lg" value={summary.healing} />} />
+                        <StatWithIcon icon={<Fire className="drop-shadow-lg" size={32} weight="fill" />} value={<NumberCell className="drop-shadow-lg" value={summary.damage} />} />
                     </div>
                 </div>
             </div>
-            {/* <div className="flex w-full justify-center p-2 text-shadow-lh text-gray-200"> */}
-            {/* <div className="w-full flex justify-center text-xl" style={{ fontFamily: '"IM Fell English", serif' }}>
-                    {isWinner ? "Victory" : "Defeat"}
-                </div> */}
-            {/* <div className="font-imfell flex w-full justify-center">
-                    {isWinner ? "Victory" : "Defeat"}
-                </div> */}
-            {/* </div> */}
-        </div>
+        </div >
     );
 };
 

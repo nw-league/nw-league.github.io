@@ -1,6 +1,6 @@
 import type { Company } from "../types/company";
 import type { Faction } from "../types/faction";
-import type { Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
+import type { GroupPerformance, GroupStats, Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
 import type { Group, Roster } from "../types/roster";
 import type { War } from "../types/war";
 import { joinCondition, makeConditions } from "../utils/querybuilder";
@@ -167,26 +167,26 @@ export async function getCompanies(): Promise<Company[]> {
     return c.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 }
 
-export function splitIntoGroups(leaderboard: Leaderboard, groups: Map<string, Roster>): Map<string, Map<number, LeaderboardEntry[]>> {
-    const warGroupStats = new Map<string, Map<number, LeaderboardEntry[]>>();
+export function splitIntoGroups(leaderboard: Leaderboard, rosters: Map<string, Roster>): Map<string, Map<number, GroupPerformance>> {
+    const warGroupStats = new Map<string, Map<number, GroupPerformance>>();
 
-    for (const [company, roster] of groups) {
+    for (const [company, roster] of rosters) {
         let companyGroupStats = warGroupStats.get(company);
         if (!companyGroupStats) {
-            companyGroupStats = new Map<number, LeaderboardEntry[]>();
+            companyGroupStats = new Map<number, GroupPerformance>();
             warGroupStats.set(company, companyGroupStats);
         }
 
         for (const [n, group] of roster.groups) {
-            let groupStats = companyGroupStats.get(n);
-            if (!groupStats) {
-                groupStats = [];
-                companyGroupStats.set(n, groupStats);
+            let groupPerformance = companyGroupStats.get(n);
+            if (!groupPerformance) {
+                groupPerformance = { group: group, stats: [] };
+                companyGroupStats.set(n, groupPerformance);
             }
             for (const player of group.players) {
                 for (const entry of leaderboard.entries) {
                     if (entry.name === player.name) {
-                        groupStats.push(entry);
+                        groupPerformance.stats.push(entry);
                     }
                 }
             }

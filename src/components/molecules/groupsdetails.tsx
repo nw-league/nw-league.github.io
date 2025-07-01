@@ -1,9 +1,9 @@
 import React from 'react';
-import type { LeaderboardEntry } from '../../types/leaderboard';
+import type { GroupPerformance } from '../../types/leaderboard';
 import GroupDisplay from './groupdisplay';
 
 interface GroupsDetailProps {
-    groups?: Map<number, LeaderboardEntry[]>;
+    groups?: Map<number, GroupPerformance>;
 }
 
 const GroupsDetail: React.FC<GroupsDetailProps> = ({ groups }) => {
