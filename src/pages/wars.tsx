@@ -11,7 +11,7 @@ const Wars: React.FC = () => {
     const warCards = []
     for (let i = wars.length - 1; i >= 0; i--) {
         warCards.push(
-            <div key={wars[i].id} className="text-white">
+            <div key={wars[i].id} className="text-white hover:scale-105">
                 <WarListCard war={wars[i]} />
             </div>
         );
