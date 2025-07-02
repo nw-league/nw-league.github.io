@@ -19,7 +19,6 @@ export async function fetchTableFromGoogleSheets(
         .replace(kSheetId, sheetId)
         .replace(kSheetName, sheetName)
         .replace(kQuery, encodedQuery);
-
     const response = await fetch(fullurl);
     const text = await response.text();
     const json = JSON.parse(text.substring(47).slice(0, -2));

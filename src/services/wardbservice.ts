@@ -1,25 +1,14 @@
 import type { Company } from "../types/company";
 import type { Faction } from "../types/faction";
 import type { GroupPerformance, Leaderboard, LeaderboardEntry, StatSummary } from "../types/leaderboard";
+import type { PlayerDetails } from "../types/playerdetails";
 import type { Group, Roster } from "../types/roster";
 import type { War } from "../types/war";
 import { joinCondition, makeConditions } from "../utils/querybuilder";
 import { convertFromGoogleSheetsDateString } from "../utils/time";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 
-const kLeaderboardSheetName = "leaderboards";
-const kLeadboardQuery = "SELECT D, B, E, F, G, H, I, J, K where C={warId}";
-const kWarId = "{warId}"
 const kSheetId = "14byZyCAX_N_AA-y_1tv4CLtgTCaOB-Zq8QbOHmavE6Y";
-
-const kIdxName = 1;
-const kIdxScore = 2;
-const kIdxKills = 3;
-const kIdxDeaths = 4;
-const kIdxAssists = 5;
-const kIdxHealing = 6;
-const kIdxDamage = 7;
-const kIdxCompany = 8;
 
 const kIdxCompanyName = 0;
 const kIdxFactiion = 1;
@@ -35,23 +24,26 @@ export interface Ordering {
     column: string;
     direction: OrderingOperator;
 }
-export async function getLeaderboard(warId: number): Promise<Leaderboard> {
-    const warStr = `${warId}`;
-    const query = kLeadboardQuery.replace(kWarId, warStr);
-    const data = await fetchTableFromGoogleSheets(kSheetId, kLeaderboardSheetName, query);
+export async function getLeaderboard(params?: QueryParameter[], limit?: number, order?: Ordering): Promise<Leaderboard> {
+    const conditions = params ? ` WHERE ${makeConditions(params)}` : ''
+    const limitStr = limit ? ` LIMIT ${limit}` : '';
+    const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()}` : '';
+    const query = `SELECT C, D, B, E, F, G, H, I, J, K${conditions}${orderStr}${limitStr}`;
+    const data = await fetchTableFromGoogleSheets(kSheetId, 'leaderboards', query);
 
     const leaderboard: Leaderboard = { entries: [] };
 
     for (const row of data) {
         const entry: LeaderboardEntry = {
-            name: String(row[kIdxName] ?? ""),
-            company: String(row[kIdxCompany] ?? ""),
-            score: Number(row[kIdxScore] ?? 0),
-            kills: Number(row[kIdxKills] ?? 0),
-            deaths: Number(row[kIdxDeaths] ?? 0),
-            assists: Number(row[kIdxAssists] ?? 0),
-            healing: Number(row[kIdxHealing] ?? 0),
-            damage: Number(row[kIdxDamage] ?? 0),
+            warid: Number(row[0] ?? 0),
+            name: String(row[2] ?? ""),
+            score: Number(row[3] ?? 0),
+            kills: Number(row[4] ?? 0),
+            deaths: Number(row[5] ?? 0),
+            assists: Number(row[6] ?? 0),
+            healing: Number(row[7] ?? 0),
+            damage: Number(row[8] ?? 0),
+            company: String(row[9] ?? ""),
         };
         leaderboard.entries.push(entry);
     }
@@ -63,7 +55,7 @@ export async function getCompanyFaction(companyNames: string[]): Promise<Map<str
     const companyFactions = new Map();
     if (companyNames.length === 0) { return companyFactions; }
     const condition = joinCondition(companyNames, 'OR', 'A');
-    const query = `SELECT A, B WHERE (${condition})`;
+    const query = `SELECT A, B WHERE(${condition})`;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'companies', query);
 
     for (const row of data) {
@@ -75,22 +67,31 @@ export async function getCompanyFaction(companyNames: string[]): Promise<Map<str
     return companyFactions;
 }
 
-export async function getRosters(warId: number): Promise<Map<string, Roster>> {
-    const warStr = `${warId}`;
-    const query = `SELECT A, B, C, D, E WHERE B=${warStr}`;
+export async function getRosters(params: QueryParameter[], limit?: number, order?: Ordering): Promise<Map<number, Map<string, Roster>>> {
+    const conditions = params ? ` WHERE ${makeConditions(params)}` : ''
+    const limitStr = limit ? ` LIMIT ${limit}` : '';
+    const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()}` : '';
+    const query = `SELECT A, B, C, D, E${conditions}${orderStr}${limitStr}`;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'groups', query);
 
-    const rosters = new Map<string, Roster>();
+    const rosters = new Map<number, Map<string, Roster>>();
     for (const row of data) {
         const name = row[0] as string;
+        const warid = row[1] as number;
         const role = row[4] as string;
         const group = row[2] as number;
         const company = row[3] as string;
 
-        let roster = rosters.get(company);
+        let warRoster = rosters.get(warid);
+        if (!warRoster) {
+            warRoster = new Map<string, Roster>();
+            rosters.set(warid, warRoster);
+        }
+
+        let roster = warRoster.get(company);
         if (!roster) {
-            roster = { groups: new Map<number, Group>() };
-            rosters.set(company, roster);
+            roster = { warid, groups: new Map<number, Group>() };
+            warRoster.set(company, roster);
         }
 
         let rosterGroup = roster.groups.get(group);
@@ -105,10 +106,10 @@ export async function getRosters(warId: number): Promise<Map<string, Roster>> {
 }
 
 export async function getWars(params?: QueryParameter[], limit?: number, order?: Ordering): Promise<War[]> {
-    const conditions = params ? ` WHERE ${makeConditions(params)}` : ''
-    const limitStr = limit ? ` LIMIT ${limit}` : '';
-    const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()}` : '';
-    const query = `SELECT A, B, C, D, E, F, I${conditions}${orderStr}${limitStr}`;
+    const conditions = params ? ` WHERE ${makeConditions(params)} ` : ''
+    const limitStr = limit ? ` LIMIT ${limit} ` : '';
+    const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()} ` : '';
+    const query = `SELECT A, B, C, D, E, F, I${conditions}${orderStr}${limitStr} `;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
 
     const wars = [];
@@ -126,8 +127,8 @@ export async function getWars(params?: QueryParameter[], limit?: number, order?:
 }
 
 export async function getWar(warId: number): Promise<War> {
-    const warStr = `${warId}`;
-    const query = `SELECT A, B, C, D, E, F, I WHERE A=${warStr}`;
+    const warStr = `${warId} `;
+    const query = `SELECT A, B, C, D, E, F, I WHERE A = ${warStr} `;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
 
     const id = data[0][0] as number;
@@ -239,7 +240,7 @@ export function summarizeGroups(leaderboard: Leaderboard, rosters: Map<string, R
                 if (group.players.some(player => player.name === entry.name)) {
                     let summary = groupSummary.get(n);
                     if (!summary) {
-                        summary = { name: `${n}`, score: 0, kills: 0, deaths: 0, assists: 0, healing: 0, damage: 0 };
+                        summary = { name: `${n} `, score: 0, kills: 0, deaths: 0, assists: 0, healing: 0, damage: 0 };
                         groupSummary.set(n, summary);
                     }
                     summary.score += entry.score;
@@ -254,4 +255,44 @@ export function summarizeGroups(leaderboard: Leaderboard, rosters: Map<string, R
     }
 
     return companyGroupSummaries;
+}
+
+export function createPlayerDetails(
+    leaderboard: Leaderboard,
+    rosters: Map<number, Map<string, Roster>>,
+    wars: War[]
+): PlayerDetails {
+    const pd: PlayerDetails = {
+        stats: []
+    };
+
+    for (const entry of leaderboard.entries) {
+        const warRoster = rosters.get(entry.warid);
+        if (!warRoster) continue;
+        const companyRoster = warRoster.get(entry.company);
+        if (!companyRoster) continue;
+        let role = '';
+        let attacker = '';
+        let defender = '';
+
+        for (const [n, group] of companyRoster.groups) {
+            for (const player of group.players) {
+                if (player.name === entry.name) {
+                    role = player.role;
+                }
+            }
+        }
+
+        for (const war of wars) {
+            if (war.id === entry.warid) {
+                attacker = war.attacker
+                defender = war.defender
+                break;
+            }
+        }
+
+        pd.stats.push({ ...entry, attacker, defender, role });
+    }
+
+    return pd;
 }

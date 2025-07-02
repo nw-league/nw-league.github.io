@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import type { War } from "../types/war";
-import { getWars } from "../services/wardbservice";
+import { getWars, type QueryParameter } from "../services/wardbservice";
 
-export function useWars() {
+export function useWars(withIds: number[]) {
     const [wars, setWars] = useState<War[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [err, setError] = useState<any>(null);
@@ -13,7 +13,11 @@ export function useWars() {
         async function fetchAll() {
             try {
                 setLoading(true);
-                const w = await getWars();
+                const qp: QueryParameter[] = [];
+                for (const wid of withIds) {
+                    qp.push({ column: "A", fn: "=", value: wid });
+                }
+                const w = await getWars(qp);
                 if (cancelled) return;
                 setWars(w);
 

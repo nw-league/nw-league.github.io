@@ -14,7 +14,7 @@ export function useLeaderboard(warId: number) {
         async function fetchData() {
             try {
                 setLoading(true);
-                const data = await getLeaderboard(warId);
+                const data = await getLeaderboard([{ value: warId, column: "C", fn: "=" }]);
                 if (!cancelled) setLeaderboard(data);
             } catch (err) {
                 if (!cancelled) setError(err);

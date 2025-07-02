@@ -5,6 +5,7 @@ import WarStatsPanel from "../components/molecules/warstatspanel";
 import { useWarData } from "../hooks/useWarData";
 import GroupsComponent from "../components/molecules/groupscomponent";
 import Loading from "../components/atom/loading";
+import ErrorPage from "./errorpage";
 
 
 
@@ -15,7 +16,7 @@ const WarDetail: React.FC = () => {
     const { loading, error, war, leaderboard, summary, factions, groupSummary, groupDetails: groupPerformance } = useWarData(warIdNum);
 
     if (loading) return <div className="flex w-full justify-center text-white p-8" ><Loading /></div >;
-    if (error || !leaderboard || !war) return <div className="text-red-500 p-8">Error loading leaderboard.</div>;
+    if (error || !leaderboard || !war) return <ErrorPage error={error} />
 
     const attackerSummary = summary.get(war.attacker);
     const defenderSummary = summary.get(war.defender);

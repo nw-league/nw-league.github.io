@@ -21,22 +21,25 @@ export function useWarData(warId: number) {
         async function fetchAll() {
             try {
                 setLoading(true);
-                const lb = await getLeaderboard(warId);
+                const lb = await getLeaderboard([{ column: "C", fn: "=", value: warId }]);
                 if (cancelled) return;
 
                 const sum = summarizeLeaderboard(lb);
                 const companies = [...sum.keys()];
                 const f = await getCompanyFaction(companies);
-                const g = await getRosters(warId);
-                const gd = await splitIntoGroups(lb, g);
-                const gs = summarizeGroups(lb, g);
+                const g = await getRosters([{ column: "B", fn: "=", value: warId }]);
+                if (!g.has(warId)) {
+                    throw new Error(`Failed to get roster for ${warId}`)
+                }
+                const gd = await splitIntoGroups(lb, g.get(warId)!);
+                const gs = summarizeGroups(lb, g.get(warId)!);
                 const w = await getWar(warId);
                 if (cancelled) return;
 
                 setLeaderboard(lb);
                 setSummary(sum);
                 setFactions(f);
-                setRosters(g);
+                setRosters(g.get(warId)!);
                 setGroupSummary(gs);
                 SetWar(w);
                 setGroupDetails(gd);

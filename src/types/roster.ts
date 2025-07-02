@@ -6,5 +6,6 @@ export interface Group {
 }
 
 export interface Roster {
+    warid: number;
     groups: Map<number, Group>;
 }

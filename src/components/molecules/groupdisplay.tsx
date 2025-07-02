@@ -118,7 +118,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
 
     return (
         <div className="text-white">
-            <div className="font-bold p-2 bg-gray-800 rounded-t-lg">Group {groupId}</div>
+            <div className="font-bold p-2 bg-gray-800 rounded-t-lg text-xs">Group {groupId}</div>
             <StatsTable columns={columns} data={combinedData} sort={sort} calc={calcColumns} />
         </div >
     );
