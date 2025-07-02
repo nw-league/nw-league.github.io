@@ -21,3 +21,6 @@ const w = await getWars(warqp);
 const r = await getRosters(rqp);
 const p = createPlayerDetails(lb, r, w);
 console.log(p);
+
+const www = await getWars([]);
+console.log(www);

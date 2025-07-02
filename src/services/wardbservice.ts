@@ -106,7 +106,7 @@ export async function getRosters(params: QueryParameter[], limit?: number, order
 }
 
 export async function getWars(params?: QueryParameter[], limit?: number, order?: Ordering): Promise<War[]> {
-    const conditions = params ? ` WHERE ${makeConditions(params)} ` : ''
+    const conditions = params && params.length > 0 ? ` WHERE ${makeConditions(params)} ` : ''
     const limitStr = limit ? ` LIMIT ${limit} ` : '';
     const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()} ` : '';
     const query = `SELECT A, B, C, D, E, F, I${conditions}${orderStr}${limitStr} `;
@@ -275,7 +275,7 @@ export function createPlayerDetails(
         let attacker = '';
         let defender = '';
 
-        for (const [n, group] of companyRoster.groups) {
+        for (const [_, group] of companyRoster.groups) {
             for (const player of group.players) {
                 if (player.name === entry.name) {
                     role = player.role;

@@ -4,7 +4,7 @@ import NotFound from "./notfound";
 import Loading from "../components/atom/loading";
 import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { LeaderboardEntry, PlayerDetailsEntry } from "../types/leaderboard";
+import type { PlayerDetailsEntry } from "../types/leaderboard";
 import NumberCell from "../components/atom/numbercell";
 import StatsTable from "../components/atom/statstble";
 import ErrorPage from "./errorpage";
