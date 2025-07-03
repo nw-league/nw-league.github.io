@@ -6,20 +6,15 @@ import type { Group, Roster } from "../types/roster";
 import type { War } from "../types/war";
 import { joinCondition, makeConditions } from "../utils/querybuilder";
 import { convertFromGoogleSheetsDateString } from "../utils/time";
-import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
+import { fetchTableFromGoogleSheets } from "./googlesheets";
+import type { QueryParameter } from "../types/queryparameter";
+import type { Role } from "../types/role";
 
 const kSheetId = "14byZyCAX_N_AA-y_1tv4CLtgTCaOB-Zq8QbOHmavE6Y";
 
 const kIdxCompanyName = 0;
 const kIdxFactiion = 1;
-export type QueryOperator = "=" | "<" | ">" | "<=" | ">=" | "<>" | 'IS NOT'
 export type OrderingOperator = "asc" | "desc";
-export interface QueryParameter {
-    column: string;
-    fn: QueryOperator;
-    value: DataType;
-}
-
 export interface Ordering {
     column: string;
     direction: OrderingOperator;
@@ -78,7 +73,7 @@ export async function getRosters(params: QueryParameter[], limit?: number, order
     for (const row of data) {
         const name = row[0] as string;
         const warid = row[1] as number;
-        const role = row[4] as string;
+        const role = row[4] as Role;
         const group = row[2] as number;
         const company = row[3] as string;
 

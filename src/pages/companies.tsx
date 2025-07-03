@@ -1,7 +1,7 @@
 
 import Loading from "../components/atom/loading";
 import CompanyListCard from "../components/molecules/companylistcard";
-import { useCompanies } from "../hooks/useCompanies";
+import { useCompanies } from "../hooks/useCompaniesNew";
 
 const Companies: React.FC = () => {
     const { loading, err, companies } = useCompanies();
@@ -16,7 +16,7 @@ const Companies: React.FC = () => {
     }
 
     return (
-        <div className="grid grid-cols-1 gap-2 text-white p-8 max-w-180 mx-auto">
+        <div className="flex flex-col gap-2 text-white p-8 max-w-180 mx-auto">
 
             {companyCards}
         </div>

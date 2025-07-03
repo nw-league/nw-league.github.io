@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import type { War } from "../types/war";
-import { getWars } from "../services/wardbservice";
-import { type QueryParameter } from "../types/queryparameter";
+import type { Company } from "../types/company";
+import { getCompanies } from "../services/companiesdbservice";
 
-export function useWars(withIds: number[]) {
-    const [wars, setWars] = useState<War[]>([]);
+
+export function useCompanies() {
+    const [companies, setCompanies] = useState<Company[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [err, setError] = useState<any>(null);
 
@@ -14,13 +14,9 @@ export function useWars(withIds: number[]) {
         async function fetchAll() {
             try {
                 setLoading(true);
-                const qp: QueryParameter[] = [];
-                for (const wid of withIds) {
-                    qp.push({ column: "A", fn: "=", value: wid });
-                }
-                const w = await getWars(qp);
+                const c = await getCompanies();
                 if (cancelled) return;
-                setWars(w);
+                setCompanies(c);
 
             } catch (err) {
                 if (!cancelled) setError(err);
@@ -33,5 +29,5 @@ export function useWars(withIds: number[]) {
         return () => { cancelled = true; };
     }, []);
 
-    return { loading, err, wars };
+    return { loading, err, companies };
 }

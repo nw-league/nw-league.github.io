@@ -6,6 +6,7 @@ import { useWarData } from "../hooks/useWarData";
 import GroupsComponent from "../components/molecules/groupscomponent";
 import Loading from "../components/atom/loading";
 import ErrorPage from "./errorpage";
+import WarResultsCompanyCombined from "../components/molecules/warresultscompanycombined";
 
 
 
@@ -34,17 +35,18 @@ const WarDetail: React.FC = () => {
     return (
         <div className="bg-gray-900 flex justify-center px-4"> {/* fills screen & centers children */}
             <div className="flex flex-col w-full justify-center gap-8 p-4">
-                <div className="max-w-6xl w-full mx-auto">
+                <div className="max-w-md w-full mx-auto">
                     <WarStatsPanel date={war.date} captures={{}} map={war.map} />
                 </div>
-                <div className="max-w-6xl w-full mx-auto">
+                <div className="max-w-md w-full mx-auto">
                     <div className="flex flex-col md:flex-row gap-4 w-full">
-                        <div className="w-full md:w-1/2">
+                        {/* <div className="w-full md:w-1/2">
                             <WarResultsCompany summary={attackerSummary} faction={attackerFaction} isAttacker={true} isWinner={war.winner === war.attacker} />
                         </div>
                         <div className="w-full md:w-1/2">
                             <WarResultsCompany summary={defenderSummary} faction={defenderFaction} isAttacker={false} isWinner={war.winner === war.defender} />
-                        </div>
+                        </div> */}
+                        <WarResultsCompanyCombined summaries={[attackerSummary, defenderSummary]} factions={[attackerFaction, defenderFaction]} winner={war.winner} attacker={war.attacker} />
                     </div>
                 </div>
                 <div className="max-w-7xl w-full mx-auto">

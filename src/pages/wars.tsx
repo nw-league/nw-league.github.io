@@ -18,9 +18,17 @@ const Wars: React.FC = () => {
         );
     }
     return (
-        <div className="grid grid-cols-1 gap-2 text-white p-8 max-w-180 mx-auto">
-            {warCards}
-        </div>
+
+        <div className="flex flex-col w-full mx-auto max-w-3xl gap-4">
+            <h1 className="text-2xl font-semibold text-white items-end">Season 3 Wars</h1>
+            <div className="text-gray-400 bg-gray-800 rounded-lg p-4">
+                Preseaon
+            </div>
+            <h1 className="text-2xl font-semibold text-white items-end">Regular Wars</h1>
+            <div className="grid grid-cols-1 gap-2 text-white m">
+                {warCards}
+            </div >
+        </div >
     )
 };
 

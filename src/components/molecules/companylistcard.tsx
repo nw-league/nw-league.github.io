@@ -15,12 +15,17 @@ const CompanyListCard: React.FC<CompanyListCardProps> = ({ company }) => {
     }
     return (
         <Link to={`/companies/${company.name}`}>
-            <div className="flex bg-gray-800 gap-0.5">
+            <div className="flex bg-gray-800 gap-1 hover:scale-105 rounded-lg">
                 <div className={`${color} rounded-l-lg p-4`}>
 
                 </div>
-                <div className={`rounded-lg p-4`}>
-                    {company.name}
+                <div className="flex-col gap-1 p-2">
+                    <div>
+                        {company.name}
+                    </div>
+                    <div className="text-xs text-gray-200">
+                        {company.faction}
+                    </div>
                 </div>
             </div>
         </Link >

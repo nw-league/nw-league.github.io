@@ -1,5 +1,6 @@
 import type { DataType } from "../services/googlesheets";
-import type { QueryParameter } from "../services/wardbservice";
+import type { Ordering } from "../services/wardbservice";
+import type { QueryParameter } from "../types/queryparameter";
 
 type Operator = 'AND' | 'OR'
 
@@ -38,4 +39,15 @@ export function makeConditions(params: QueryParameter[]): string {
     }
 
     return columnCondtions.join(' AND ');
+}
+
+export function constructQuery(columns: string[], params?: QueryParameter[], order?: Ordering, limit?: number): string {
+    if (limit && limit <= 0) {
+        throw new Error(`Limit must be greater than 0. limit=${limit}`);
+    }
+    const conditions = params ? ` WHERE ${makeConditions(params)}` : '';
+    const limitStr = limit ? ` LIMIT ${limit}` : '';
+    const orderBy = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()}` : '';
+    const select = columns.map(v => v.toUpperCase()).join(', ');
+    return `SELECT ${select}${conditions}${orderBy}${limitStr}`;
 }

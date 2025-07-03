@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { createPlayerDetails, getLeaderboard, getRosters, getWars, type QueryOperator, type QueryParameter } from "../services/wardbservice";
+import { createPlayerDetails, getLeaderboard, getRosters, getWars } from "../services/wardbservice";
+import { type QueryOperator } from "../types/queryparameter";
+import { type QueryParameter } from "../types/queryparameter";
 import type { PlayerDetails } from "../types/playerdetails";
 
 export function usePlayerDetails(playerName: string) {
