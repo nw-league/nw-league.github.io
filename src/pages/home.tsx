@@ -3,7 +3,7 @@ import Loading from "../components/atom/loading";
 import WarTile from "../components/molecules/wartile";
 import PlaceholderTile from "../components/molecules/placeholdertile";
 import WarListCard from "../components/molecules/warlistcard";
-import Carousel from "../components/molecules/carousel";
+// import Carousel from "../components/molecules/carousel";
 
 const Home: React.FC = () => {
     const { loading, err, upcomingWars, pastWars } = useUpcomingAndPast();
