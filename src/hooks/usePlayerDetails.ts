@@ -3,6 +3,7 @@ import { createPlayerDetails, getLeaderboard, getRosters, getWars } from "../ser
 import { type QueryOperator } from "../types/queryparameter";
 import { type QueryParameter } from "../types/queryparameter";
 import type { PlayerDetails } from "../types/playerdetails";
+import { getPlayer } from "../services/playerdbservice";
 
 export function usePlayerDetails(playerName: string) {
     const [playerDetails, setPlayerDetails] = useState<PlayerDetails | null>(null);
@@ -27,9 +28,13 @@ export function usePlayerDetails(playerName: string) {
                     };
                 })
                 rqp.push({ column: "A", fn: "=" as unknown as QueryOperator, value: playerName });
-                const w = await getWars(warqp);
-                const r = await getRosters(rqp);
-                const p = createPlayerDetails(lb, r, w);
+                const [x, w, r] = await Promise.all([
+                    getPlayer(playerName),
+                    getWars(warqp),
+                    getRosters(rqp)
+                ]);
+
+                const p = createPlayerDetails(x, lb, r, w);
 
                 console.log(r);
                 if (cancelled) return;

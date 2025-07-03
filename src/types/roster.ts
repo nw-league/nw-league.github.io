@@ -1,8 +1,8 @@
-import type { Player } from "./player";
+import type { WarPlayer } from "./warplayer";
 
 
 export interface Group {
-    players: Player[];
+    players: WarPlayer[];
 }
 
 export interface Roster {

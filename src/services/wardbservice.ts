@@ -9,6 +9,7 @@ import { convertFromGoogleSheetsDateString } from "../utils/time";
 import { fetchTableFromGoogleSheets } from "./googlesheets";
 import type { QueryParameter } from "../types/queryparameter";
 import type { Role } from "../types/role";
+import type { Player } from "../types/player";
 
 const kSheetId = "14byZyCAX_N_AA-y_1tv4CLtgTCaOB-Zq8QbOHmavE6Y";
 
@@ -253,11 +254,23 @@ export function summarizeGroups(leaderboard: Leaderboard, rosters: Map<string, R
 }
 
 export function createPlayerDetails(
+    player: Player | null,
     leaderboard: Leaderboard,
     rosters: Map<number, Map<string, Roster>>,
     wars: War[]
 ): PlayerDetails {
+
+    const usablePlayer = player || {
+        id: -1,
+        name: 'Scot Lane',
+        server: 'San Francisco',
+        role: '',
+        faction: 'Gray',
+        company: 'AGS'
+    }
+
     const pd: PlayerDetails = {
+        player: usablePlayer,
         stats: []
     };
 
