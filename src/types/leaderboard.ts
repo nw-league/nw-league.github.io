@@ -40,6 +40,7 @@ export interface StatSummary {
     assists: number;
     healing: number;
     damage: number;
+    count: number;
 }
 
 export interface GroupPerformance {
