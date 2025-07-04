@@ -8,7 +8,7 @@ interface CompanyWarTileProps {
 }
 
 function CompanyWarTile({ companyName, war }: CompanyWarTileProps): JSX.Element {
-    const isWinner = war.winner === companyName;
+    // const isWinner = war.winner === companyName;
     const opponent = war.attacker === companyName ? war.defender : war.attacker;
     return (
         <Link to={`/wars/${war.id}`} className="h-full w-full">

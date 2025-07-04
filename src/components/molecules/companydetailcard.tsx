@@ -10,7 +10,7 @@ function CompanyDetailCard({ company }: CompanyDetailCardProps): JSX.Element {
 
     const color = factionToColor(company.faction);
     const primary = `bg-${color}-700`;
-    const accent = `bg-${color}-800`;
+    // const accent = `bg-${color}-800`;
     return (
         <div className={`flex w-full items-center ${primary} rounded-lg p-2 gap-2 text-white`}>
             <ProfilePicture pictureUrl="https://dqzvgunkova5o.cloudfront.net/statics/2025-06-20/images/NW-bug.svg" size={32} />

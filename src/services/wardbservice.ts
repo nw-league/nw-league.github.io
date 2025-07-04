@@ -157,7 +157,15 @@ export async function getCompanies(): Promise<Company[]> {
         if (!f) { f = 'Gray' };
         c.push({
             name: company,
+            shorthand: '',
+            server: '',
+            governor: '',
+            captains: [],
+            shotcaller: '',
+            tier: '',
+            icon: '',
             faction: f,
+
         });
     }
 
