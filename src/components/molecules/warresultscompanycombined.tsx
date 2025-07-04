@@ -17,10 +17,10 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
 
     let attackerColor = `bg-${factionToColor(factions[0])}-700`;
     let attackerAccent = `bg-${factionToColor(factions[0])}-800`;
-    let attackerBorder = `border-r-${factionToColor(factions[0])}-900`;
+    let attackerBorder = `border-${factionToColor(factions[0])}-900`;
     let defenderColor = `bg-${factionToColor(factions[1])}-700`;
     let defenderAccent = `bg-${factionToColor(factions[1])}-800`;
-    let defenderBorder = `border-r-${factionToColor(factions[1])}-900`;
+    let defenderBorder = `border-${factionToColor(factions[1])}-900`;
 
     const isAttackerWinner = summaries[0].name === winner;
     const isSmall = useMediaQuery({ maxWidth: 768 })
@@ -30,19 +30,30 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
             <div className="grid grid-rows w-full text-white mx-auto">
                 <div className="grid grid-cols-[1fr_50px_1fr] w-full items-center place-items-center">
                     <div className={`flex w-full ${attackerAccent} rounded-tl-lg w-full h-fit justify-center text-center font-bold`}>
-                        Attacker<span></span>
+                        Attacker
                     </div >
                     <div className="bg-gray-700 w-full h-full"></div>
                     <div className={`flex w-full ${defenderAccent} rounded-tr-lg w-full h-fit justify-center font-bold`}>
-                        Defender<span>{!isAttackerWinner && <CrownIcon weight="fill" className="text-yellow-500 drop-shadow-lg" />}</span>
+                        Defender
                     </div>
                 </div>
                 <div className="grid grid-rows-7 w-full text-white mx-auto">
                     {/* Row 1: Names */}
                     <div className="grid grid-cols-[1fr_50px_1fr] w-full items-center">
-                        <div className={`${attackerColor} flex items-center justify-center font-bold text-xl md:text-3xl p-2 w-full h-full ${attackerBorder} border-b-2`}>{summaries[0].name}</div>
+                        <div className={`${attackerColor} flex items-center justify-center font-bold text-xl md:text-3xl p-2 w-full h-full ${attackerBorder} border-b-2 relative`}>
+                            {isAttackerWinner && <CrownIcon weight="fill" size={16} className="absolute top-0 left-1/2 -translate-x-1/2 translate-y-[1px] text-yellow-500 drop-shadow-lg" />}
+                            {summaries[0].name}
+                        </div>
                         <div className="bg-gray-700 text-center text-3xl p-2 border-b-2 border-gray-900">vs</div>
-                        <div className={`${defenderColor} flex items-center justify-center font-bold text-xl md:text-3xl p-2 w-full h-full ${defenderBorder} border-b-2`}>{summaries[1].name}</div>
+                        <div className={`${defenderColor} flex items-center justify-center font-bold text-xl md:text-3xl p-2 w-full h-full ${defenderBorder} border-b-2 relative`}>
+                            {!isAttackerWinner &&
+                                <CrownIcon
+                                    weight="fill"
+                                    size={16}
+                                    className="absolute top-0 left-1/2 -translate-x-1/2 translate-y-[1px] text-yellow-500 drop-shadow-lg" />
+                            }
+                            {summaries[1].name}
+                        </div>
                     </div>
 
                     {/* Row 2: Kills */}
@@ -131,16 +142,17 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                             </div>
                         </td>
 
-                        <td className={`font-bold text-3xl ${attackerBorder}`}>
-                            <div className="flex w-full h-full items-center justify-center">
-                                {isAttackerWinner && <CrownIcon weight="fill" className="text-yellow-500 drop-shadow-lg" />}{summaries[0].name}
+                        <td className={`font-bold text-2xl ${attackerBorder} border-r-2 pt-4 pb-4`}>
+                            <div className="flex w-full h-full items-center justify-center relative text-nowrap">
+                                {isAttackerWinner && <CrownIcon weight="fill" size={24} className="absolute -top-3 text-yellow-400 drop-shadow-lg" />}
+                                {summaries[0].name}
                             </div>
                         </td>
-                        <td className={`${attackerBorder}`}>{<NumberCell value={summaries[0].kills} />}</td>
-                        <td className={`${attackerBorder}`}>{<NumberCell value={summaries[0].deaths} />}</td>
-                        <td className={`${attackerBorder}`}>{<NumberCell value={summaries[0].assists} />}</td>
-                        <td className={`${attackerBorder}`}>{<NumberCell value={summaries[0].healing} />}</td>
-                        <td className={`${attackerBorder}`}>{<NumberCell value={summaries[0].damage} />}</td>
+                        <td className={`${attackerBorder} border-r-2`}>{<NumberCell value={summaries[0].kills} />}</td>
+                        <td className={`${attackerBorder} border-r-2`}>{<NumberCell value={summaries[0].deaths} />}</td>
+                        <td className={`${attackerBorder} border-r-2`}>{<NumberCell value={summaries[0].assists} />}</td>
+                        <td className={`${attackerBorder} border-r-2`}>{<NumberCell value={summaries[0].healing} />}</td>
+                        <td className={`${attackerBorder} border-r-2`}>{<NumberCell value={summaries[0].damage} />}</td>
                     </tr>
                     <tr className={`${defenderColor}`}>
                         <td className={`${defenderAccent} ${defenderBorder}`}>
@@ -148,16 +160,17 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                                 <ShieldIcon />
                             </div>
                         </td>
-                        <td className={`font-bold text-3xl ${defenderBorder}`}>
-                            <div className="flex w-full h-full items-center justify-center">
-                                {!isAttackerWinner && <CrownIcon weight="fill" className="text-yellow-500 drop-shadow-lg" />}{summaries[1].name}
+                        <td className={`font-bold text-2xl ${defenderBorder} border-r-2 pt-4 pb-4`}>
+                            <div className="flex w-full h-full items-center justify-center text-nowrap text-ellipsis">
+                                {!isAttackerWinner && <CrownIcon weight="fill" className="absolute -top-3 text-yellow-400 drop-shadow-lg" />}
+                                {summaries[1].name}
                             </div>
                         </td>
-                        <td className={`${defenderBorder}`}>{<NumberCell value={summaries[1].kills} />}</td>
-                        <td className={`${defenderBorder}`}>{<NumberCell value={summaries[1].deaths} />}</td>
-                        <td className={`${defenderBorder}`}>{<NumberCell value={summaries[1].assists} />}</td>
-                        <td className={`${defenderBorder}`}>{<NumberCell value={summaries[1].healing} />}</td>
-                        <td className={`${defenderBorder}`}>{<NumberCell value={summaries[1].damage} />}</td>
+                        <td className={`${defenderBorder} border-r-2`}>{<NumberCell value={summaries[1].kills} />}</td>
+                        <td className={`${defenderBorder} border-r-2`}>{<NumberCell value={summaries[1].deaths} />}</td>
+                        <td className={`${defenderBorder} border-r-2`}>{<NumberCell value={summaries[1].assists} />}</td>
+                        <td className={`${defenderBorder} border-r-2`}>{<NumberCell value={summaries[1].healing} />}</td>
+                        <td className={`${defenderBorder} border-r-2`}>{<NumberCell value={summaries[1].damage} />}</td>
                     </tr>
                 </tbody>
             </table >

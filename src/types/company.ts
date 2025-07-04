@@ -2,5 +2,12 @@ import type { Faction } from "./faction";
 
 export interface Company {
     name: string;
-    faction: Faction
+    shorthand: string;
+    server: string;
+    faction: Faction;
+    governor: string;
+    captains: string[]
+    shotcaller: string;
+    tier: string;
+    icon: string;
 }

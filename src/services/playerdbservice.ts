@@ -1,9 +1,10 @@
 import { constructQuery } from "../utils/querybuilder";
-import { Qop } from "../types/queryparameter";
+import { Qop, type QueryParameter } from "../types/queryparameter";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 import type { Player } from "../types/player";
 import type { Role } from "../types/role";
 import type { Faction } from "../types/faction";
+import type { Ordering } from "./wardbservice";
 
 const kPlayerDbSheetId: string = '1Zpmwiu2M3AHdPVwaZ8A-nIPN5eKGclLSfnLl_Xn10PA';
 
@@ -29,4 +30,18 @@ export async function getPlayer(playerName: string): Promise<Player | null> {
     }
 
     return null;
+}
+
+export async function getPlayers(params?: QueryParameter[], order?: Ordering, limit?: number): Promise<Player[]> {
+    const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F'], params, order, limit);
+    const data = await fetchTableFromGoogleSheets(kPlayerDbSheetId, 'players', query);
+
+    return data.map(row => ({
+        id: row[0] as number,
+        name: row[1] as string,
+        server: row[2] as string,
+        role: row[3] as Role,
+        faction: row[4] as Faction,
+        company: row[5] as string
+    }));
 }

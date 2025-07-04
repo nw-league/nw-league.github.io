@@ -48,3 +48,16 @@ export interface GroupPerformance {
     group: Group;
     stats: LeaderboardEntry[];
 }
+
+export interface MapStat {
+    played: number;
+    win: number;
+}
+
+export interface WarsSummary {
+    win: number;
+    loss: number;
+    map: string;
+    most_win: string;
+    most_loss: string;
+}
