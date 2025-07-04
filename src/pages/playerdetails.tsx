@@ -27,15 +27,13 @@ function PlayerDetails() {
         company: ''
     } as Player;
 
+
     return (
-        <div className="flex flex-col max-w-4xl mx-auto mt-4 gap-2s">
+        <div className="flex flex-col max-w-6xl mx-auto mt-4 gap-2s">
             <PlayerCard player={useablePlayer} />
-            <PlayerSummary playerName={playerName} />
-            <div className="bg-gray-700 rounded-lg">
-                <h1 className="text-white font-semibold p-2">War History</h1>
-                <PlayerWarHistory playerName={playerName} />
-            </div>
-        </div>
+            <PlayerSummary player={useablePlayer} />
+            <PlayerWarHistory playerName={playerName} />
+        </div >
     );
 }
 

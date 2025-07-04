@@ -32,22 +32,30 @@ const WarDetail: React.FC = () => {
         return <div className="text-gray-500 p-8">Error loading leaderboard.</div>;
     }
 
+
     return (
         <div className="bg-gray-900 flex justify-center px-4"> {/* fills screen & centers children */}
             <div className="flex flex-col w-full justify-center gap-8 p-4">
-                <div className="max-w-md w-full mx-auto">
-                    <WarStatsPanel date={war.date} captures={{}} map={war.map} />
-                </div>
-                <div className="max-w-md w-full mx-auto">
-                    <div className="flex flex-col md:flex-row gap-4 w-full">
-                        {/* <div className="w-full md:w-1/2">
+                <div className="flex flex-col md:flex-row max-w-7xl w-full mx-auto gap-4">
+                    <div className="flex-1">
+                        <WarStatsPanel date={war.date} captures={{
+                            pointA: 300,
+                            pointB: 900,
+                            pointC: 1200,
+                            fort: 1800
+                        }} map={war.map} />
+                    </div>
+                    {/* <div className="flex flex-col md:flex-row gap-4 w-full"> */}
+                    {/* <div className="w-full md:w-1/2">
                             <WarResultsCompany summary={attackerSummary} faction={attackerFaction} isAttacker={true} isWinner={war.winner === war.attacker} />
                         </div>
                         <div className="w-full md:w-1/2">
                             <WarResultsCompany summary={defenderSummary} faction={defenderFaction} isAttacker={false} isWinner={war.winner === war.defender} />
                         </div> */}
+                    <div className="flex-3">
                         <WarResultsCompanyCombined summaries={[attackerSummary, defenderSummary]} factions={[attackerFaction, defenderFaction]} winner={war.winner} attacker={war.attacker} />
                     </div>
+                    {/* </div> */}
                 </div>
                 <div className="max-w-7xl w-full mx-auto">
                     <GroupsComponent attackerName={war.attacker} attackerSummary={attackerGroupSummary} defenderName={war.defender} defenderSummary={defenderGroupSummary} attackerGroups={attackerGroups} defenderGroups={defenderGroups} />

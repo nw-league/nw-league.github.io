@@ -8,6 +8,7 @@ import NumberCell from "../atom/numbercell";
 import ErrorPage from "../../pages/errorpage";
 import Loading from "../atom/loading";
 import StatsTable from "../atom/statstble";
+import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 
 
 export interface PlayerWarHistoryProps {
@@ -33,8 +34,13 @@ function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
                 },
             },
             {
-                accessorKey: "role",
-                header: "Role",
+                accessorKey: "isWinner",
+                header: "Win/Loss",
+                cell: info => (
+                    <div className="flex justify-center items-center">
+                        {info.getValue<boolean>() ? <CheckCircleIcon weight="bold" className="text-green-500" /> : <XCircleIcon weight="bold" className="text-red-500" />}
+                    </div>
+                ),
             },
             {
                 accessorKey: "score",
@@ -99,7 +105,10 @@ function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
     if (!playerDetails) return <NotFound />
 
     return (
-        <StatsTable columns={columns} data={playerDetails.stats} sort={sort} />
+        <div className="bg-gray-700">
+            <h1 className="text-white font-semibold p-2">War History</h1>
+            <StatsTable columns={columns} data={playerDetails.stats} sort={sort} />
+        </div>
     );
 }
 

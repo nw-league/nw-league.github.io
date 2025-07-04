@@ -25,7 +25,7 @@ const GroupsComponent: React.FC<GroupsSummaryProps> = ({
     const selectedSummary = company === 0 ? attackerSummary : defenderSummary;
     const selectedGroups = company === 0 ? attackerGroups : defenderGroups;
 
-    return <div>
+    return (
         <div className='text-white'>
             <div className="flex p-2">
                 <div dir="ltr">
@@ -45,12 +45,13 @@ const GroupsComponent: React.FC<GroupsSummaryProps> = ({
                     </button>
                 </div>
             </div>
+
+            <div className='grid grid-cols-1 gap-8'>
+                <GroupsSummary groups={selectedSummary} />
+                <GroupsDetail groups={selectedGroups} />
+            </div>
         </div>
-        <div className='grid grid-cols-1 gap-8'>
-            <GroupsSummary groups={selectedSummary} />
-            <GroupsDetail groups={selectedGroups} />
-        </div>
-    </div>
+    );
 
 };
 

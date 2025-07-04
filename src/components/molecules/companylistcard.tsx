@@ -1,18 +1,12 @@
 import { Link } from "react-router-dom";
 import type { Company } from "../../types/company";
+import { factionToColor } from "../../utils/factions";
 
 export interface CompanyListCardProps {
     company: Company,
 }
 const CompanyListCard: React.FC<CompanyListCardProps> = ({ company }) => {
-    let color = "bg-gray-700";
-    if (company.faction === "Marauder") {
-        color = 'bg-green-700';
-    } else if (company.faction === "Covenant") {
-        color = 'bg-yellow-700';
-    } else if (company.faction === "Syndicate") {
-        color = 'bg-purple-700';
-    }
+    const color = `bg-${factionToColor(company.faction)}-700`;
     return (
         <Link to={`/companies/${company.name}`}>
             <div className="flex bg-gray-800 gap-1 hover:scale-105 rounded-lg">

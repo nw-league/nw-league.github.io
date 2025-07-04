@@ -15,6 +15,7 @@ export interface PlayerDetailsEntry extends LeaderboardEntry {
     role: string;
     attacker: string;
     defender: string;
+    isWinner: boolean;
 }
 
 export interface Leaderboard {

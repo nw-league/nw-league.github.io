@@ -283,7 +283,7 @@ export function createPlayerDetails(
         let role = '';
         let attacker = '';
         let defender = '';
-
+        let isWinner = false;
         for (const [_, group] of companyRoster.groups) {
             for (const player of group.players) {
                 if (player.name === entry.name) {
@@ -296,11 +296,12 @@ export function createPlayerDetails(
             if (war.id === entry.warid) {
                 attacker = war.attacker
                 defender = war.defender
+                isWinner = entry.company === war.winner;
                 break;
             }
         }
 
-        pd.stats.push({ ...entry, attacker, defender, role });
+        pd.stats.push({ ...entry, attacker, defender, role, isWinner });
     }
 
     return pd;

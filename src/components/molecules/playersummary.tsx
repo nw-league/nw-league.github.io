@@ -1,30 +1,34 @@
 import type { JSX } from "react";
 import { usePlayerStats } from "../../hooks/usePlayerStats";
 import Loading from "../atom/loading";
-import { FireIcon, FirstAidIcon, HandshakeIcon, SigmaIcon, SkullIcon, SwordIcon } from "@phosphor-icons/react";
+import { FireIcon, FirstAidIcon, HandshakeIcon, HashIcon, SkullIcon, SwordIcon } from "@phosphor-icons/react";
+import StatWithIcon from "./statwithicon";
+import NumberCell from "../atom/numbercell";
+import type { Player } from "../../types/player";
+import { factionToColor } from "../../utils/factions";
 
 interface PlayerSummaryProps {
-    playerName: string
+    player: Player
 }
-function PlayerSummary({ playerName }: PlayerSummaryProps): JSX.Element {
+function PlayerSummary({ player }: PlayerSummaryProps): JSX.Element {
 
-    const { loading, error, summary } = usePlayerStats(playerName);
-    if (loading) return <Loading />
+    const { loading, error, summary } = usePlayerStats(player.name);
+    if (loading) return <div className="text-white" ><Loading /></div>
     if (error || !summary) return <></>
 
+    const isVisible = !(!error && summary) ? "invisible" : "";
+    const color = `bg-${factionToColor(player.faction)}-800`
     return (
-        <div className="flex text-white">
-            <div className="grid grid-cols-1">
-                <SigmaIcon />
-                <span>{summary.count}</span>
-
+        <div className={`grid grid-cols-1 text-white ${isVisible} ${color} p-1`}>
+            <h1 className="font-semibold">Lifetime Stats</h1>
+            <div className={`grid grid-flow-col`}>
+                <StatWithIcon icon={<HashIcon weight="bold" />} value={<NumberCell value={summary.count} />} />
+                <StatWithIcon icon={<SwordIcon weight="fill" />} value={<NumberCell value={summary.kills} />} />
+                <StatWithIcon icon={<SkullIcon weight="fill" />} value={<NumberCell value={summary.deaths} />} />
+                <StatWithIcon icon={<HandshakeIcon weight="fill" />} value={<NumberCell value={summary.assists} />} />
+                <StatWithIcon icon={<FirstAidIcon weight="fill" />} value={<NumberCell value={summary.healing} />} />
+                <StatWithIcon icon={<FireIcon weight="fill" />} value={<NumberCell value={summary.damage} />} />
             </div>
-
-            <span><SwordIcon />{summary.kills}</span>
-            <span><SkullIcon />{summary.deaths}</span>
-            <span><HandshakeIcon /> {summary.assists}</span>
-            <span><FirstAidIcon />{summary.healing}</span>
-            <span><FireIcon />{summary.damage}</span>
         </div>
     );
 }

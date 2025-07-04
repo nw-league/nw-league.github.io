@@ -1,19 +1,13 @@
 import type { JSX } from "react";
 import ProfilePicture from "../atom/profilepicture";
 import type { Player } from "../../types/player";
+import { factionToColor } from "../../utils/factions";
 
 export interface PlayerCardProps {
     player: Player
 }
 function PlayerCard({ player }: PlayerCardProps): JSX.Element {
-    let color = 'bg-gray-700';
-    if (player.faction === 'Covenant') {
-        color = 'bg-yellow-700';
-    } else if (player.faction === "Marauder") {
-        color = 'bg-green-700';
-    } else if (player.faction === 'Syndicate') {
-        color = 'bg-purple-700';
-    }
+    let color = `bg-${factionToColor(player.faction)}-700`;
 
     return (
         <div className={`flex items-center ${color} rounded-t-lg p-2 gap-2`}>

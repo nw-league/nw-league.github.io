@@ -36,7 +36,6 @@ export function usePlayerDetails(playerName: string) {
 
                 const p = createPlayerDetails(x, lb, r, w);
 
-                console.log(r);
                 if (cancelled) return;
                 setPlayerDetails(p)
             } catch (err) {
