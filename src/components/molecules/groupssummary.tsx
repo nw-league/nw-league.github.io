@@ -7,8 +7,8 @@ import {
 import type { StatSummary } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
-import { Fire, FirstAid, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 import StatsTable from '../atom/statstble';
+import { FireIcon, FirstAidIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
 
 interface GroupsSummaryProps {
     groups?: Map<number, StatSummary>;
@@ -22,7 +22,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
         () => [
             {
                 accessorKey: 'name',
-                header: () => (<LabelIcon text={"Group"} icon={<UserList weight="fill" />} />),
+                header: () => (<LabelIcon text={"Group"} icon={<UsersIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-left">
                         {info.getValue<string>()}
@@ -31,7 +31,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
             },
             {
                 accessorKey: 'score',
-                header: () => (<LabelIcon text={'Score'} icon={<PlusCircle weight="fill" />} />),
+                header: () => (<LabelIcon text={'Score'} icon={<PlusCircleIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -40,7 +40,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
             },
             {
                 accessorKey: 'kills',
-                header: () => <LabelIcon text='Kills' icon={<Sword weight='fill' />} />,
+                header: () => <LabelIcon text='Kills' icon={<SwordIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -49,7 +49,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
             },
             {
                 accessorKey: 'deaths',
-                header: () => <LabelIcon text='Deaths' icon={<Skull weight='fill' />} />,
+                header: () => <LabelIcon text='Deaths' icon={<SkullIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -58,7 +58,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
             },
             {
                 accessorKey: 'assists',
-                header: () => <LabelIcon text='Assists' icon={<Handshake weight='fill' />} />,
+                header: () => <LabelIcon text='Assists' icon={<HandshakeIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -67,7 +67,8 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
             },
             {
                 accessorKey: 'healing',
-                header: () => <LabelIcon text='Healing' icon={<FirstAid weight='fill' />} />,
+                header: () => <LabelIcon text='Healing' icon={<FirstAidIcon weight='fill' />
+                } />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -76,7 +77,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
             },
             {
                 accessorKey: 'damage',
-                header: () => <LabelIcon text='Damage' icon={<Fire weight='fill' />} />,
+                header: () => <LabelIcon text='Damage' icon={<FireIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />

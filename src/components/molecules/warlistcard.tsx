@@ -1,4 +1,4 @@
-import { Crown, Shield, Sword } from "phosphor-react";
+import { CrownIcon, ShieldIcon, SwordIcon } from "@phosphor-icons/react";
 import type { War } from "../../types/war";
 import { formatDate } from "../../utils/time";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
                     <div className="grid grid-cols-3 place-items-center text-white font-bold relative">
                         <div className="relative flex items-center justify-center">
                             {attackerWins && (
-                                <Crown
+                                <CrownIcon
                                     className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400"
                                     weight="fill"
                                     size={16}
@@ -30,15 +30,15 @@ const WarListCard: React.FC<WarListCardProp> = ({ war }) => {
 
                         <div className="text-gray-400 font-normal">
                             <div className="relative flex items-center justify-center">
-                                <Sword className="absolute right-full mr-4 drop-shadow-fuchsia-500 drop-shadow-2xl" weight="fill" />
+                                <SwordIcon className="absolute right-full mr-4 drop-shadow-fuchsia-500 drop-shadow-2xl" weight="fill" />
                                 <span className="drop-shadow-lg">vs</span>
-                                <Shield className="absolute left-full ml-4 drop-shadow-lg" weight="fill" />
+                                <ShieldIcon className="absolute left-full ml-4 drop-shadow-lg" weight="fill" />
                             </div>
                         </div>
 
                         <div className="relative flex items-center justify-center">
                             {defenderWins && (
-                                <Crown
+                                <CrownIcon
                                     className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400"
                                     weight="fill"
                                     size={16}

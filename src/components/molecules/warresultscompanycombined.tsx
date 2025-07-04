@@ -1,8 +1,8 @@
 import type { JSX } from "react";
 import type { Faction } from "../../types/faction";
 import type { StatSummary } from "../../types/leaderboard";
-import { Crown, Fire, FirstAid, Handshake, Skull, Sword } from "phosphor-react";
 import NumberCell from "../atom/numbercell";
+import { CrownIcon, FireIcon, FirstAidIcon, HandshakeIcon, SkullIcon, SwordIcon } from "@phosphor-icons/react";
 
 interface WarResultsSummaryProp {
     summaries: StatSummary[],
@@ -55,11 +55,11 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
         <div className="grid grid-rows w-full text-white mx-auto">
             <div className="grid grid-cols-[1fr_50px_1fr] w-full items-center place-items-center">
                 <div className={`flex w-full ${attackerAccent} rounded-tl-lg w-full h-fit justify-center text-center font-bold`}>
-                    Attacker<span>{isAttackerWinner && <Crown weight="fill" className="text-yellow-500 drop-shadow-lg" />}</span>
+                    Attacker<span>{isAttackerWinner && <CrownIcon weight="fill" className="text-yellow-500 drop-shadow-lg" />}</span>
                 </div >
                 <div className="bg-gray-700 w-full h-full"></div>
                 <div className={`flex w-full ${defenderAccent} rounded-tr-lg w-full h-fit justify-center font-bold`}>
-                    Defender<span>{!isAttackerWinner && <Crown weight="fill" className="text-yellow-500 drop-shadow-lg" />}</span>
+                    Defender<span>{!isAttackerWinner && <CrownIcon weight="fill" className="text-yellow-500 drop-shadow-lg" />}</span>
                 </div>
             </div>
             <div className="grid grid-rows-7 w-full text-white mx-auto">
@@ -73,28 +73,28 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                 {/* Row 2: Kills */}
                 <div className="grid grid-cols-[1fr_50px_1fr] w-full items-center">
                     <div className={`${attackerColor} flex items-center justify-center font-semibold text-xl p-2 w-full h-full ${attackerBorder} border-b-2`}>{<NumberCell value={summaries[0].kills} />}</div>
-                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><Sword weight="fill" size={32} /></div>
+                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><SwordIcon weight="fill" size={32} /></div>
                     <div className={`${defenderColor} flex items-center justify-center font-semibold text-xl p-2 w-full h-full ${defenderBorder} border-b-2`}>{<NumberCell value={summaries[1].kills} />}</div>
                 </div>
 
                 {/* Row 3: Deaths */}
                 <div className="grid grid-cols-[1fr_50px_1fr] w-full items-center">
                     <div className={`${attackerColor} flex items-center justify-center font-semibold text-xl p-2 w-full h-full ${attackerBorder} border-b-2`}>{<NumberCell value={summaries[0].deaths} />}</div>
-                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><Skull weight="fill" size={32} /></div>
+                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><SkullIcon weight="fill" size={32} /></div>
                     <div className={`${defenderColor} flex items-center justify-center font-semibold text-xl p-2 w-full h-full ${defenderBorder} border-b-2`}>{<NumberCell value={summaries[1].deaths} />}</div>
                 </div>
 
                 {/* Row 4: Assists */}
                 <div className="grid grid-cols-[1fr_50px_1fr] w-full items-center">
                     <div className={`${attackerColor} flex items-center justify-center p-2 font-semibold text-xl w-full h-full ${attackerBorder} border-b-2`}>{<NumberCell value={summaries[0].assists} />}</div>
-                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><Handshake weight="fill" size={32} /></div>
+                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><HandshakeIcon weight="fill" size={32} /></div>
                     <div className={`${defenderColor} flex items-center justify-center p-2 font-semibold text-xl w-full h-full ${defenderBorder} border-b-2`}>{<NumberCell value={summaries[1].assists} />}</div>
                 </div>
 
                 {/* Row 5: Healing */}
                 <div className="grid grid-cols-[1fr_50px_1fr] w-full items-center">
                     <div className={`${attackerColor} flex items-center justify-center p-2 font-semibold text-xl w-full h-full ${attackerBorder} border-b-2`}>{<NumberCell value={summaries[0].healing} />}</div>
-                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><FirstAid weight="fill" size={32} /></div>
+                    <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900"><FirstAidIcon weight="fill" size={32} /></div>
                     <div className={`${defenderColor} flex items-center justify-center p-2 font-semibold text-xl w-full h-full ${defenderBorder} border-b-2`}>{<NumberCell value={summaries[1].healing} />}</div>
                 </div>
 
@@ -104,7 +104,7 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                         <NumberCell value={summaries[0].damage} />
                     </div>
                     <div className="bg-gray-700 w-full h-full flex items-center justify-center border-b-2 border-gray-900">
-                        <Fire weight="fill" size={32} />
+                        <FireIcon weight="fill" size={32} />
                     </div>
                     <div className={`${defenderColor} rounded-br-lg flex items-center justify-center p-2 font-semibold text-xl w-full h-full`}>
                         <NumberCell value={summaries[1].damage} />

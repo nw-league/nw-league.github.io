@@ -43,7 +43,7 @@
 //                             <Stat label="Score" value={match.score} icon={<PlusCircle size={16} />} />
 //                             <Stat label="Kills" value={match.kills} icon={<Sword size={16} />} />
 //                             <Stat label="Deaths" value={match.deaths} icon={<Skull size={16} />} />
-//                             <Stat label="Assists" value={match.assists} icon={<Handshake size={16} />} />
+//                             <Stat label="Assists" value={match.assists} icon={<HandshakeIcon size={16} />} />
 //                             <Stat label="Healing" value={match.healing} icon={<Fire size={16} />} />
 //                             <Stat label="Damage" value={match.damage} icon={<Fire size={16} />} />
 //                         </div>

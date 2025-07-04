@@ -201,6 +201,7 @@ export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, Stat
         if (!summary) {
             summary = {
                 name: entry.company,
+                count: 0,
                 score: 0,
                 kills: 0,
                 deaths: 0,

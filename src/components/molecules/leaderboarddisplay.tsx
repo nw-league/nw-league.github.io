@@ -11,8 +11,8 @@ import {
 import type { Faction } from "../../types/faction";
 import NumberCell from "../atom/numbercell";
 import LabelIcon from "../atom/labelicon";
-import { Fire, FirstAid, Handshake, PlusCircle, Skull, Sword, UserList, UsersThree } from "phosphor-react";
 import { Link } from "react-router-dom";
+import { FireIcon, FirstAidIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UserListIcon, UsersThreeIcon } from "@phosphor-icons/react";
 
 type LeaderboardProps = {
     leaderboard: Leaderboard,
@@ -28,7 +28,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
         () => [
             {
                 accessorKey: 'name',
-                header: () => (<LabelIcon text={"Player"} icon={<UserList weight="fill" />} />),
+                header: () => (<LabelIcon text={"Player"} icon={<UserListIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-left hover:underline">
                         <Link to={`/players/${info.getValue<string>()}`}>
@@ -39,7 +39,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             },
             {
                 accessorKey: 'company',
-                header: () => (<LabelIcon text='Company' icon={<UsersThree weight="fill" />} />),
+                header: () => (<LabelIcon text='Company' icon={<UsersThreeIcon weight="fill" />} />),
                 cell: info => (
                     <div className="hover:underline">
                         <Link to={`/companies/${info.getValue<string>()}`}>
@@ -50,7 +50,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             },
             {
                 accessorKey: 'score',
-                header: () => (<LabelIcon text={'Score'} icon={<PlusCircle weight="fill" />} />),
+                header: () => (<LabelIcon text={'Score'} icon={<PlusCircleIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -59,7 +59,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             },
             {
                 accessorKey: 'kills',
-                header: () => <LabelIcon text='Kills' icon={<Sword weight='fill' />} />,
+                header: () => <LabelIcon text='Kills' icon={<SwordIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -68,7 +68,9 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             },
             {
                 accessorKey: 'deaths',
-                header: () => <LabelIcon text='Deaths' icon={<Skull weight='fill' />} />,
+                header: () => {
+                    return <LabelIcon text='Deaths' icon={<SkullIcon weight='fill' />} />;
+                },
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -77,7 +79,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             },
             {
                 accessorKey: 'assists',
-                header: () => <LabelIcon text='Assists' icon={<Handshake weight='fill' />} />,
+                header: () => <LabelIcon text='Assists' icon={<HandshakeIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -86,7 +88,8 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             },
             {
                 accessorKey: 'healing',
-                header: () => <LabelIcon text='Healing' icon={<FirstAid weight='fill' />} />,
+                header: () => <LabelIcon text='Healing' icon={<FirstAidIcon weight='fill' />
+                } />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -95,7 +98,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
             },
             {
                 accessorKey: 'damage',
-                header: () => <LabelIcon text='Damage' icon={<Fire weight='fill' />} />,
+                header: () => <LabelIcon text='Damage' icon={<FireIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />

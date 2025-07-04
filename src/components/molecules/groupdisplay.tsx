@@ -3,10 +3,10 @@ import { type ColumnDef } from '@tanstack/react-table';
 import type { GroupPerformance, LeaderboardEntry } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
-import { Fire, FirstAid, GameController, Handshake, PlusCircle, Skull, Sword, UserList } from 'phosphor-react';
 import StatsTable, { type Calculation } from '../atom/statstble';
 import { Link } from 'react-router-dom';
 import { kRoleOrder } from '../../constants/roleorder';
+import { FireIcon, FirstAidIcon, GameControllerIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
 
 
 interface GroupDisplayProps {
@@ -21,7 +21,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
         () => [
             {
                 accessorKey: 'name',
-                header: () => (<LabelIcon text={"Player"} icon={<UserList weight="fill" />} />),
+                header: () => (<LabelIcon text={"Player"} icon={<UsersIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-left hover:underline">
                         <Link to={`/players/${info.getValue<string>()}`}>
@@ -32,7 +32,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             },
             {
                 accessorKey: 'role',
-                header: () => <LabelIcon text={'Role'} icon={<GameController weight="fill" />} />,
+                header: () => <LabelIcon text={'Role'} icon={<GameControllerIcon weight="fill" />} />,
                 sortingFn: (rowA, rowB) => {
                     const a = rowA.getValue<string>('role');
                     const b = rowB.getValue<string>('role');
@@ -43,7 +43,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             },
             {
                 accessorKey: 'score',
-                header: () => (<LabelIcon text={'Score'} icon={<PlusCircle weight="fill" />} />),
+                header: () => (<LabelIcon text={'Score'} icon={<PlusCircleIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -52,7 +52,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             },
             {
                 accessorKey: 'kills',
-                header: () => <LabelIcon text='Kills' icon={<Sword weight='fill' />} />,
+                header: () => <LabelIcon text='Kills' icon={<SwordIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -61,7 +61,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             },
             {
                 accessorKey: 'deaths',
-                header: () => <LabelIcon text='Deaths' icon={<Skull weight='fill' />} />,
+                header: () => <LabelIcon text='Deaths' icon={<SkullIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -70,7 +70,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             },
             {
                 accessorKey: 'assists',
-                header: () => <LabelIcon text='Assists' icon={<Handshake weight='fill' />} />,
+                header: () => <LabelIcon text='Assists' icon={<HandshakeIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -79,7 +79,8 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             },
             {
                 accessorKey: 'healing',
-                header: () => <LabelIcon text='Healing' icon={<FirstAid weight='fill' />} />,
+                header: () => <LabelIcon text='Healing' icon={<FirstAidIcon weight='fill' />
+                } />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
@@ -88,7 +89,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
             },
             {
                 accessorKey: 'damage',
-                header: () => <LabelIcon text='Damage' icon={<Fire weight='fill' />} />,
+                header: () => <LabelIcon text='Damage' icon={<FireIcon weight='fill' />} />,
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
