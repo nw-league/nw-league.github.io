@@ -1,13 +1,15 @@
 import type { JSX } from "react";
 import ProfilePicture from "../atom/profilepicture";
 import type { Player } from "../../types/player";
-import { factionToColor } from "../../utils/factions";
+import { factionBgPrimary } from "../../utils/factions";
+
 
 export interface PlayerCardProps {
     player: Player
 }
 function PlayerCard({ player }: PlayerCardProps): JSX.Element {
-    let color = `bg-${factionToColor(player.faction)}-700`;
+    let color = factionBgPrimary(player.faction)
+
 
     return (
         <div className={`flex items-center ${color} rounded-t-lg p-2 gap-2`}>

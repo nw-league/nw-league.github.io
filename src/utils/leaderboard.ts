@@ -1,3 +1,4 @@
+
 import { type StatSummary, type LeaderboardEntry, type MapStat, type WarsSummary } from "../types/leaderboard"
 import type { War } from "../types/war";
 
@@ -27,12 +28,14 @@ export function summarize(toSummarize: LeaderboardEntry[]): StatSummary {
 
 export function summarizeWars(toSummarize: War[], forCompany: string): WarsSummary {
     const summary: WarsSummary = {
-        win: 0,
-        loss: 0,
-        map: "First Light",
-        most_win: "Great Cleave",
-        most_loss: "Shattered Mountain",
+        mostPlayed: { name: '', count: 0 },
+        mostWin: { name: '', count: 0 },
+        mostLoss: { name: '', count: 0 },
+        defense: { win: 0, loss: 0, count: 0 },
+        attack: { win: 0, loss: 0, count: 0 },
+        overall: { win: 0, loss: 0, count: 0 },
     }
+
 
     const mapStats = new Map<string, MapStat>();
 
@@ -43,13 +46,26 @@ export function summarizeWars(toSummarize: War[], forCompany: string): WarsSumma
             mapStats.set(war.map, stat);
         }
         stat.played += 1;
-        if (war.winner === forCompany) {
-            summary.win += 1;
-            stat.win += 1;
+        if (war.attacker === forCompany) {
+            if (war.winner === forCompany) {
+                summary.attack.win += 1;
+            } else {
+                summary.attack.loss += 1;
+            }
         } else {
-            summary.loss += 1;
+            if (war.winner === forCompany) {
+
+                summary.defense.win += 1;
+            } else {
+                summary.defense.loss += 1;
+            }
         }
     }
+    summary.defense.count = summary.defense.win + summary.defense.loss;
+    summary.attack.count = summary.attack.win + summary.attack.loss;
+    summary.overall.count = summary.attack.count + summary.defense.count;
+    summary.overall.win = summary.attack.win + summary.defense.win;
+    summary.overall.loss = summary.attack.loss + summary.defense.loss;
 
     let mostWins = -1;
     let mostWinMap = "";
@@ -76,11 +92,12 @@ export function summarizeWars(toSummarize: War[], forCompany: string): WarsSumma
     for (const [mapName, stat] of mapStats.entries()) {
         if (mostPlayed < stat.played) {
             mostPlayedMap = mapName;
+            mostPlayed = stat.played;
         }
     }
 
-    summary.map = mostPlayedMap;
-    summary.most_win = mostWinMap;
-    summary.most_loss = mostLossMap;
+    summary.mostPlayed = { name: mostPlayedMap, count: mostPlayed };
+    summary.mostWin = { name: mostWinMap, count: mostWins };
+    summary.mostLoss = { name: mostLossMap, count: mostLosses };
     return summary;
 }

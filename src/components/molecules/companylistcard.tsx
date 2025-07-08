@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import type { Company } from "../../types/company";
-import { factionToColor } from "../../utils/factions";
+import { factionBgPrimary } from "../../utils/factions";
 
 export interface CompanyListCardProps {
     company: Company,
 }
 const CompanyListCard: React.FC<CompanyListCardProps> = ({ company }) => {
-    const color = `bg-${factionToColor(company.faction)}-700`;
+    const color = factionBgPrimary(company.faction);
     return (
         <Link to={`/companies/${company.name}`}>
             <div className="flex bg-gray-800 gap-1 hover:scale-105 rounded-lg">

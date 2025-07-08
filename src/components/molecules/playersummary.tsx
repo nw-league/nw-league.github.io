@@ -5,7 +5,7 @@ import { FireIcon, FirstAidIcon, HandshakeIcon, HashIcon, SkullIcon, SwordIcon }
 import StatWithIcon from "./statwithicon";
 import NumberCell from "../atom/numbercell";
 import type { Player } from "../../types/player";
-import { factionToColor } from "../../utils/factions";
+import { factionBgPrimary } from "../../utils/factions";
 
 interface PlayerSummaryProps {
     player: Player
@@ -17,7 +17,7 @@ function PlayerSummary({ player }: PlayerSummaryProps): JSX.Element {
     if (error || !summary) return <></>
 
     const isVisible = !(!error && summary) ? "invisible" : "";
-    const color = `bg-${factionToColor(player.faction)}-800`
+    const color = factionBgPrimary(player.faction);
     return (
         <div className={`grid grid-cols-1 text-white ${isVisible} ${color} p-1`}>
             <h1 className="font-semibold">Lifetime Stats</h1>

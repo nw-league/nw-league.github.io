@@ -55,9 +55,10 @@ export interface MapStat {
 }
 
 export interface WarsSummary {
-    win: number;
-    loss: number;
-    map: string;
-    most_win: string;
-    most_loss: string;
+    mostPlayed: { name: string, count: number };
+    mostWin: { name: string, count: number };
+    mostLoss: { name: string, count: number };
+    defense: { win: number, loss: number, count: number };
+    attack: { win: number, loss: number, count: number };
+    overall: { win: number, loss: number, count: number };
 }

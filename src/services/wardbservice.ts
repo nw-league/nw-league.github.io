@@ -156,6 +156,7 @@ export async function getCompanies(): Promise<Company[]> {
         let f = factions.get(company);
         if (!f) { f = 'Gray' };
         c.push({
+            id: 0,
             name: company,
             shorthand: '',
             server: '',

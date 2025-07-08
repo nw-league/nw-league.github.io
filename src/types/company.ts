@@ -1,6 +1,7 @@
 import type { Faction } from "./faction";
 
 export interface Company {
+    id: number,
     name: string;
     shorthand: string;
     server: string;

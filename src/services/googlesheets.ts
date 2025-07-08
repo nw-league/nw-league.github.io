@@ -26,7 +26,5 @@ export async function fetchTableFromGoogleSheets(
         row.c.map((cell: any) => cell?.v ?? null)
     );
 
-    console.log(sheetName, query)
-
     return rows;
 }

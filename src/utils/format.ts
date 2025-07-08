@@ -5,3 +5,7 @@ export function formatCompact(value: number): string {
 export function formatThousands(value: number): string {
     return value.toLocaleString();
 }
+
+export function formatPercent(value: number, figures?: number): string {
+    return `${value.toFixed(figures)}%`;
+}

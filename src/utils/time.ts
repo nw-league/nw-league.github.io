@@ -29,3 +29,8 @@ export function convertFromGoogleSheetsDateString(dateString: string): Date | nu
         return null;
     }
 }
+
+export function formatPercent(value: number, figures?: number): string {
+    let sigFig = figures ? figures : 2;
+    return `${(value * 100).toFixed(sigFig)}%`
+}
