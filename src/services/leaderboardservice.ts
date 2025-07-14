@@ -1,26 +1,47 @@
 import { kSheetId } from "../constants/sheets";
-import type { LeaderboardEntry } from "../types/leaderboard";
+import { EmptyStatSummary, type Leaderboard, type LeaderboardEntry, type StatSummary } from "../types/leaderboard";
 import { Qop, type QueryParameter } from "../types/queryparameter";
 import { constructQuery } from "../utils/querybuilder";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 
 
+export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, StatSummary> {
+    const summaries = new Map<string, StatSummary>();
 
-export async function getLeaderboard(warId: number): Promise<LeaderboardEntry[]> {
+    for (const entry of leaderboard.entries) {
+        let summary = summaries.get(entry.company);
+        if (!summary) {
+            summary = EmptyStatSummary;
+            summaries.set(entry.company, summary);
+        }
+
+        summary.name = entry.company;
+        summary.score += entry.score;
+        summary.kills += entry.kills;
+        summary.deaths += entry.deaths;
+        summary.assists += entry.assists;
+        summary.healing += entry.healing;
+        summary.count += 1;
+    }
+
+    return summaries;
+}
+
+export async function getLeaderboard(warId: number): Promise<Leaderboard> {
     const qp: QueryParameter = { column: "B", fn: Qop.Eq, value: warId };
     const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], [qp]);
     let data: DataType[][] = [];
     try {
         data = await fetchTableFromGoogleSheets(kSheetId, 'leaderboards', query);
     } catch (err) {
-        return [];
+        return { warId, entries: [] };
     }
 
     if (data.length === 0) {
-        return [];
+        return { warId, entries: [] };
     }
 
-    const entires: LeaderboardEntry[] = data.map((row: any[]) => ({
+    const entries: LeaderboardEntry[] = data.map((row: any[]) => ({
         warid: row[1] as number,
         player: row[2] as string,
         score: row[3] as number,
@@ -32,5 +53,5 @@ export async function getLeaderboard(warId: number): Promise<LeaderboardEntry[]>
         company: row[9] as string,
     }));
 
-    return entires;
+    return { warId, entries };
 }

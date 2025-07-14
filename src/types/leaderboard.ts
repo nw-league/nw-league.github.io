@@ -19,6 +19,7 @@ export interface PlayerDetailsEntry extends LeaderboardEntry {
 }
 
 export interface Leaderboard {
+    warId: number;
     entries: LeaderboardEntry[];
 }
 
@@ -62,3 +63,15 @@ export interface WarsSummary {
     attack: { win: number, loss: number, count: number };
     overall: { win: number, loss: number, count: number };
 }
+
+export const EmptyLeaderboard: Leaderboard = { warId: 0, entries: [] };
+export const EmptyStatSummary: StatSummary = {
+    name: '',
+    score: 0,
+    kills: 0,
+    deaths: 0,
+    assists: 0,
+    healing: 0,
+    damage: 0,
+    count: 0,
+};

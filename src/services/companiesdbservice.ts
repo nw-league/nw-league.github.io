@@ -16,31 +16,6 @@ export async function getCompanies(companyNames?: string[]): Promise<Company[]> 
         return [];
     }
 
-    // const companies: Company[] = [];
-    // for (const row of data) {
-    //     const id = row[0] as number;
-    //     const name = row[1] as string;
-    //     const shorthand = row[2] as string;
-    //     const server = row[3] as string;
-    //     const faction = row[4] as Faction;
-    //     const governor = row[5] as string;
-    //     const captains = (row[6] as string).split(',').map(v => v.trim());
-    //     const shotcaller = row[7] as string;
-    //     const tier = row[8] as string;
-    //     const icon = row[0] as string;
-    //     companies.push({
-    //         id,
-    //         name,
-    //         shorthand,
-    //         server,
-    //         faction,
-    //         governor,
-    //         captains,
-    //         shotcaller,
-    //         tier,
-    //         icon
-    //     });
-    // }
     return data.map(row => ({
         id: row[0] as number,
         name: row[1] as string,

@@ -1,6 +1,6 @@
 import Loading from "../components/atom/loading";
 import WarListCard from "../components/molecules/warlistcard";
-import { useWars } from "../hooks2/hookes/useWars";
+import { useWars } from "../hooks/useWars";
 // import Carousel from "../components/molecules/carousel";
 
 const Home: React.FC = () => {
