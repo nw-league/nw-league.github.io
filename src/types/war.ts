@@ -7,4 +7,26 @@ export interface War {
     defender: string;
     winner: string;
     duration: number;
+    captures: {
+        pointa: number,
+        pointb: number,
+        pointc: number,
+        fort: number,
+    },
+}
+
+export const WarTable = {
+    id: "A",
+    date: "B",
+    time: "C",
+    server: "D",
+    territory: "E",
+    attacker: "F",
+    defender: "G",
+    winner: "H",
+    pointa: "I",
+    pointb: "J",
+    pointc: "K",
+    fort: "L",
+    duration: "M",
 }

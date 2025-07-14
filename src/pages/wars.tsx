@@ -1,6 +1,6 @@
 import Loading from "../components/atom/loading";
 import WarListCard from "../components/molecules/warlistcard";
-import { useWars } from "../hooks/useWars";
+import { useWars } from "../hooks2/useWars";
 
 const Wars: React.FC = () => {
     const { loading, err, wars } = useWars([]);

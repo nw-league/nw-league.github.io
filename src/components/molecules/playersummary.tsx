@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { usePlayerStats } from "../../hooks/usePlayerStats";
+import { usePlayerStats } from "../../hooks2/usePlayerStats";
 import Loading from "../atom/loading";
 import { FireIcon, FirstAidIcon, HandshakeIcon, HashIcon, SkullIcon, SwordIcon } from "@phosphor-icons/react";
 import StatWithIcon from "./statwithicon";

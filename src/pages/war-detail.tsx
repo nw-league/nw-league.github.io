@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import LeaderboardDisplay from "../components/molecules/leaderboarddisplay";
 // import WarResultsCompany from "../components/molecules/warresultscompany";
 import WarStatsPanel from "../components/molecules/warstatspanel";
-import { useWarData } from "../hooks/useWarData";
+import { useWarData } from "../hooks2/useWarData";
 import GroupsComponent from "../components/molecules/groupscomponent";
 import Loading from "../components/atom/loading";
 import ErrorPage from "./errorpage";

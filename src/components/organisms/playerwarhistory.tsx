@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import NotFound from "../../pages/notfound";
-import { usePlayerDetails } from "../../hooks/usePlayerDetails";
+import { usePlayerDetails } from "../../hooks2/usePlayerDetails";
 import type { PlayerDetailsEntry } from "../../types/leaderboard";
 import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";

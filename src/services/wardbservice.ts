@@ -7,12 +7,12 @@ import type { War } from "../types/war";
 import { joinCondition, makeConditions } from "../utils/querybuilder";
 import { convertFromGoogleSheetsDateString } from "../utils/time";
 import { fetchTableFromGoogleSheets } from "./googlesheets";
-import type { QueryParameter } from "../types/queryparameter";
+import { Qop, type QueryParameter } from "../types/queryparameter";
 import type { Role } from "../types/role";
 import type { Player } from "../types/player";
 
-const kSheetId = "14byZyCAX_N_AA-y_1tv4CLtgTCaOB-Zq8QbOHmavE6Y";
-
+//const kSheetId = "14byZyCAX_N_AA-y_1tv4CLtgTCaOB-Zq8QbOHmavE6Y";
+const kSheetId = "1Zpmwiu2M3AHdPVwaZ8A-nIPN5eKGclLSfnLl_Xn10PA";
 const kIdxCompanyName = 0;
 const kIdxFactiion = 1;
 export type OrderingOperator = "asc" | "desc";
@@ -105,37 +105,40 @@ export async function getWars(params?: QueryParameter[], limit?: number, order?:
     const conditions = params && params.length > 0 ? ` WHERE ${makeConditions(params)} ` : ''
     const limitStr = limit ? ` LIMIT ${limit} ` : '';
     const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()} ` : '';
-    const query = `SELECT A, B, C, D, E, F, I${conditions}${orderStr}${limitStr} `;
+    const query = `SELECT A, B, C, D, E, F, G, H, I, J, K, L, M${conditions}${orderStr}${limitStr} `;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
 
-    const wars = [];
+    const wars: War[] = [];
     for (const row of data) {
         const id = row[0] as number;
         const date = convertFromGoogleSheetsDateString(row[1] as string)!;
-        const map = row[2] as string;
-        const attacker = row[3] as string;
-        const defender = row[4] as string;
-        const winner = row[5] as string;
-        const duration = row[6] as number;
-        wars.push({ id, date, map, attacker, defender, winner, duration });
+        const map = row[4] as string;
+        const attacker = row[5] as string;
+        const defender = row[6] as string;
+        const winner = row[7] as string;
+        const captures = {
+            pointa: row[8] as number,
+            pointb: row[9] as number,
+            pointc: row[10] as number,
+            fort: row[11] as number,
+        }
+        const duration = row[12] as number;
+        wars.push({ id, date, map, attacker, defender, winner, captures, duration });
     }
     return wars;
 }
 
-export async function getWar(warId: number): Promise<War> {
-    const warStr = `${warId} `;
-    const query = `SELECT A, B, C, D, E, F, I WHERE A = ${warStr} `;
-    const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
-
-    const id = data[0][0] as number;
-    const date = convertFromGoogleSheetsDateString(data[0][1] as string)!;
-    const map = data[0][2] as string;
-    const attacker = data[0][3] as string;
-    const defender = data[0][4] as string;
-    const winner = data[0][5] as string;
-    const duration = data[0][6] as number;
-
-    return { id, date, map, attacker, defender, winner, duration };
+export async function getWar(warId: number): Promise<War | null> {
+    const qp = {
+        column: "A",
+        fn: Qop.eq,
+        value: warId
+    }
+    const w = await getWars([qp]);
+    if (w.length >= 1) {
+        return w[0];
+    }
+    return null;
 }
 
 export async function getCompanies(): Promise<Company[]> {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import NotFound from "./notfound";
 
-import { useCompanyDetails } from "../hooks/useCompanyNew";
+import { useCompanyDetails } from "../hooks2/useCompanyNew";
 import Loading from "../components/atom/loading";
 import CompanyDetailCard from "../components/molecules/companydetailcard";
 import CompanyMembersTable from "../components/organisms/companymemberstable";

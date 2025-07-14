@@ -2,7 +2,7 @@ import type { Group } from "./roster";
 
 export interface LeaderboardEntry {
     warid: number;
-    name: string;
+    player: string;
     score: number;
     kills: number;
     deaths: number;

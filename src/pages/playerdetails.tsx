@@ -3,7 +3,7 @@ import NotFound from "./notfound";
 
 import PlayerWarHistory from "../components/organisms/playerwarhistory";
 import PlayerCard from "../components/organisms/playercard";
-import { usePlayer } from "../hooks/usePlayer";
+import { usePlayer } from "../hooks2/usePlayer";
 import Loading from "../components/atom/loading";
 import type { Player } from "../types/player";
 import PlayerSummary from "../components/molecules/playersummary";
