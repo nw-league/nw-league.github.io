@@ -2,32 +2,28 @@ import { useEffect, useState } from "react";
 import type { Company } from "../types/company";
 import { getCompanies } from "../services/companiesservice";
 
-
-export function useCompanies() {
+export function useCompanies(names: string[]) {
     const [companies, setCompanies] = useState<Company[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [err, setError] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<any>(null);
 
     useEffect(() => {
         let cancelled = false;
-
         async function fetchAll() {
             try {
                 setLoading(true);
-                const c = await getCompanies();
+                const c = await getCompanies(names);
                 if (cancelled) return;
                 setCompanies(c);
-
             } catch (err) {
                 if (!cancelled) setError(err);
             } finally {
                 if (!cancelled) setLoading(false);
             }
         }
-
         fetchAll();
-        return () => { cancelled = true; };
-    }, []);
+        return () => { cancelled = true };
+    }, [names]);
 
-    return { loading, err, companies };
+    return { loading, error, companies };
 }

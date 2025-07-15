@@ -1,3 +1,4 @@
+import type { CaptureTimes } from "./captures";
 
 export interface War {
     id: number;
@@ -7,12 +8,7 @@ export interface War {
     defender: string;
     winner: string;
     duration: number;
-    captures: {
-        pointa: number,
-        pointb: number,
-        pointc: number,
-        fort: number,
-    },
+    captures: CaptureTimes;
 }
 
 export const WarTable = {

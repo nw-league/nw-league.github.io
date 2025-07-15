@@ -1,5 +1,10 @@
 import type { DataType } from "../services/googlesheets";
 
+export type OrderingOperator = "asc" | "desc";
+export interface Ordering {
+    column: string;
+    direction: OrderingOperator;
+}
 export type QueryOperator = "=" | "<" | ">" | "<=" | ">=" | "<>" | 'IS NOT';
 export const Qop: Record<string, QueryOperator> = {
     Eq: '=',

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { War } from "../types/war";
-import { getWars, type OrderingOperator } from "../services/wardbservice";
-import { type QueryOperator } from "../types/queryparameter";
+import { getWars } from "../services/wardbservice";
+import { type OrderingOperator, type QueryOperator } from "../types/queryparameter";
 
 export function useUpcomingAndPast() {
     const [upcomingWars, setUpcomingWars] = useState<War[]>([]);

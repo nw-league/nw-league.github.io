@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { QueryParameter } from "../types/queryparameter";
+import { Qop } from "../types/queryparameter";
 import type { War } from "../types/war";
 import { getWars } from "../services/wardbservice";
 
-export function useWars(withIds: number[]) {
+export function useWarsByCompany(companyName: string) {
     const [wars, setWars] = useState<War[]>([]);
     const [loading, setLoading] = useState<Boolean>(true);
     const [error, setError] = useState<any>(null);
@@ -13,12 +13,14 @@ export function useWars(withIds: number[]) {
         async function fetchAll() {
             try {
                 setLoading(true);
-                const query: QueryParameter[] = [];
-                for (const wid of withIds) {
-                    query.push({ column: "A", fn: "=", value: wid });
-                }
-                const w = await getWars(query);
+                const attackerQp = { column: "D", fn: Qop.Eq, value: companyName };
+                const defenderQp = { column: "E", fn: Qop.Eq, value: companyName };
+
+                const [atk, def] = await Promise.all([getWars([attackerQp]), getWars([defenderQp])]);
                 if (cancelled) return;
+
+                const w = atk.concat(def).sort((a, b) => (a.date.getTime() - b.date.getTime()));
+
                 setWars(w)
             } catch (err) {
                 if (!cancelled) setError(err);
@@ -28,7 +30,7 @@ export function useWars(withIds: number[]) {
         }
         fetchAll();
         return () => { cancelled = true };
-    }, []);
+    }, [companyName]);
 
     return { loading, error, wars };
 }

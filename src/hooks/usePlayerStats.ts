@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { getPlayer } from "../services/playerservice";
-import type { Player } from "../types/player";
+import { Qop } from "../types/queryparameter";
+import type { StatSummary } from "../types/leaderboard";
+import { summarize } from "../utils/leaderboard";
+import { getLeaderboard } from "../services/leaderboardservice";
 
-export function usePlayer(playerName: string) {
-    const [player, setPlayer] = useState<Player | null>(null);
+export function usePlayerStats(playerName: string) {
+    const [summary, setSummary] = useState<StatSummary | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null);
 
@@ -14,10 +16,12 @@ export function usePlayer(playerName: string) {
             try {
                 setLoading(true);
 
-                const p = await getPlayer(playerName);
-
+                const qp = { column: 'B', fn: Qop.Eq, value: playerName };
+                const lb = await getLeaderboard([qp]);
+                if (!lb) return;
+                const s = summarize(lb.entries);
                 if (cancelled) return;
-                setPlayer(p)
+                setSummary(s)
 
             } catch (err) {
                 if (!cancelled) setError(err);
@@ -33,5 +37,5 @@ export function usePlayer(playerName: string) {
         };
     }, [playerName]);
 
-    return { error, loading, player };
+    return { error, loading, summary };
 }

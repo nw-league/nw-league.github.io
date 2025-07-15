@@ -3,7 +3,7 @@ import type { War } from "../types/war";
 import { getWars } from "../services/wardbservice";
 import { type QueryParameter } from "../types/queryparameter";
 
-export function useWars(withIds: number[]) {
+export function useWarsById(withIds: number[]) {
     const [wars, setWars] = useState<War[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [err, setError] = useState<any>(null);

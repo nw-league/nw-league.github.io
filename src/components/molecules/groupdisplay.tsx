@@ -7,10 +7,11 @@ import StatsTable, { type Calculation } from '../atom/statstble';
 import { Link } from 'react-router-dom';
 import { kRoleOrder } from '../../constants/roleorder';
 import { FireIcon, FirstAidIcon, GameControllerIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
+import type { GroupKey } from '../../types/roster';
 
 
 interface GroupDisplayProps {
-    groupId: number;
+    groupId: GroupKey;
     group: GroupPerformance;
 }
 
@@ -20,7 +21,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
     const columns = React.useMemo<ColumnDef<LeaderboardEntry>[]>(
         () => [
             {
-                accessorKey: 'name',
+                accessorKey: 'player',
                 header: () => (<LabelIcon text={"Player"} icon={<UsersIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-left hover:underline">
@@ -111,8 +112,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
 
     const combinedData = useMemo(() => {
         return group.stats.map(entry => {
-            const player = group.group.players.find(p => p.name === entry.name);
-            return { ...entry, role: player?.role ?? "Unknown" };
+            return { ...entry };
         })
     }, [group]);
 

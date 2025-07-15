@@ -3,14 +3,15 @@ import { useState } from 'react';
 import type { GroupPerformance, StatSummary } from '../../types/leaderboard';
 import GroupsDetail from './groupsdetails';
 import GroupsSummary from './groupssummary';
+import type { GroupKey } from '../../types/roster';
 
 interface GroupsSummaryProps {
     attackerName: string,
     defenderName: string,
-    attackerGroups?: Map<number, GroupPerformance>;
-    defenderGroups?: Map<number, GroupPerformance>;
-    attackerSummary?: Map<number, StatSummary>;
-    defenderSummary?: Map<number, StatSummary>;
+    attackerGroups?: Map<GroupKey, GroupPerformance>;
+    defenderGroups?: Map<GroupKey, GroupPerformance>;
+    attackerSummary?: Map<GroupKey, StatSummary>;
+    defenderSummary?: Map<GroupKey, StatSummary>;
 }
 const GroupsComponent: React.FC<GroupsSummaryProps> = ({
     attackerName,

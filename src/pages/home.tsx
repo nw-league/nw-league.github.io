@@ -1,11 +1,10 @@
 import Loading from "../components/atom/loading";
 import WarListCard from "../components/molecules/warlistcard";
-import { useWars } from "../hooks/useWars";
+import { useWarsById } from "../hooks/useWarsById";
 // import Carousel from "../components/molecules/carousel";
 
 const Home: React.FC = () => {
-    const { loading, error, wars } = useWars([]);
-
+    const { loading, error, wars } = useWarsById([]);
     //if (loading) return <div className="flex w-full justify-center text-white p-8" ><Loading /></div >;
     if (error) return <div className="flex w-full justify-center text-red-500">Error loading wars </div>;
 

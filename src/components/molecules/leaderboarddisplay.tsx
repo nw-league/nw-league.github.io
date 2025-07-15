@@ -8,15 +8,17 @@ import {
     type ColumnDef,
     type SortingState,
 } from '@tanstack/react-table';
-import type { Faction } from "../../types/faction";
+
 import NumberCell from "../atom/numbercell";
 import LabelIcon from "../atom/labelicon";
 import { Link } from "react-router-dom";
 import { FireIcon, FirstAidIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UserListIcon, UsersThreeIcon } from "@phosphor-icons/react";
+import type { Company } from "../../types/company";
+import { factionBgSecondary, factionBgTertiary } from "../../utils/factions";
 
 type LeaderboardProps = {
     leaderboard: Leaderboard,
-    companies: Map<string, Faction>,
+    companies: Map<string, Company>,
 };
 
 const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies }) => {
@@ -27,13 +29,22 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
     const columns = React.useMemo<ColumnDef<LeaderboardEntry>[]>(
         () => [
             {
-                accessorKey: 'name',
+                accessorKey: 'player',
                 header: () => (<LabelIcon text={"Player"} icon={<UserListIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-left hover:underline">
                         <Link to={`/players/${info.getValue<string>()}`}>
                             {info.getValue<string>()}
                         </Link>
+                    </div>
+                )
+            },
+            {
+                accessorKey: 'role',
+                header: () => (<LabelIcon text={"Role"} icon={<PlusCircleIcon weight="fill" />} />),
+                cell: info => (
+                    <div className="text-left">
+                        {info.getValue<number>()}
                     </div>
                 )
             },
@@ -158,21 +169,9 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                     </thead >
                     <tbody>
                         {table.getRowModel().rows.map((row, index) => {
-                            const faction = companies.get(row.original.company);
+                            const faction = companies.get(row.original.company)?.faction || 'Gray';
 
-                            const rowClass = index % 2 === 0 ? faction === 'Marauder'
-                                ? 'bg-green-800'
-                                : faction === 'Syndicate'
-                                    ? 'bg-purple-800'
-                                    : faction === 'Covenant'
-                                        ? 'bg-yellow-800'
-                                        : 'bg-gray-800' : faction === 'Marauder'
-                                ? 'bg-green-900'
-                                : faction === 'Syndicate'
-                                    ? 'bg-purple-900'
-                                    : faction === 'Covenant'
-                                        ? 'bg-yellow-900'
-                                        : 'bg-gray-800';
+                            const rowClass = index % 2 === 0 ? factionBgSecondary(faction) : factionBgTertiary(faction);
 
                             return (
                                 <tr key={row.id} className={rowClass}>

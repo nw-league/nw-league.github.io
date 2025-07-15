@@ -9,9 +9,10 @@ import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
 import StatsTable from '../atom/statstble';
 import { FireIcon, FirstAidIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
+import type { GroupKey } from '../../types/roster';
 
 interface GroupsSummaryProps {
-    groups?: Map<number, StatSummary>;
+    groups?: Map<GroupKey, StatSummary>;
 }
 const GroupsSummary: React.FC<GroupsSummaryProps> = ({
     groups
@@ -92,7 +93,24 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
         if (!groups) return [];
 
         return Array.from(groups.keys())
-            .sort((a, b) => a - b)
+            .sort((a, b) => {
+                const keyA = a;
+                const keyB = b;
+
+                // If both are numbers, sort numerically
+                if (typeof keyA === 'number' && typeof keyB === 'number') {
+                    return keyA - keyB;
+                }
+
+                // If one is a number and the other is a string, number comes first
+                if (typeof keyA === 'number') return -1;
+                if (typeof keyB === 'number') return 1;
+
+                // If both are strings, sort 'Weak' before 'Strong'
+                if (keyA === keyB) return 0;
+                if (keyA === 'Weak') return -1;
+                return 1; // keyB === 'Weak' or keyA === 'Strong' > keyB === 'Strong'
+            })
             .map(key => groups.get(key))
             .filter((item): item is StatSummary => item !== undefined);
     }, [groups]);

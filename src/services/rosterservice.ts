@@ -1,13 +1,13 @@
 import { kSheetId } from "../constants/sheets";
-import { Qop, type QueryParameter } from "../types/queryparameter";
+import { type QueryParameter } from "../types/queryparameter";
 import type { Role } from "../types/role";
 import type { Group, GroupKey, Roster } from "../types/roster";
 import { constructQuery } from "../utils/querybuilder";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 
-export async function getRosters(warId: number): Promise<Map<string, Roster>> {
-    const qp: QueryParameter = { column: "B", fn: Qop.Eq, value: warId };
-    const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F', 'G'], [qp]);
+
+export async function getRosters(params: QueryParameter[]): Promise<Map<number, Map<string, Roster>>> {
+    const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F', 'G'], params);
     let data: DataType[][] = [];
     try {
         data = await fetchTableFromGoogleSheets(kSheetId, 'rosters', query);
@@ -15,7 +15,7 @@ export async function getRosters(warId: number): Promise<Map<string, Roster>> {
         return new Map();
     }
 
-    const rosters = new Map<string, Roster>();
+    const allRosters = new Map<number, Map<string, Roster>>();
     for (const row of data) {
         //const id = row[0] as number;
         const war = row[1] as number;
@@ -25,20 +25,26 @@ export async function getRosters(warId: number): Promise<Map<string, Roster>> {
         const gk = row[5] as GroupKey;
         const qpds = row[6] as boolean;
 
-        let roster = rosters.get(company);
-        if (!roster) {
-            roster = { warid: war, groups: new Map<GroupKey, Group>() };
-            rosters.set(company, roster);
+        let warRoster = allRosters.get(war);
+        if (!warRoster) {
+            warRoster = new Map<string, Roster>();
+            allRosters.set(war, warRoster);
         }
 
-        let group = roster.groups.get(gk);
+        let teamRoster = warRoster.get(company);
+        if (!teamRoster) {
+            teamRoster = { warid: war, groups: new Map<GroupKey, Group>() };
+            warRoster.set(company, teamRoster);
+        }
+
+        let group = teamRoster.groups.get(gk);
         if (!group) {
-            group = { players: [] };
-            roster.groups.set(gk, group);
+            group = [];
+            teamRoster.groups.set(gk, group);
         }
 
-        group.players.push({ name: player, role, qpds });
+        group.push({ name: player, role, qpds });
     }
 
-    return rosters;
+    return allRosters;
 }

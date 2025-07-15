@@ -1,6 +1,5 @@
 import type { DataType } from "../services/googlesheets";
-import type { Ordering } from "../services/wardbservice";
-import type { QueryParameter } from "../types/queryparameter";
+import type { Ordering, QueryParameter } from "../types/queryparameter";
 
 type Operator = 'AND' | 'OR'
 

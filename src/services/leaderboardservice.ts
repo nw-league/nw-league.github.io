@@ -1,6 +1,7 @@
 import { kSheetId } from "../constants/sheets";
-import { EmptyStatSummary, type Leaderboard, type LeaderboardEntry, type StatSummary } from "../types/leaderboard";
-import { Qop, type QueryParameter } from "../types/queryparameter";
+import { type Leaderboard, type LeaderboardEntry, type StatSummary } from "../types/leaderboard";
+import { type QueryParameter } from "../types/queryparameter";
+import type { Role } from "../types/role";
 import { constructQuery } from "../utils/querybuilder";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 
@@ -11,7 +12,16 @@ export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, Stat
     for (const entry of leaderboard.entries) {
         let summary = summaries.get(entry.company);
         if (!summary) {
-            summary = EmptyStatSummary;
+            summary = {
+                name: '',
+                score: 0,
+                kills: 0,
+                deaths: 0,
+                assists: 0,
+                healing: 0,
+                damage: 0,
+                count: 0,
+            };
             summaries.set(entry.company, summary);
         }
 
@@ -21,28 +31,29 @@ export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, Stat
         summary.deaths += entry.deaths;
         summary.assists += entry.assists;
         summary.healing += entry.healing;
+        summary.damage += entry.damage;
         summary.count += 1;
     }
 
     return summaries;
 }
 
-export async function getLeaderboard(warId: number): Promise<Leaderboard> {
-    const qp: QueryParameter = { column: "B", fn: Qop.Eq, value: warId };
-    const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], [qp]);
+export async function getLeaderboard(params: QueryParameter[]): Promise<Leaderboard | null> {
+    const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], params);
     let data: DataType[][] = [];
     try {
         data = await fetchTableFromGoogleSheets(kSheetId, 'leaderboards', query);
     } catch (err) {
-        return { warId, entries: [] };
+        return null
     }
 
     if (data.length === 0) {
-        return { warId, entries: [] };
+        return null
     }
 
     const entries: LeaderboardEntry[] = data.map((row: any[]) => ({
         warid: row[1] as number,
+        role: '' as Role,
         player: row[2] as string,
         score: row[3] as number,
         kills: row[4] as number,
@@ -53,5 +64,5 @@ export async function getLeaderboard(warId: number): Promise<Leaderboard> {
         company: row[9] as string,
     }));
 
-    return { warId, entries };
+    return { entries };
 }

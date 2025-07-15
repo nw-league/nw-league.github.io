@@ -12,7 +12,6 @@ export function formatDate(date: Date): string {
 }
 
 export function convertFromGoogleSheetsDateString(dateString: string): Date | null {
-    console.log(dateString);
     // Match the Date string pattern "Date(year, month, day)"
     const regex = /Date\((\d{4}),(\d{1,2}),(\d{1,2})\)/;
     const matches = dateString.match(regex);

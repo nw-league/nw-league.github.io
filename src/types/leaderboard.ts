@@ -1,8 +1,9 @@
-import type { Group } from "./roster";
+import type { Role } from "./role";
 
 export interface LeaderboardEntry {
     warid: number;
     player: string;
+    role: Role;
     score: number;
     kills: number;
     deaths: number;
@@ -11,15 +12,17 @@ export interface LeaderboardEntry {
     damage: number;
     company: string;
 }
+
+export interface GroupsEntry extends LeaderboardEntry {
+
+}
 export interface PlayerDetailsEntry extends LeaderboardEntry {
-    role: string;
     attacker: string;
     defender: string;
     isWinner: boolean;
 }
 
 export interface Leaderboard {
-    warId: number;
     entries: LeaderboardEntry[];
 }
 
@@ -46,8 +49,7 @@ export interface StatSummary {
 }
 
 export interface GroupPerformance {
-    group: Group;
-    stats: LeaderboardEntry[];
+    stats: GroupsEntry[];
 }
 
 export interface MapStat {
@@ -63,15 +65,3 @@ export interface WarsSummary {
     attack: { win: number, loss: number, count: number };
     overall: { win: number, loss: number, count: number };
 }
-
-export const EmptyLeaderboard: Leaderboard = { warId: 0, entries: [] };
-export const EmptyStatSummary: StatSummary = {
-    name: '',
-    score: 0,
-    kills: 0,
-    deaths: 0,
-    assists: 0,
-    healing: 0,
-    damage: 0,
-    count: 0,
-};

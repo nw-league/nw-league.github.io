@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { EmptyLeaderboard, type Leaderboard, type StatSummary } from "../types/leaderboard";
+import { type Leaderboard, type StatSummary } from "../types/leaderboard";
 import { getLeaderboard, summarizeLeaderboard } from "../services/leaderboardservice";
+import { Qop } from "../types/queryparameter";
 
-export function useLeaderboards(warId: number) {
-    const [leaderboard, setLeaderboard] = useState<Leaderboard>(EmptyLeaderboard);
-    const [summary, setSummary] = useState<Map<string, StatSummary> | null>(null);
+export function useLeaderboardsByIds(warId: number) {
+    const [leaderboard, setLeaderboard] = useState<Leaderboard | null>(null);
+    const [summary, setSummary] = useState<Map<string, StatSummary>>(new Map());
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<any>(null);
 
@@ -13,7 +14,9 @@ export function useLeaderboards(warId: number) {
         async function fetchAll() {
             try {
                 setLoading(true);
-                const lb = await getLeaderboard(warId);
+                const qp = { column: "B", fn: Qop.Eq, value: warId };
+                const lb = await getLeaderboard([qp]);
+                if (!lb) throw new Error("Problem getting leaderboard.");
                 const s = summarizeLeaderboard(lb);
                 if (cancelled) return;
                 setLeaderboard(lb);

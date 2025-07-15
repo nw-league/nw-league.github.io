@@ -1,10 +1,9 @@
 import { constructQuery } from "../utils/querybuilder";
-import { Qop, type QueryParameter } from "../types/queryparameter";
+import { Qop, type Ordering, type QueryParameter } from "../types/queryparameter";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 import type { Player } from "../types/player";
 import type { Role } from "../types/role";
 import type { Faction } from "../types/faction";
-import type { Ordering } from "./wardbservice";
 
 const kPlayerDbSheetId: string = '1Zpmwiu2M3AHdPVwaZ8A-nIPN5eKGclLSfnLl_Xn10PA';
 
