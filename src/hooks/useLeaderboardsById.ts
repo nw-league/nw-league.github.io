@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { type Leaderboard, type StatSummary } from "../types/leaderboard";
 import { getLeaderboard, summarizeLeaderboard } from "../services/leaderboardservice";
 import { Qop } from "../types/queryparameter";
+import { fillKpar } from "../utils/leaderboard";
 
 export function useLeaderboardsByIds(warId: number) {
     const [leaderboard, setLeaderboard] = useState<Leaderboard | null>(null);
@@ -16,11 +17,13 @@ export function useLeaderboardsByIds(warId: number) {
                 setLoading(true);
                 const qp = { column: "B", fn: Qop.Eq, value: warId };
                 const lb = await getLeaderboard([qp]);
-                if (!lb) throw new Error("Problem getting leaderboard.");
-                const s = summarizeLeaderboard(lb);
                 if (cancelled) return;
+                if (lb) {
+                    const s = summarizeLeaderboard(lb);
+                    setSummary(s);
+                    fillKpar(lb, s);
+                }
                 setLeaderboard(lb);
-                setSummary(s);
             } catch (err) {
                 if (!cancelled) setError(err);
             } finally {

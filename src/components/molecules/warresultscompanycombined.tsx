@@ -6,6 +6,7 @@ import { CrownIcon, FireIcon, FirstAidIcon, HandshakeIcon, ShieldIcon, SkullIcon
 import { factionBgPrimary, factionBgSecondary, factionBorder } from "../../utils/factions";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
+import FitTextToCell from "../atom/fittexttocell";
 
 interface WarResultsSummaryProp {
     summaries: StatSummary[],
@@ -44,11 +45,11 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                         <div className={`${attackerColor} flex items-center justify-center font-bold text-xl md:text-3xl p-2 w-full h-full border-b-2 ${attackerBorder} relative`}>
                             {isAttackerWinner && <CrownIcon weight="fill" size={16} className="absolute top-0 left-1/2 -translate-x-1/2 translate-y-[1px] text-yellow-500 drop-shadow-lg" />}
                             <Link to={`/companies/${summaries[0].name}`}>
-                                <span className="hover:underline">{summaries[0].name}</span>
+                                <span className="hover:underline"><FitTextToCell text={summaries[0].name} /></span>
                             </Link>
                         </div>
                         <div className="bg-gray-700 text-center text-3xl p-2 border-b-2 border-gray-900">vs</div>
-                        <div className={`${defenderColor} flex items-center justify-center font-bold text-xl md:text-3xl p-2 w-full h-full ${defenderBorder} border-b-2 relative`}>
+                        <div className={`${defenderColor} flex items-center justify-center font-bold text-xl md:text-3xl p-2 w-full h-full overflow-hidden ${defenderBorder} border-b-2 relative`}>
                             {!isAttackerWinner &&
                                 <CrownIcon
                                     weight="fill"
@@ -56,7 +57,7 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                                     className="absolute top-0 left-1/2 -translate-x-1/2 translate-y-[1px] text-yellow-500 drop-shadow-lg" />
                             }
                             <Link to={`/companies/${summaries[0].name}`}>
-                                <span className="hover:underline">{summaries[1].name}</span>
+                                <span className="hover:underline"><FitTextToCell text={summaries[1].name} /></span>
                             </Link>
                         </div>
                     </div>
@@ -151,7 +152,7 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                             <div className="flex w-full h-full items-center justify-center relative text-nowrap">
                                 {isAttackerWinner && <CrownIcon weight="fill" size={24} className="absolute -top-3 text-yellow-400 drop-shadow-lg" />}
                                 <Link to={`/companies/${summaries[0].name}`}>
-                                    <span className="hover:underline">{summaries[0].name}</span>
+                                    <span className="hover:underline"><FitTextToCell text={summaries[0].name} /></span>
                                 </Link>
                             </div>
                         </td>
@@ -168,10 +169,10 @@ function WarResultsCompanyCombined({ summaries, factions, winner }: WarResultsSu
                             </div>
                         </td>
                         <td className={`font-bold text-2xl ${defenderBorder} border-r-2 pt-4 pb-4`}>
-                            <div className="flex w-full h-full items-center justify-center text-nowrap text-ellipsis">
-                                {!isAttackerWinner && <CrownIcon weight="fill" className="absolute -top-3 text-yellow-400 drop-shadow-lg" />}
+                            <div className="flex w-full h-full items-center justify-center relative text-nowrap">
+                                {!isAttackerWinner && <CrownIcon weight="fill" size={24} className="absolute -top-3 text-yellow-400 drop-shadow-lg" />}
                                 <Link to={`/companies/${summaries[1].name}`}>
-                                    <span className="hover:underline">{summaries[1].name}</span>
+                                    <span className="hover:underline"><FitTextToCell text={summaries[1].name} /></span>
                                 </Link>
                             </div>
                         </td>

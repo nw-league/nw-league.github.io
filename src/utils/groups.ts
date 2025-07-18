@@ -1,4 +1,4 @@
-import type { GroupPerformance, Leaderboard, StatSummary } from "../types/leaderboard";
+import type { GroupPerformance, Leaderboard, StatDiff, StatSummary } from "../types/leaderboard";
 import type { GroupKey, Roster } from "../types/roster";
 
 export function getGroupDetails(leaderboard: Leaderboard, rosters: Map<string, Roster>): Map<string, Map<GroupKey, GroupPerformance>> {
@@ -22,7 +22,7 @@ export function getGroupDetails(leaderboard: Leaderboard, rosters: Map<string, R
                 for (const player of players) {
                     if (player.name === entry.player) {
                         entry.role = player.role;
-                        groupPerformance.stats.push({ ...entry, role: player.role, });
+                        groupPerformance.stats.push({ ...entry, role: player.role });
                     }
                 }
             }
@@ -54,6 +54,7 @@ export function getGroupSummaries(groupDetails: Map<string, Map<GroupKey, GroupP
                     healing: 0,
                     damage: 0,
                     count: 0,
+                    kpar: 0,
                 }
                 summary.set(gk, group);
             }
@@ -65,9 +66,31 @@ export function getGroupSummaries(groupDetails: Map<string, Map<GroupKey, GroupP
                 group.assists += entry.assists;
                 group.healing += entry.healing;
                 group.damage += entry.damage;
+                group.kpar += entry.kpar;
+            }
+            if (entries.stats.length > 0) {
+                group.kpar /= entries.stats.length;
             }
         }
     }
 
     return summaires;
+}
+
+export function getGroupDiff(attackerSummary: Map<GroupKey, StatSummary>, defenderSummary: Map<GroupKey, StatSummary>): Map<GroupKey, StatDiff> {
+    const diff = new Map<GroupKey, StatDiff>();
+    //{ name: 'diff', score: 0, killS: 0, deths: 0, assists: 0, healing: 0, damage: 0 };
+    for (const gk of attackerSummary.keys()) {
+        let atk = attackerSummary.get(gk);
+        let def = defenderSummary.get(gk);
+
+        if (!atk) {
+            atk = { name: String(gk), score: 0, kills: 0, deaths: 0, assists: 0, healing: 0, damage: 0, count: 0, kpar: 0 };
+        }
+        if (!def) {
+            def = { name: String(gk), score: 0, kills: 0, deaths: 0, assists: 0, healing: 0, damage: 0, count: 0, kpar: 0 };
+        }
+    }
+
+    return diff;
 }

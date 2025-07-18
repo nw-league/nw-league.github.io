@@ -10,6 +10,8 @@ import NotFound from './pages/notfound';
 import Home from './pages/home';
 import CompanyDetail from './pages/company-detail';
 import PlayerDetails from './pages/playerdetails';
+import Feedback from './pages/feedback';
+import Rankings from './pages/rankings';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +28,8 @@ const App: React.FC = () => {
             <Route path="/companies/:companyName" element={<CompanyDetail />} />
             <Route path="/wars" element={<Wars />} />
             <Route path="/wars/:warId" element={<WarDetail />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/rankings" element={<Rankings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

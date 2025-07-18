@@ -1,3 +1,5 @@
+
+
 export function formatSeconds(seconds: number, pad: string = '0'): string {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -11,26 +13,50 @@ export function formatDate(date: Date): string {
     return `${month}/${day}/${year}`;
 }
 
-export function convertFromGoogleSheetsDateString(dateString: string): Date | null {
-    // Match the Date string pattern "Date(year, month, day)"
-    const regex = /Date\((\d{4}),(\d{1,2}),(\d{1,2})\)/;
-    const matches = dateString.match(regex);
+export function formatDatetime(date: Date): string {
+    const hourRaw = date.getHours();
+    const hour = String(hourRaw % 12 === 0 ? 12 : hourRaw % 12);
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const ampm = hourRaw >= 12 ? 'PM' : 'AM';
+    return `${formatDate(date)} ${hour}:${minute} ${ampm}`;
+}
 
-    if (matches) {
-        const year = parseInt(matches[1], 10);
-        const month = parseInt(matches[2], 10);  // Month is 0-based in JavaScript
-        const day = parseInt(matches[3], 10);
 
-        // Return a new Date object
-        return new Date(year, month, day);
-    } else {
-        // Return null if the string doesn't match the Date format
-        console.error("Invalid date string format");
-        return null;
-    }
+export function convertFromGoogleSheetsDateString(dateString: string): Date {
+    const match = dateString.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+    if (!match) return new Date();
+
+    const year = Number(match[1]);
+    const month = Number(match[2]); // 0-indexed
+    const day = Number(match[3]);
+    const hour = Number(match[4] ?? 0);
+    const minute = Number(match[5] ?? 0);
+    const second = Number(match[6] ?? 0);
+
+    return new Date(year, month, day, hour, minute, second);
+}
+
+export function combineDateAndTime(date: Date, time: Date): Date {
+    const combined = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        time.getHours(),
+        time.getMinutes(),
+        time.getSeconds(),
+        time.getMilliseconds()
+    );
+
+    return combined
+}
+
+export function currentHour(): Date {
+    const rightNow = new Date();
+    rightNow.setMinutes(0, 0, 0);
+    return rightNow;
 }
 
 export function formatPercent(value: number, figures?: number): string {
     let sigFig = figures ? figures : 2;
-    return `${(value * 100).toFixed(sigFig)}%`
+    return `${(value * 100).toFixed(sigFig)}% `
 }

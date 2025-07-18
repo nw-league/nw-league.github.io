@@ -8,8 +8,9 @@ import type { StatSummary } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
 import StatsTable from '../atom/statstble';
-import { FireIcon, FirstAidIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
+import { FireIcon, FirstAidIcon, HandshakeIcon, PercentIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
 import type { GroupKey } from '../../types/roster';
+import { formatPercent } from '../../utils/format';
 
 interface GroupsSummaryProps {
     groups?: Map<GroupKey, StatSummary>;
@@ -82,6 +83,15 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'kpar',
+                header: () => <LabelIcon text='KPAR' icon={<PercentIcon weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        {formatPercent(info.getValue<number>())}
                     </div>
                 ),
             },

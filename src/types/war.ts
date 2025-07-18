@@ -1,4 +1,5 @@
 import type { CaptureTimes } from "./captures";
+export type WarType = 'M' | 'G' | 'M-10' | 'G-10';
 
 export interface War {
     id: number;
@@ -25,4 +26,5 @@ export const WarTable = {
     pointc: "K",
     fort: "L",
     duration: "M",
+    hidden: "N",
 }

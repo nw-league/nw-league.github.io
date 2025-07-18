@@ -7,12 +7,15 @@ import GroupsComponent from "../components/molecules/groupscomponent";
 import Loading from "../components/atom/loading";
 
 import WarResultsCompanyCombined from "../components/molecules/warresultscompanycombined";
-import type { JSX } from "react";
+import { type JSX } from "react";
 import NotFound from "./notfound";
+import DataEntryInProgress from "./dataentryinprogress";
+// import Heatmap from "../components/molecules/heatmap";
 
 
 function WarDetail(): JSX.Element {
-    const { warId } = useParams<{ warId: string }>();
+    const { warId } = useParams<{ warId: string, slug: string }>();
+
     const warIdNum = Number(warId);
     const { loading, error, war, companies, leaderboard, summary, groupDetails, groupsSummary } = useWarData(warIdNum);
 
@@ -24,8 +27,9 @@ function WarDetail(): JSX.Element {
         return <NotFound />;
     }
     if (!leaderboard) {
-        return <NotFound />;
+        return <DataEntryInProgress />;
     }
+
 
 
     const attackerSummary = summary.get(war.attacker);
@@ -35,7 +39,6 @@ function WarDetail(): JSX.Element {
 
     const attackerCompany = companies.get(war.attacker);
     const defenderCompany = companies.get(war.defender);
-
     if (!attackerCompany || !defenderCompany) {
         return <NotFound />;
     }
@@ -46,6 +49,8 @@ function WarDetail(): JSX.Element {
     const attackerGroupSummary = groupsSummary.get(war.attacker);
     const defenderGroupSummary = groupsSummary.get(war.defender);
 
+
+
     return (
         <div className="flex flex-col mx-auto max-w-7xl gap-8">
             <div className="pt-8">
@@ -54,7 +59,19 @@ function WarDetail(): JSX.Element {
             <div>
                 <WarResultsCompanyCombined summaries={[attackerSummary, defenderSummary]} factions={[attackerCompany.faction, defenderCompany.faction]} winner={war.winner} attacker={war.attacker} />
             </div>
-            <div>
+            {/* <div className="text-white">
+                <Heatmap
+                    point="indianred"
+                    topRight="yellow"
+                    topLeft="red"
+                    bottomLeft="yellow"
+                    bottomRight="green"
+                    weak="green"
+                    strong="orange"
+                    outer="yellow"
+                    wide="red" />
+            </div> */}
+            <div className="text-sm">
                 <GroupsComponent attackerName={war.attacker} defenderName={war.defender} attackerGroups={attackerGroups} defenderGroups={defenderGroups} attackerSummary={attackerGroupSummary} defenderSummary={defenderGroupSummary} />
             </div>
             <div>

@@ -19,7 +19,6 @@ export function useWarData(warId: number) {
     const loading = lbHook.loading || wHook.loading || rHook.loading || cHook.loading;
 
     const groupDetails = useMemo(() => {
-
         if (!lbHook.leaderboard || !rHook.rosters) return new Map<string, Map<GroupKey, GroupPerformance>>();
         const warRoster = rHook.rosters.get(warId);
         if (!warRoster) return new Map<string, Map<GroupKey, GroupPerformance>>();

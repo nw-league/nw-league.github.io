@@ -1,11 +1,11 @@
 import Loading from "../components/atom/loading";
 import WarListCard from "../components/molecules/warlistcard";
-import { useWarsById } from "../hooks2/useWarsById";
+import { useWarsById } from "../hooks/useWarsById";
 
 const Wars: React.FC = () => {
-    const { loading, err, wars } = useWarsById([]);
+    const { loading, error, wars } = useWarsById([]);
     if (loading) return <div className="flex w-full justify-center text-white p-8" ><Loading /></div >;
-    if (err) return <div className="text-white">Problem loading wars</div>
+    if (error) return <div className="text-white">Problem loading wars</div>
 
 
     const warCards = []

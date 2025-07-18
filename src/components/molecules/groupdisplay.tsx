@@ -6,8 +6,9 @@ import LabelIcon from '../atom/labelicon';
 import StatsTable, { type Calculation } from '../atom/statstble';
 import { Link } from 'react-router-dom';
 import { kRoleOrder } from '../../constants/roleorder';
-import { FireIcon, FirstAidIcon, GameControllerIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
+import { FireIcon, FirstAidIcon, GameControllerIcon, HandshakeIcon, PercentIcon, PlusCircleIcon, SkullIcon, SwordIcon, UsersIcon } from '@phosphor-icons/react';
 import type { GroupKey } from '../../types/roster';
+import { formatPercent } from '../../utils/format';
 
 
 interface GroupDisplayProps {
@@ -97,6 +98,15 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
                     </div>
                 ),
             },
+            {
+                accessorKey: 'kpar',
+                header: () => <LabelIcon text='KPAR' icon={<PercentIcon weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        {formatPercent(info.getValue<number>())}
+                    </div>
+                ),
+            },
         ],
         []
     );
@@ -108,6 +118,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
         { fn: "sum", column: "assists" },
         { fn: "sum", column: "healing" },
         { fn: "sum", column: "damage" },
+        { fn: 'average', column: 'kpar' },
     ]
 
     const combinedData = useMemo(() => {

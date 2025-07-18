@@ -12,9 +12,10 @@ import {
 import NumberCell from "../atom/numbercell";
 import LabelIcon from "../atom/labelicon";
 import { Link } from "react-router-dom";
-import { FireIcon, FirstAidIcon, HandshakeIcon, PlusCircleIcon, SkullIcon, SwordIcon, UserListIcon, UsersThreeIcon } from "@phosphor-icons/react";
+import { FireIcon, FirstAidIcon, HandshakeIcon, PercentIcon, PlusCircleIcon, SkullIcon, SwordIcon, UserListIcon, UsersThreeIcon } from "@phosphor-icons/react";
 import type { Company } from "../../types/company";
 import { factionBgSecondary, factionBgTertiary } from "../../utils/factions";
+import { formatPercent } from "../../utils/format";
 
 type LeaderboardProps = {
     leaderboard: Leaderboard,
@@ -113,6 +114,15 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
                 cell: info => (
                     <div className="text-right">
                         <NumberCell value={info.getValue<number>()} />
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'kpar',
+                header: () => <LabelIcon text='KPAR' icon={<PercentIcon weight='fill' />} />,
+                cell: info => (
+                    <div className="text-right">
+                        {formatPercent(info.getValue<number>())}
                     </div>
                 ),
             },

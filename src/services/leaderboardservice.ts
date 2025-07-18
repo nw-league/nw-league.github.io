@@ -20,11 +20,11 @@ export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, Stat
                 assists: 0,
                 healing: 0,
                 damage: 0,
+                kpar: 0,
                 count: 0,
             };
             summaries.set(entry.company, summary);
         }
-
         summary.name = entry.company;
         summary.score += entry.score;
         summary.kills += entry.kills;
@@ -61,6 +61,7 @@ export async function getLeaderboard(params: QueryParameter[]): Promise<Leaderbo
         assists: row[6] as number,
         healing: row[7] as number,
         damage: row[8] as number,
+        kpar: 0,
         company: row[9] as string,
     }));
 

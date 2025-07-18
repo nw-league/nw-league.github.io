@@ -10,11 +10,11 @@ export interface LeaderboardEntry {
     assists: number;
     healing: number;
     damage: number;
+    kpar: number;
     company: string;
 }
 
 export interface GroupsEntry extends LeaderboardEntry {
-
 }
 export interface PlayerDetailsEntry extends LeaderboardEntry {
     attacker: string;
@@ -46,7 +46,10 @@ export interface StatSummary {
     healing: number;
     damage: number;
     count: number;
+    kpar: number;
 }
+
+export interface StatDiff extends StatSummary { }
 
 export interface GroupPerformance {
     stats: GroupsEntry[];

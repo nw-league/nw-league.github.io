@@ -4,10 +4,11 @@ import {
     getCoreRowModel,
     getSortedRowModel,
     useReactTable,
+    type CellContext,
     type ColumnDef,
     type SortingState,
 } from "@tanstack/react-table";
-import { calculateColumnSums } from "../../utils/tableFunctions";
+import { calculateColumnAverage, calculateColumnSums, getColumnById } from "../../utils/table";
 import NumberCell from "./numbercell";
 
 type BottomCalcFunction = "sum" | "average";
@@ -35,13 +36,23 @@ function StatsTable<T>({ columns, data, calc, sort }: StatsTableProps<T>): JSX.E
         getSortedRowModel: getSortedRowModel(),
     });
 
-
     const bottomRowCalc = useMemo(() => {
+        let calcs = {} as Record<string, number>;
         if (calc) {
-            return calculateColumnSums(data, calc.map((v) => v.column) as (keyof T)[]);
-        } else {
-            return {} as Record<string, number>;
+            for (const { fn, column } of calc) {
+                if (fn === 'sum') {
+                    calcs = {
+                        ...calcs, ...calculateColumnSums(data, [column as (keyof T)])
+                    };
+                } else if (fn === 'average') {
+                    calcs = {
+                        ...calcs, ...calculateColumnAverage(data, [column as (keyof T)])
+                    };
+                }
+
+            }
         }
+        return calcs;
     }, [data])
 
     const headerRow: JSX.Element[] = [];
@@ -60,7 +71,7 @@ function StatsTable<T>({ columns, data, calc, sort }: StatsTableProps<T>): JSX.E
                             {flexRender(header.column.columnDef.header, header.getContext())}
                         </span>
                         <span className="text-xs top-1/2 -translate-y-1/2 right-0.5 absolute">
-                            {{ asc: "▲", desc: "▼" }[header.column.getIsSorted() as string] ?? null}
+                            {{ asc: "▲", desc: "▼" }[header.column.getIsSorted() as string] ?? "-"}
                         </span>
                     </div>
                 </th>
@@ -86,11 +97,35 @@ function StatsTable<T>({ columns, data, calc, sort }: StatsTableProps<T>): JSX.E
     for (const column of table.getVisibleFlatColumns()) {
         const colId = column.id;
         const sum = bottomRowCalc[colId];
-        sumRowCells.push(
+        const colDef = getColumnById(columns, colId);
+        let fmt = (
             <td key={colId} className="p1 border border-gray-800 bg-gray-700 border-t-3 border-t-gray-600 text-white text-right font-semibold">
                 {typeof sum === "number" ? <NumberCell value={sum} /> : null}
             </td>
-        )
+        );
+        if (typeof sum === "number") {
+            if (colDef?.cell) {
+                if (typeof colDef.cell === 'function') {
+                    const fakeCellContext = {
+                        getValue: () => sum,
+                        // these are technically required, so we add no-op or mock versions
+                        cell: {} as any,
+                        renderValue: () => sum,
+                        row: {} as any,
+                        column: column as any,
+                        table: table as any,
+                        getContext: () => ({}),
+                    } as CellContext<any, unknown>;
+                    fmt = (
+                        <td key={colId} className="p1 border border-gray-800 bg-gray-700 border-t-3 border-t-gray-600 text-white text-right font-semibold">
+                            {colDef.cell(fakeCellContext)}
+                        </td >
+                    );
+                }
+            }
+        }
+
+        sumRowCells.push(fmt);
     }
     const summaryRow = <tr key="summary">{sumRowCells}</tr>;
 

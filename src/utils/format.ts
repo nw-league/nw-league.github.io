@@ -7,5 +7,7 @@ export function formatThousands(value: number): string {
 }
 
 export function formatPercent(value: number, figures?: number): string {
-    return `${value.toFixed(figures)}%`;
+    const pct = value * 100;
+    const fixed = pct.toFixed(figures);
+    return `${fixed}%`;
 }

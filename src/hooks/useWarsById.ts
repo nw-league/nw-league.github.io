@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { QueryParameter } from "../types/queryparameter";
+import { Qop, type QueryParameter } from "../types/queryparameter";
 import type { War } from "../types/war";
 import { getWars } from "../services/wardbservice";
 
@@ -15,8 +15,9 @@ export function useWarsById(withIds: number[]) {
                 setLoading(true);
                 const query: QueryParameter[] = [];
                 for (const wid of withIds) {
-                    query.push({ column: "A", fn: "=", value: wid });
+                    query.push({ column: "A", fn: Qop.Eq, value: wid });
                 }
+                query.push({ column: "N", fn: Qop.Neq, value: true });
                 const w = (await getWars(query)).sort((a, b) => b.date.getTime() - a.date.getTime());
                 if (cancelled) return;
                 setWars(w)

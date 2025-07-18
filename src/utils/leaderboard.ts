@@ -1,5 +1,5 @@
 
-import { type StatSummary, type LeaderboardEntry, type MapStat, type WarsSummary } from "../types/leaderboard"
+import { type StatSummary, type LeaderboardEntry, type MapStat, type WarsSummary, type Leaderboard } from "../types/leaderboard"
 import type { War } from "../types/war";
 
 export function summarize(toSummarize: LeaderboardEntry[]): StatSummary {
@@ -11,6 +11,7 @@ export function summarize(toSummarize: LeaderboardEntry[]): StatSummary {
         assists: 0,
         healing: 0,
         damage: 0,
+        kpar: 0,
         count: toSummarize.length,
     }
 
@@ -21,6 +22,10 @@ export function summarize(toSummarize: LeaderboardEntry[]): StatSummary {
         summary.assists += entry.assists;
         summary.healing += entry.healing;
         summary.damage += entry.damage;
+        summary.kpar += entry.kpar;
+    }
+    if (toSummarize.length > 0) {
+        summary.kpar /= toSummarize.length;
     }
 
     return summary;
@@ -100,4 +105,14 @@ export function summarizeWars(toSummarize: War[], forCompany: string): WarsSumma
     summary.mostWin = { name: mostWinMap, count: mostWins };
     summary.mostLoss = { name: mostLossMap, count: mostLosses };
     return summary;
+}
+
+export function fillKpar(leaderboard: Leaderboard, summaries: Map<string, StatSummary>) {
+    for (const entry of leaderboard.entries) {
+        const company = entry.company;
+        if (!summaries.has(company)) { continue; }
+        const summary = summaries.get(company)!;
+        const kpar = (entry.kills + entry.assists) / summary.kills;
+        entry.kpar = kpar;
+    }
 }
