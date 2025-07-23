@@ -10,6 +10,7 @@ export interface War {
     winner: string;
     duration: number;
     captures: CaptureTimes;
+    league: string;
 }
 
 export const WarTable = {

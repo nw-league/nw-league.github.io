@@ -3,6 +3,7 @@ import { makeConditions } from "../utils/querybuilder";
 import { combineDateAndTime, convertFromGoogleSheetsDateString } from "../utils/time";
 import { fetchTableFromGoogleSheets } from "./googlesheets";
 import { type Ordering, type QueryParameter } from "../types/queryparameter";
+import type { League } from "../types/league";
 
 // //const kSheetId = "14byZyCAX_N_AA-y_1tv4CLtgTCaOB-Zq8QbOHmavE6Y";
 const kSheetId = "1Zpmwiu2M3AHdPVwaZ8A-nIPN5eKGclLSfnLl_Xn10PA";
@@ -98,7 +99,7 @@ export async function getWars(params?: QueryParameter[], limit?: number, order?:
     const conditions = params && params.length > 0 ? ` WHERE ${makeConditions(params)} ` : ''
     const limitStr = limit ? ` LIMIT ${limit} ` : '';
     const orderStr = order ? ` ORDER BY ${order.column} ${order.direction.toUpperCase()} ` : '';
-    const query = `SELECT A, B, C, D, E, F, G, H, I, J, K, L, M, N${conditions}${orderStr}${limitStr} `;
+    const query = `SELECT A, B, C, D, E, F, G, H, I, J, K, L, M, N, O${conditions}${orderStr}${limitStr} `;
     const data = await fetchTableFromGoogleSheets(kSheetId, 'wars', query);
 
     const wars: War[] = [];
@@ -118,7 +119,8 @@ export async function getWars(params?: QueryParameter[], limit?: number, order?:
             fort: row[11] as number,
         }
         const duration = row[12] as number;
-        wars.push({ id, date: dateTime, map, attacker, defender, winner, captures, duration });
+        const league = row[14] as League;
+        wars.push({ id, date: dateTime, map, attacker, defender, winner, captures, duration, league });
     }
     return wars;
 }

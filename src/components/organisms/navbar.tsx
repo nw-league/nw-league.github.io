@@ -117,6 +117,14 @@ const Navbar: React.FC = () => {
                 {/* Desktop Menu */}
                 <div className="hidden md:flex space-x-4 items-center relative">
                     <NavLink
+                        to="/rankings"
+                        className={({ isActive }) =>
+                            isActive ? 'px-3 py-2 bg-gray-700 rounded' : 'px-3 py-2 hover:bg-gray-600 rounded'
+                        }
+                    >
+                        Rankings
+                    </NavLink>
+                    <NavLink
                         to="/wars"
                         className={({ isActive }) =>
                             isActive ? 'px-3 py-2 bg-gray-700 rounded' : 'px-3 py-2 hover:bg-gray-600 rounded'
@@ -184,6 +192,15 @@ const Navbar: React.FC = () => {
 
             {/* Mobile Menu */}
             <div className={`md:hidden bg-gray-800 p-4 ${isOpen ? 'block' : 'hidden'}`}>
+                <NavLink
+                    to="/rankings"
+                    className={({ isActive }) =>
+                        isActive ? 'block px-3 py-2 bg-gray-700 rounded mb-2' : 'block px-3 py-2 rounded mb-2 hover:bg-gray-600'
+                    }
+                    onClick={toggleMenu}
+                >
+                    Rankings
+                </NavLink>
                 <NavLink
                     to="/wars"
                     className={({ isActive }) =>
