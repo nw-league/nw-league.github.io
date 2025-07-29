@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getPlayer } from "../services/playerservice";
+import { getPlayers } from "../services/playerservice";
 import type { Player } from "../types/player";
 
-export function usePlayer(playerName?: string) {
-    const [player, setPlayer] = useState<Player | null>(null);
+export function usePlayers() {
+    const [players, setPlayers] = useState<Player[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null);
 
@@ -15,11 +15,10 @@ export function usePlayer(playerName?: string) {
                 setLoading(true);
 
 
-
-                const p = await getPlayer(playerName);
+                const p = await getPlayers();
 
                 if (cancelled) return;
-                setPlayer(p)
+                setPlayers(p)
 
             } catch (err) {
                 if (!cancelled) setError(err);
@@ -33,7 +32,7 @@ export function usePlayer(playerName?: string) {
         return () => {
             cancelled = true; // Prevent state update on unmounted component
         };
-    }, [playerName]);
+    }, []);
 
-    return { error, loading, player };
+    return { error, loading, players };
 }

@@ -19,7 +19,6 @@ function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
 
 
     const { error, loading, details } = usePlayerDetails(playerName);
-
     const columns = useMemo<ColumnDef<PlayerDetailsEntry>[]>(
         () => [
             {
@@ -104,6 +103,7 @@ function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
     if (error) return <ErrorPage error={error} />
     if (loading) return <span className="text-white" ><Loading /></span>
     if (!details) return <NotFound />
+
 
     return (
         <div className="bg-gray-700">

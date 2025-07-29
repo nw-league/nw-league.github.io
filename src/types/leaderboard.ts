@@ -37,7 +37,7 @@ export interface GroupStats {
     kpar: number;
 }
 
-export interface StatSummary {
+export interface StatTotals {
     name: string;
     score: number;
     kills: number;
@@ -49,7 +49,8 @@ export interface StatSummary {
     kpar: number;
 }
 
-export interface StatDiff extends StatSummary { }
+
+export interface StatDiff extends StatTotals { }
 
 export interface GroupPerformance {
     stats: GroupsEntry[];

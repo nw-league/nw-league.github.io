@@ -1,8 +1,42 @@
 
-import { type StatSummary, type LeaderboardEntry, type MapStat, type WarsSummary, type Leaderboard } from "../types/leaderboard"
+import { type StatTotals, type LeaderboardEntry, type MapStat, type WarsSummary, type Leaderboard } from "../types/leaderboard"
 import type { War } from "../types/war";
+import { kThirtyMinutesInSeconds } from "./constants";
 
-export function summarize(toSummarize: LeaderboardEntry[]): StatSummary {
+export function normalize(toNormalize: LeaderboardEntry[], wars: War[]): StatTotals {
+    let name = '';
+    let score = 0;
+    let kills = 0;
+    let deaths = 0;
+    let assists = 0;
+    let healing = 0;
+    let damage = 0;
+    let count = 0;
+    let kpar = 0;
+    for (const entry of toNormalize) {
+        const war = wars.find(v => v.id === entry.warid);
+        if (!war) continue;
+
+        const normalizeFactor = kThirtyMinutesInSeconds / war.duration;
+        name = entry.player;
+        score += entry.score * normalizeFactor;
+        kills += entry.kills * normalizeFactor;
+        deaths += entry.deaths * normalizeFactor;
+        assists += entry.assists * normalizeFactor;
+        healing += entry.healing * normalizeFactor;
+        damage += entry.damage * normalizeFactor;
+        count += 1;
+    }
+    score /= count;
+    kills /= count;
+    deaths /= count;
+    assists /= count;
+    healing /= count;
+    damage /= count;
+
+    return { name, score, kills, deaths, assists, healing, damage, count, kpar }
+}
+export function summarize(toSummarize: LeaderboardEntry[]): StatTotals {
     const summary = {
         name: '',
         score: 0,
@@ -107,7 +141,7 @@ export function summarizeWars(toSummarize: War[], forCompany: string): WarsSumma
     return summary;
 }
 
-export function fillKpar(leaderboard: Leaderboard, summaries: Map<string, StatSummary>) {
+export function fillKpar(leaderboard: Leaderboard, summaries: Map<string, StatTotals>) {
     for (const entry of leaderboard.entries) {
         const company = entry.company;
         if (!summaries.has(company)) { continue; }

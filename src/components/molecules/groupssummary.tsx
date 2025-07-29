@@ -4,7 +4,7 @@ import {
 
 
 } from '@tanstack/react-table';
-import type { StatSummary } from '../../types/leaderboard';
+import type { StatTotals } from '../../types/leaderboard';
 import NumberCell from '../atom/numbercell';
 import LabelIcon from '../atom/labelicon';
 import StatsTable from '../atom/statstble';
@@ -13,14 +13,14 @@ import type { GroupKey } from '../../types/roster';
 import { formatPercent } from '../../utils/format';
 
 interface GroupsSummaryProps {
-    groups?: Map<GroupKey, StatSummary>;
+    groups?: Map<GroupKey, StatTotals>;
 }
 const GroupsSummary: React.FC<GroupsSummaryProps> = ({
     groups
 }) => {
 
 
-    const columns = React.useMemo<ColumnDef<StatSummary>[]>(
+    const columns = React.useMemo<ColumnDef<StatTotals>[]>(
         () => [
             {
                 accessorKey: 'name',
@@ -99,7 +99,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
         []
     );
 
-    const data: Array<StatSummary> = React.useMemo(() => {
+    const data: Array<StatTotals> = React.useMemo(() => {
         if (!groups) return [];
 
         return Array.from(groups.keys())
@@ -122,7 +122,7 @@ const GroupsSummary: React.FC<GroupsSummaryProps> = ({
                 return 1; // keyB === 'Weak' or keyA === 'Strong' > keyB === 'Strong'
             })
             .map(key => groups.get(key))
-            .filter((item): item is StatSummary => item !== undefined);
+            .filter((item): item is StatTotals => item !== undefined);
     }, [groups]);
 
     return (

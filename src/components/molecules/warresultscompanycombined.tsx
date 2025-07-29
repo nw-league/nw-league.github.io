@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import type { Faction } from "../../types/faction";
-import type { StatSummary } from "../../types/leaderboard";
+import type { StatTotals } from "../../types/leaderboard";
 import NumberCell from "../atom/numbercell";
 import { CrownIcon, FireIcon, FirstAidIcon, HandshakeIcon, ShieldIcon, SkullIcon, SwordIcon } from "@phosphor-icons/react";
 import { factionBgPrimary, factionBgSecondary, factionBorder } from "../../utils/factions";
@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import FitTextToCell from "../atom/fittexttocell";
 
 interface WarResultsSummaryProp {
-    summaries: StatSummary[],
+    summaries: StatTotals[],
     factions: Faction[],
     attacker: string,
     winner: string

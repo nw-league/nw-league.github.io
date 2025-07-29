@@ -1,5 +1,5 @@
 import StatWithIcon from "./statwithicon";
-import type { StatSummary } from "../../types/leaderboard";
+import type { StatTotals } from "../../types/leaderboard";
 import type { Faction } from "../../types/faction";
 import NumberCell from "../atom/numbercell";
 import { Link } from "react-router-dom";
@@ -7,7 +7,7 @@ import { CrownIcon, FireIcon, FirstAidIcon, HandshakeIcon, SkullIcon, SwordIcon 
 
 
 interface WarResultsSummaryProp {
-    summary: StatSummary,
+    summary: StatTotals,
     faction: Faction,
     isAttacker: boolean,
     isWinner: boolean

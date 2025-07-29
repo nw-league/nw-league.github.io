@@ -26,34 +26,57 @@ export function createPlayerDetails(
         stats: []
     };
 
-    for (const entry of leaderboard.entries) {
-        const warRoster = rosters.get(entry.warid);
+    for (const war of wars) {
+        const lbEntry = leaderboard.entries.find(v => v.warid === war.id);
+        if (!lbEntry) continue;
+        const warRoster = rosters.get(war.id);
         if (!warRoster) continue;
-        const companyRoster = warRoster.get(entry.company);
+        const companyRoster = warRoster.get(lbEntry.company);
         if (!companyRoster) continue;
-        let role = ('' as Role);
-        let attacker = '';
-        let defender = '';
-        let isWinner = false;
-        for (const [_, group] of companyRoster.groups) {
-            for (const player of group) {
-                if (player.name === entry.player) {
-                    role = player.role;
-                }
-            }
-        }
 
-        for (const war of wars) {
-            if (war.id === entry.warid) {
-                attacker = war.attacker
-                defender = war.defender
-                isWinner = entry.company === war.winner;
+        const attacker = war.attacker;
+        const defender = war.defender;
+        const isWinner = war.winner === lbEntry.company;
+
+        let role: Role = '';
+        for (const [_, group] of companyRoster.groups) {
+            const wp = group.find(v => v.name === lbEntry.player);
+            if (wp) {
+                role = wp.role;
                 break;
             }
         }
 
-        pd.stats.push({ ...entry, attacker, defender, role, isWinner });
+        pd.stats.push({ ...lbEntry, attacker, defender, role, isWinner });
     }
+    // for (const entry of leaderboard.entries) {
+    //     const warRoster = rosters.get(entry.warid);
+    //     if (!warRoster) continue;
+    //     const companyRoster = warRoster.get(entry.company);
+    //     if (!companyRoster) continue;
+    //     let role = ('' as Role);
+    //     let attacker = '';
+    //     let defender = '';
+    //     let isWinner = false;
+    //     for (const [_, group] of companyRoster.groups) {
+    //         for (const player of group) {
+    //             if (player.name === entry.player) {
+    //                 role = player.role;
+    //             }
+    //         }
+    //     }
+
+    //     for (const war of wars) {
+    //         if (war.id === entry.warid) {
+    //             attacker = war.attacker
+    //             defender = war.defender
+    //             isWinner = entry.company === war.winner;
+    //             break;
+    //         }
+    //     }
+
+    //     pd.stats.push({ ...entry, attacker, defender, role, isWinner });
+    // }
 
     return pd;
 }

@@ -1,13 +1,13 @@
 import { kSheetId } from "../constants/sheets";
-import { type Leaderboard, type LeaderboardEntry, type StatSummary } from "../types/leaderboard";
+import { type Leaderboard, type LeaderboardEntry, type StatTotals } from "../types/leaderboard";
 import { type QueryParameter } from "../types/queryparameter";
 import type { Role } from "../types/role";
 import { constructQuery } from "../utils/querybuilder";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 
 
-export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, StatSummary> {
-    const summaries = new Map<string, StatSummary>();
+export function summarizeLeaderboard(leaderboard: Leaderboard): Map<string, StatTotals> {
+    const summaries = new Map<string, StatTotals>();
 
     for (const entry of leaderboard.entries) {
         let summary = summaries.get(entry.company);
@@ -64,6 +64,5 @@ export async function getLeaderboard(params: QueryParameter[]): Promise<Leaderbo
         kpar: 0,
         company: row[9] as string,
     }));
-
     return { entries };
 }

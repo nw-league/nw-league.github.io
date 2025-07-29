@@ -1,4 +1,4 @@
-import type { GroupPerformance, Leaderboard, StatDiff, StatSummary } from "../types/leaderboard";
+import type { GroupPerformance, Leaderboard, StatDiff, StatTotals } from "../types/leaderboard";
 import type { GroupKey, Roster } from "../types/roster";
 
 export function getGroupDetails(leaderboard: Leaderboard, rosters: Map<string, Roster>): Map<string, Map<GroupKey, GroupPerformance>> {
@@ -33,12 +33,12 @@ export function getGroupDetails(leaderboard: Leaderboard, rosters: Map<string, R
 }
 
 export function getGroupSummaries(groupDetails: Map<string, Map<GroupKey, GroupPerformance>>) {
-    const summaires = new Map<string, Map<GroupKey, StatSummary>>();
+    const summaires = new Map<string, Map<GroupKey, StatTotals>>();
 
     for (const [company, details] of groupDetails) {
         let summary = summaires.get(company);
         if (!summary) {
-            summary = new Map<GroupKey, StatSummary>();
+            summary = new Map<GroupKey, StatTotals>();
             summaires.set(company, summary);
         }
 
@@ -77,7 +77,7 @@ export function getGroupSummaries(groupDetails: Map<string, Map<GroupKey, GroupP
     return summaires;
 }
 
-export function getGroupDiff(attackerSummary: Map<GroupKey, StatSummary>, defenderSummary: Map<GroupKey, StatSummary>): Map<GroupKey, StatDiff> {
+export function getGroupDiff(attackerSummary: Map<GroupKey, StatTotals>, defenderSummary: Map<GroupKey, StatTotals>): Map<GroupKey, StatDiff> {
     const diff = new Map<GroupKey, StatDiff>();
     //{ name: 'diff', score: 0, killS: 0, deths: 0, assists: 0, healing: 0, damage: 0 };
     for (const gk of attackerSummary.keys()) {

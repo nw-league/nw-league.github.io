@@ -35,6 +35,7 @@ export async function getPlayers(params?: QueryParameter[], order?: Ordering, li
     const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F'], params, order, limit);
     const data = await fetchTableFromGoogleSheets(kPlayerDbSheetId, 'players', query);
 
+
     return data.map(row => ({
         id: row[0] as number,
         name: row[1] as string,
@@ -42,5 +43,5 @@ export async function getPlayers(params?: QueryParameter[], order?: Ordering, li
         role: row[3] as Role,
         faction: row[4] as Faction,
         company: row[5] as string
-    }));
+    })).filter(v => v.name);
 }

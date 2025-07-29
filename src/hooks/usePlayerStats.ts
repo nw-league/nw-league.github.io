@@ -1,27 +1,51 @@
 import { useEffect, useState } from "react";
 import { Qop } from "../types/queryparameter";
-import type { StatSummary } from "../types/leaderboard";
-import { summarize } from "../utils/leaderboard";
+import type { StatTotals } from "../types/leaderboard";
+import { normalize, summarize } from "../utils/leaderboard";
 import { getLeaderboard } from "../services/leaderboardservice";
+import { getWars } from "../services/wardbservice";
 
 export function usePlayerStats(playerName: string) {
-    const [summary, setSummary] = useState<StatSummary | null>(null);
+    const [summary, setSummary] = useState<StatTotals | null>(null);
+    const [averages, setAverages] = useState<StatTotals | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null);
 
     useEffect(() => {
         let cancelled = false;
-
         async function fetchData() {
             try {
                 setLoading(true);
 
-                const qp = { column: 'B', fn: Qop.Eq, value: playerName };
+                const qp = { column: 'C', fn: Qop.Eq, value: playerName };
                 const lb = await getLeaderboard([qp]);
-                if (!lb) return;
+                const wqp = lb?.entries.map(v => ({
+                    column: 'A',
+                    fn: Qop.Eq,
+                    value: v.warid
+                }));
+
+                const w = await getWars(wqp);
+
+                if (!lb) {
+                    setSummary(null);
+                    setAverages(null);
+                    return;
+                }
                 const s = summarize(lb.entries);
-                if (cancelled) return;
-                setSummary(s)
+
+                if (!w) {
+                    setAverages(null);
+                }
+                const a = normalize(lb.entries, w);
+
+                if (cancelled) {
+                    setSummary(null);
+                    setAverages(null);
+                    return;
+                }
+                setSummary(s);
+                setAverages(a);
 
             } catch (err) {
                 if (!cancelled) setError(err);
@@ -37,5 +61,5 @@ export function usePlayerStats(playerName: string) {
         };
     }, [playerName]);
 
-    return { error, loading, summary };
+    return { error, loading, summary, averages };
 }

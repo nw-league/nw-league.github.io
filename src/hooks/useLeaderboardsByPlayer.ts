@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { type LeaderboardEntry, type StatSummary } from "../types/leaderboard";
+import { type LeaderboardEntry, type StatTotals } from "../types/leaderboard";
 import { getLeaderboard, summarizeLeaderboard } from "../services/leaderboardservice";
 import { Qop } from "../types/queryparameter";
 
 export function useLeaderboardsByPlayer(player: string) {
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-    const [summary, setSummary] = useState<Map<string, StatSummary>>(new Map());
+    const [summary, setSummary] = useState<Map<string, StatTotals>>(new Map());
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<any>(null);
 

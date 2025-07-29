@@ -13,7 +13,7 @@ export function useRostersByPlayer(player: string) {
         async function fetchAll() {
             try {
                 setLoading(true);
-                const qp = { column: "B", fn: Qop.Eq, value: player }
+                const qp = { column: "D", fn: Qop.Eq, value: player }
                 const r = await getRosters([qp]);
                 if (cancelled) return;
                 setRosters(r);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Qop, type QueryParameter } from "../types/queryparameter";
 import type { War } from "../types/war";
 import { getWars } from "../services/wardbservice";
@@ -7,7 +7,7 @@ export function useWarsById(withIds: number[]) {
     const [wars, setWars] = useState<War[]>([]);
     const [loading, setLoading] = useState<Boolean>(true);
     const [error, setError] = useState<any>(null);
-
+    const warKey = useMemo(() => [...withIds].sort((a, b) => a - b).join(','), [withIds]);
     useEffect(() => {
         let cancelled = false;
         async function fetchAll() {
@@ -29,7 +29,7 @@ export function useWarsById(withIds: number[]) {
         }
         fetchAll();
         return () => { cancelled = true };
-    }, withIds);
+    }, [warKey]);
 
     return { loading, error, wars };
 }
