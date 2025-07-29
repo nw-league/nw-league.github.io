@@ -1,29 +1,32 @@
-import type { JSX } from "react";
-import { useWarsById } from "../hooks2/useWarsById";
+import { useState, type JSX } from "react";
+import { useWarsById } from "../hooks/useWarsById";
 import NotFound from "./notfound";
 import Loading from "../components/atom/loading";
 //import RankingCard from "../components/atom/rankingcard";
 import RankingsDisplay from "../components/organisms/rankingsdisplay";
-import type { WinLoss } from "../types/winloss";
+import type { WinLoss } from "../types/ranking";
+
+const kLeageNames: Record<string, string> = { M: "Main", G: "G" };
 
 function Rankings(): JSX.Element {
-    const { wars, err, loading } = useWarsById([]);
+    const { wars, error, loading } = useWarsById([]);
+    const [league, setLeague] = useState<string>("M");
 
-    if (err) return <NotFound />;
+    if (error) return <NotFound />;
     if (loading) return <Loading />;
 
-    // const companies = new Map<string, { atkWin: number, atkLoss: number, defWin: number, defLoss: number }>();
-    const companiesM: Map<string, WinLoss> = new Map();
-    const companiesG: Map<string, WinLoss> = new Map();
+    // const companies = new Map<string, {atkWin: number, atkLoss: number, defWin: number, defLoss: number }>();
+    const companies: Map<string, WinLoss> = new Map();
 
     for (const war of wars) {
-        const companies = war.league === "M" ? companiesM : companiesG;
+        if (war.league !== league) continue;
         let attacker = companies.get(war.attacker);
         let defender = companies.get(war.defender);
 
         if (!attacker) {
             attacker = {
                 name: war.attacker,
+                faction: 'Gray',
                 defenseWins: 0,
                 defenseLoss: 0,
                 attackWins: 0,
@@ -34,6 +37,7 @@ function Rankings(): JSX.Element {
         if (!defender) {
             defender = {
                 name: war.defender,
+                faction: 'Gray',
                 defenseWins: 0,
                 defenseLoss: 0,
                 attackWins: 0,
@@ -48,43 +52,33 @@ function Rankings(): JSX.Element {
         defender.defenseLoss += Number(war.defender !== war.winner);
     }
 
-    // const entries = [...companies.entries()];
+    const entries = [...companies.entries()]
+        .map(([_, company]) => company)
+        .sort((a, b) => {
+            const winsA = a.attackWins + a.defenseWins;
+            const winsB = b.attackWins + b.defenseWins;
 
-    // // Optional: Sort by total wins for rankings
-    // entries.sort(([, aStats], [, bStats]) => {
-    //     const aWins = aStats.atkWin + aStats.defWin;
-    //     const bWins = bStats.atkWin + bStats.defWin;
-    //     return bWins - aWins;
-    // });
+            if (winsA !== winsB) {
+                return winsB - winsA; // More wins first
+            }
 
-    // return (
-    //     <div>
-    //         {entries.map(([name, stats], index) => (
-    //             <RankingCard
-    //                 key={name}
-    //                 rank={index + 1}
-    //                 name={name}
-    //                 faction="Gray" // You might want to derive this from the war data instead
-    //                 defWins={stats.defWin}
-    //                 defLoss={stats.defLoss}
-    //                 atkWins={stats.atkWin}
-    //                 atkLoss={stats.atkLoss}
-    //             />
-    //         ))}
-    //     </div>
-    // );
+            const lossesA = a.attackLoss + a.defenseLoss;
+            const lossesB = b.attackLoss + b.defenseLoss;
+
+            return lossesA - lossesB; // Fewer losses first
+        });
+
     return (
         <div className="flex flex-col pt-8 max-w-6xl mx-auto gap-4">
-            <div className="bg-gray-800 rounded-lg">
-                <h1 className="text-white font-semibold text-xl p-2">Main League</h1>
-                <RankingsDisplay rankings={[...companiesM.entries()].map((a, _) => a[1])} />
+            <div className="flex max-w-40">
+                <button onClick={() => setLeague("M")} className={`text-white ${league === "M" ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600 hover:bg-gray-700"} rounded-l-lg w-full pt-2 pb-2`}>Main</button>
+                <button onClick={() => setLeague("G")} className={`text-white ${league === "G" ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600 hover:bg-gray-700"} rounded-r-lg w-full pt-2 pb-2`} >G</button>
             </div>
-
             <div className="bg-gray-800 rounded-lg">
-                <h1 className="text-white font-semibold text-xl p-2">G League</h1>
-                <RankingsDisplay rankings={[...companiesG.entries()].map((a, _) => a[1])} />
+                <h1 className="text-white font-semibold text-xl p-2">{kLeageNames[league]} League</h1>
+                <RankingsDisplay rankings={entries} />
             </div>
-        </div>
+        </div >
     );
 }
 

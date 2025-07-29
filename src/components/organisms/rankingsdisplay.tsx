@@ -1,6 +1,6 @@
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from "@tanstack/react-table";
 import { useMemo, useState, type JSX } from "react";
-import type { WinLoss } from "../../types/winloss";
+import type { WinLoss } from "../../types/ranking";
 import LabelIcon from "../atom/labelicon";
 import { ListNumbersIcon, ThumbsDownIcon, ThumbsUpIcon, UsersThreeIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
@@ -12,52 +12,83 @@ interface RankingsDisplayProps {
 }
 
 function RankingsDisplay({ rankings }: RankingsDisplayProps): JSX.Element {
-    const [sorting, setSorting] = useState<SortingState>([{ id: 'rank', desc: true }]);
-
-    const sortedRankings = useMemo(() => {
-        return [...rankings].sort((a, b) => {
-            const aScore = (a.attackWins + a.defenseWins) - (a.attackLoss + a.defenseLoss);
-            const bScore = (b.attackWins + b.defenseWins) - (b.attackLoss + b.defenseLoss);
-            return bScore - aScore;
-        });
-    }, [rankings]);
+    const [sorting, setSorting] = useState<SortingState>([{ id: "rank", desc: true }]);
 
     const columns = useMemo<ColumnDef<WinLoss>[]>(() => [
         {
-            id: 'rank',
-            header: () => <LabelIcon icon={<ListNumbersIcon weight="fill" />} text="Rank" />,
-            accessorFn: row => (row.attackWins + row.defenseWins) - (row.attackLoss + row.defenseLoss),
-            sortingFn: 'basic',
-            cell: (info) => <div className="text-center">{info.row.index + 1}</div>,
+            id: "rank",
+            header: ({ column }) => (
+                <div className="w-32 text-center">
+                    <button onClick={() => column.toggleSorting()} className="flex items-center gap-1 justify-center w-full">
+                        <LabelIcon icon={<ListNumbersIcon weight="fill" />} text="Rank" /></button>
+                </div>
+            ),
+            accessorFn: row => row.attackWins + row.defenseWins - row.attackLoss - row.defenseLoss,
+            sortingFn: "basic",
+            cell: info => (
+                <div className="w-32 text-center font-bold text-lg">{info.row.index + 1}</div>
+            ),
         },
         {
-            accessorKey: 'name',
+            accessorKey: "name",
             id: "company",
-            header: () => <LabelIcon icon={<UsersThreeIcon weight="fill" />} text="Company" />,
-            cell: (info) => (
-                <div className="text-left hover:underline">
-                    <Link to={`/companies/${info.getValue<string>()}`}>
-                        {info.getValue<string>()}
+            header: ({ column }) => (
+                <div className="text-left w-full">
+                    <button onClick={() => column.toggleSorting()}>
+                        <LabelIcon icon={<UsersThreeIcon weight="fill" />} text="Company" />
+                    </button>
+
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data = row.original;
+                return (
+                    <Link to={`/companies/${data.name}`} className="block w-full text-left">
+                        <span className="hover:underline text-white font-semibold text-xl truncate">
+                            {data.name}
+                        </span>
                     </Link>
+                );
+            },
+        },
+        {
+            id: "wins",
+            header: ({ column }) => (
+                <div className="w-32 text-center">
+                    <button onClick={() => column.toggleSorting()} className="flex items-center gap-1 justify-center w-full">
+                        <LabelIcon icon={<ThumbsUpIcon weight="fill" />} text="Wins" />
+                    </button>
+                </div>
+            ),
+            accessorFn: item => item.attackWins + item.defenseWins,
+            sortingFn: "basic",
+            cell: info => (
+                <div className="w-32 text-center font-semibold text-green-300">
+                    {info.getValue<number>()}
                 </div>
             ),
         },
         {
-            accessorFn: (item) => item.attackWins + item.defenseWins,
-            id: 'wins',
-            header: () => <LabelIcon icon={<ThumbsUpIcon weight="fill" />} text="Wins" />,
-            cell: (info) => <div className="text-center">{info.getValue<number>()}</div>,
+            id: "losses",
+            header: ({ column }) => (
+                <div className="w-32 text-center">
+                    <button onClick={() => column.toggleSorting()} className="flex items-center gap-1 justify-center w-full">
+                        <LabelIcon icon={<ThumbsDownIcon />} text="Losses" />
+                    </button>
+                </div>
+            ),
+            accessorFn: item => item.attackLoss + item.defenseLoss,
+            sortingFn: "basic",
+            cell: info => (
+                <div className="w-32 text-center font-semibold text-red-300">
+                    {info.getValue<number>()}
+                </div>
+            ),
         },
-        {
-            accessorFn: (item) => item.attackLoss + item.defenseLoss,
-            id: 'loss',
-            header: () => <LabelIcon icon={<ThumbsDownIcon />} text="Losses" />,
-            cell: (info) => <div className="text-center">{info.getValue<number>()}</div>,
-        },
-    ], []);
+    ], [rankings]);
 
     const table = useReactTable({
-        data: sortedRankings,
+        data: rankings,
         columns,
         state: { sorting },
         onSortingChange: setSorting,
@@ -67,49 +98,59 @@ function RankingsDisplay({ rankings }: RankingsDisplayProps): JSX.Element {
 
     return (
         <div className="w-full text-white">
-            <table className="w-full table-auto border-collapse text-sm">
-                <thead className="bg-gray-700">
-                    {table.getHeaderGroups().map((headerGroup) => (
+            <table className="w-full table-fixed border-collapse text-sm">
+                <thead className="bg-gray-700 text-white">
+                    {table.getHeaderGroups().map(headerGroup => (
                         <tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <th
-                                    key={header.id}
-                                    colSpan={header.colSpan}
-                                    onClick={header.column.getToggleSortingHandler()}
-                                    className="cursor-pointer select-none p-2 border-b border-gray-600 text-center"
-                                >
-                                    <div className="flex justify-center items-center relative w-full space-x-2">
-                                        <span>
-                                            {flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                        </span>
-                                        <span className="text-xs absolute right-0.5">
+                            {headerGroup.headers.map(header => {
+                                // Determine width classes based on column id
+                                let widthClass = "";
+                                if (header.column.id === "rank") widthClass = "w-32";
+                                else if (header.column.id === "wins" || header.column.id === "losses") widthClass = "w-32";
+                                else if (header.column.id === "company") widthClass = "w-auto"; // stretch
+
+                                return (
+                                    <th
+                                        key={header.id}
+                                        className={`${widthClass} cursor-pointer select-none p-2 border-b border-gray-600 text-center relative pr-6`} // pr-6 for space on right
+                                    >
+                                        <div>
+                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                        </div>
+                                        <span className="text-xs top-1/2 -translate-y-1/2 right-1 absolute pointer-events-none">
                                             {{
-                                                asc: '▲',
-                                                desc: '▼',
-                                            }[header.column.getIsSorted() as string] ?? null}
+                                                asc: "▲",
+                                                desc: "▼"
+                                            }[header.column.getIsSorted() as string] ?? "-"}
                                         </span>
-                                    </div>
-                                </th>
-                            ))}
+                                    </th>
+                                );
+                            })}
                         </tr>
                     ))}
                 </thead>
                 <tbody>
                     {table.getRowModel().rows.map((row, index) => {
-                        const rowClass = index % 2 === 0 ? factionBgSecondary('Gray') : factionBgTertiary('Gray');
+                        const rowClass = index % 2 === 0
+                            ? factionBgSecondary("Gray")
+                            : factionBgTertiary("Gray");
                         return (
                             <tr key={row.id} className={rowClass}>
-                                {row.getVisibleCells().map(cell => (
-                                    <td
-                                        key={cell.id}
-                                        className="p-3 border-b border-gray-700 text-sm text-nowrap"
-                                    >
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </td>
-                                ))}
+                                {row.getVisibleCells().map(cell => {
+                                    let widthClass = "";
+                                    if (cell.column.id === "rank") widthClass = "w-32 text-center";
+                                    else if (cell.column.id === "wins" || cell.column.id === "losses") widthClass = "w-32 text-center";
+                                    else if (cell.column.id === "company") widthClass = "w-auto text-left";
+
+                                    return (
+                                        <td
+                                            key={cell.id}
+                                            className={`p-3 border-b border-gray-700 align-middle ${widthClass}`}
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </td>
+                                    );
+                                })}
                             </tr>
                         );
                     })}
@@ -118,6 +159,5 @@ function RankingsDisplay({ rankings }: RankingsDisplayProps): JSX.Element {
         </div>
     );
 }
-
 
 export default RankingsDisplay;
