@@ -16,6 +16,8 @@ import { FireIcon, FirstAidIcon, HandshakeIcon, PercentIcon, PlusCircleIcon, Sku
 import type { Company } from "../../types/company";
 import { factionBgSecondary, factionBgTertiary } from "../../utils/factions";
 import { formatPercent } from "../../utils/format";
+import Dropdown from "../atom/dropdown";
+import { kRoles } from "../../types/role";
 
 type LeaderboardProps = {
     leaderboard: Leaderboard,
@@ -23,9 +25,14 @@ type LeaderboardProps = {
 };
 
 const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies }) => {
+    const [selectedRole, setSelectedRole] = React.useState<string>('All Roles');
     const [sorting, setSorting] = React.useState<SortingState>([
         { id: 'score', desc: true },
     ]);
+
+    const filtered = React.useMemo<LeaderboardEntry[]>(() => {
+        return leaderboard.entries.filter(v => selectedRole === 'All Roles' || selectedRole === v.role);
+    }, [selectedRole]);
 
     const columns = React.useMemo<ColumnDef<LeaderboardEntry>[]>(
         () => [
@@ -131,7 +138,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
     );
 
     const table = useReactTable({
-        data: leaderboard.entries,
+        data: filtered,
         columns,
         state: {
             sorting,
@@ -142,11 +149,14 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
     });
 
     return (
-        <div className="bg-gray-800 rounded-lg shadow-lg text-white">
+        <div className="flex flex-col gap-2 bg-gray-800 rounded-lg shadow-lg text-white">
             <h2 className="text-xl font-bold p-2">Leaderboard</h2>
+            <div className="pl-2">
+                <Dropdown options={['All Roles', ...kRoles]} value={selectedRole} onChange={setSelectedRole} />
+            </div>
             <div className="overflow-x-auto">
                 <table className="min-w-full table-auto border-collapse">
-                    < thead className="bg-gray-700" >
+                    <thead className="bg-gray-700" >
                         {
                             table.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id}>

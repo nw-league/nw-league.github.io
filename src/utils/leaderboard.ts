@@ -27,13 +27,14 @@ export function normalize(toNormalize: LeaderboardEntry[], wars: War[]): StatTot
         damage += entry.damage * normalizeFactor;
         count += 1;
     }
-    score /= count;
-    kills /= count;
-    deaths /= count;
-    assists /= count;
-    healing /= count;
-    damage /= count;
-
+    if (count > 0) {
+        score /= count;
+        kills /= count;
+        deaths /= count;
+        assists /= count;
+        healing /= count;
+        damage /= count;
+    }
     return { name, score, kills, deaths, assists, healing, damage, count, kpar }
 }
 export function summarize(toSummarize: LeaderboardEntry[]): StatTotals {
@@ -73,8 +74,7 @@ export function summarizeWars(toSummarize: War[], forCompany: string): WarsSumma
         defense: { win: 0, loss: 0, count: 0 },
         attack: { win: 0, loss: 0, count: 0 },
         overall: { win: 0, loss: 0, count: 0 },
-    }
-
+    };
 
     const mapStats = new Map<string, MapStat>();
 
@@ -84,60 +84,53 @@ export function summarizeWars(toSummarize: War[], forCompany: string): WarsSumma
             stat = { played: 0, win: 0 };
             mapStats.set(war.map, stat);
         }
-        stat.played += 1;
-        if (war.attacker === forCompany) {
-            if (war.winner === forCompany) {
-                summary.attack.win += 1;
-            } else {
-                summary.attack.loss += 1;
-            }
-        } else {
-            if (war.winner === forCompany) {
 
-                summary.defense.win += 1;
-            } else {
-                summary.defense.loss += 1;
-            }
+        stat.played += 1;
+
+        const won = war.winner === forCompany;
+        if (won) stat.win += 1;
+
+        if (war.attacker === forCompany) {
+            won ? summary.attack.win++ : summary.attack.loss++;
+        } else {
+            won ? summary.defense.win++ : summary.defense.loss++;
         }
     }
-    summary.defense.count = summary.defense.win + summary.defense.loss;
+
     summary.attack.count = summary.attack.win + summary.attack.loss;
+    summary.defense.count = summary.defense.win + summary.defense.loss;
     summary.overall.count = summary.attack.count + summary.defense.count;
     summary.overall.win = summary.attack.win + summary.defense.win;
     summary.overall.loss = summary.attack.loss + summary.defense.loss;
 
-    let mostWins = -1;
-    let mostWinMap = "";
+    // Track max stats
+    let mostPlayed = -1, mostPlayedMap = '';
+    let mostWins = -1, mostWinMap = '';
+    let mostLosses = -1, mostLossMap = '';
 
     for (const [mapName, stat] of mapStats.entries()) {
+        const losses = stat.played - stat.win;
+
+        if (stat.played > mostPlayed) {
+            mostPlayed = stat.played;
+            mostPlayedMap = mapName;
+        }
+
         if (stat.win > mostWins) {
             mostWins = stat.win;
             mostWinMap = mapName;
         }
-    }
-    let mostLosses = -1;
-    let mostLossMap = "";
 
-    for (const [mapName, stat] of mapStats.entries()) {
-        const losses = stat.played - stat.win;
         if (losses > mostLosses) {
             mostLosses = losses;
             mostLossMap = mapName;
         }
     }
 
-    let mostPlayed = -1;
-    let mostPlayedMap = "";
-    for (const [mapName, stat] of mapStats.entries()) {
-        if (mostPlayed < stat.played) {
-            mostPlayedMap = mapName;
-            mostPlayed = stat.played;
-        }
-    }
+    summary.mostPlayed = mostPlayed >= 0 ? { name: mostPlayedMap, count: mostPlayed } : { name: '', count: 0 };
+    summary.mostWin = mostWins >= 0 ? { name: mostWinMap, count: mostWins } : { name: '', count: 0 };
+    summary.mostLoss = mostLosses >= 0 ? { name: mostLossMap, count: mostLosses } : { name: '', count: 0 };
 
-    summary.mostPlayed = { name: mostPlayedMap, count: mostPlayed };
-    summary.mostWin = { name: mostWinMap, count: mostWins };
-    summary.mostLoss = { name: mostLossMap, count: mostLosses };
     return summary;
 }
 

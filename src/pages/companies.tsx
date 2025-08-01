@@ -11,12 +11,12 @@ const Companies: React.FC = () => {
     const companyCards = [];
     for (const company of companies) {
         companyCards.push(
-            <CompanyListCard company={company} />
+            <CompanyListCard company={company} key={company.name} />
         );
     }
 
     return (
-        <div className="flex flex-col gap-2 text-white p-8 max-w-180 mx-auto">
+        <div className="flex flex-col gap-2 text-white p-8 max-w-3xl mx-auto">
 
             {companyCards}
         </div>

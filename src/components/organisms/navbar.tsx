@@ -98,7 +98,7 @@
 
 // export default Navbar;
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -107,6 +107,9 @@ const Navbar: React.FC = () => {
     const toggleMenu = () => setIsOpen(!isOpen);
     const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
 
+    const location = useLocation();
+    const fromPath = encodeURIComponent(location.pathname);
+    console.log(fromPath);
     return (
         <nav className="bg-gray-800 p-4 text-white w-full top-0 z-10 fixed shadow-md">
             <div className="container mx-auto flex justify-between items-center">
@@ -148,7 +151,13 @@ const Navbar: React.FC = () => {
                     >
                         Players
                     </NavLink>
-
+                    <NavLink
+                        to={`/inaccuracy?from=${fromPath}`}
+                        className="block px-4 py-2 hover:bg-gray-600 text-red-300"
+                        onClick={() => setDropdownOpen(false)}
+                    >
+                        Report Bad Data
+                    </NavLink>
                     {/* Dropdown */}
                     <div className="relative">
                         <button
@@ -229,6 +238,16 @@ const Navbar: React.FC = () => {
                     Player Stats
                 </NavLink>
                 <NavLink
+                    to="/inaccuracy"
+                    state={{ from: location.pathname }}
+                    className={({ isActive }) =>
+                        isActive ? 'block px-3 py-2 bg-gray-700 rounded' : 'block px-3 py-2 rounded hover:bg-gray-600 text-red-300'
+                    }
+                    onClick={toggleMenu}
+                >
+                    Report Bad Data
+                </NavLink>
+                <NavLink
                     to="/feedback"
                     className={({ isActive }) =>
                         isActive ? 'block px-3 py-2 bg-gray-700 rounded' : 'block px-3 py-2 rounded hover:bg-gray-600'
@@ -237,6 +256,7 @@ const Navbar: React.FC = () => {
                 >
                     Feedback
                 </NavLink>
+
             </div>
         </nav>
     );

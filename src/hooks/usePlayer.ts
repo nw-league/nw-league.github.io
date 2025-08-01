@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getPlayer } from "../services/playerservice";
 import type { Player } from "../types/player";
 
-export function usePlayer(playerName?: string) {
+export function usePlayer(playerName: string) {
     const [player, setPlayer] = useState<Player | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null);
@@ -17,7 +17,6 @@ export function usePlayer(playerName?: string) {
 
 
                 const p = await getPlayer(playerName);
-
                 if (cancelled) return;
                 setPlayer(p)
 

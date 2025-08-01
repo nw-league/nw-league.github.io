@@ -19,25 +19,21 @@ export function usePlayerStats(playerName: string) {
 
                 const qp = { column: 'C', fn: Qop.Eq, value: playerName };
                 const lb = await getLeaderboard([qp]);
-                const wqp = lb?.entries.map(v => ({
-                    column: 'A',
-                    fn: Qop.Eq,
-                    value: v.warid
-                }));
 
-                const w = await getWars(wqp);
+                const wqp = lb?.entries.map(v => ({ column: 'A', fn: Qop.Eq, value: v.warid })) || [];
+                const w = await getWars([...wqp, { column: 'N', fn: Qop.Neq, value: true }]);
+                // if (!lb) {
+                //     setSummary(null);
+                //     setAverages(null);
+                //     return;
+                // }
 
-                if (!lb) {
-                    setSummary(null);
-                    setAverages(null);
-                    return;
-                }
-                const s = summarize(lb.entries);
+                const s = summarize(lb?.entries.filter(v => w.findIndex(w => w.id === v.warid) >= 0) || []);
 
                 if (!w) {
                     setAverages(null);
                 }
-                const a = normalize(lb.entries, w);
+                const a = normalize(lb?.entries || [], w);
 
                 if (cancelled) {
                     setSummary(null);

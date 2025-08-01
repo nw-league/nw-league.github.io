@@ -13,6 +13,8 @@ export function useCompanyDetails(name: string) {
     const mHook = useMembers(name);
     const lbHook = useLeaderboardsByCompany(name);
 
+
+
     const loading = cHook.loading || wHook.loading || mHook.loading || lbHook.loading;
 
     useEffect(() => {
@@ -25,6 +27,6 @@ export function useCompanyDetails(name: string) {
         company: cHook.companies[0],
         wars: wHook.wars,
         members: mHook.members,
-        leaderboards: lbHook.leaderboard
+        leaderboards: lbHook.leaderboard,
     };
 }

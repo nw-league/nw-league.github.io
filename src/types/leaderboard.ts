@@ -17,6 +17,7 @@ export interface LeaderboardEntry {
 export interface GroupsEntry extends LeaderboardEntry {
 }
 export interface PlayerDetailsEntry extends LeaderboardEntry {
+    date: Date;
     attacker: string;
     defender: string;
     isWinner: boolean;

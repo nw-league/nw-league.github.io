@@ -24,7 +24,7 @@ export function useMembers(company: string) {
         }
         fetchAll();
         return () => { cancelled = true };
-    });
+    }, [company]);
 
     return { loading, error, members };
 }

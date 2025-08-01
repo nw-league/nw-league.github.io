@@ -16,7 +16,6 @@ export function useLeaderboardsByCompany(name: string) {
                 setLoading(true);
                 const qp = { column: "J", fn: Qop.Eq, value: name };
                 const lb = await getLeaderboard([qp]);
-
                 if (!lb) throw new Error("Problem getting leaderboard.");
 
                 const s = summarizeLeaderboard(lb);

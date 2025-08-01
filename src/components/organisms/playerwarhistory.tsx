@@ -4,7 +4,6 @@ import type { PlayerDetailsEntry } from "../../types/leaderboard";
 import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import NumberCell from "../atom/numbercell";
-import ErrorPage from "../../pages/errorpage";
 import Loading from "../atom/loading";
 import StatsTable from "../atom/statstble";
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
@@ -15,12 +14,21 @@ export interface PlayerWarHistoryProps {
     playerName: string;
 }
 function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
-    const sort = [{ id: "warid", desc: true }];
+    const sort = [{ id: "date", desc: true }];
 
 
-    const { error, loading, details } = usePlayerDetails(playerName);
+    const { loading, details } = usePlayerDetails(playerName);
     const columns = useMemo<ColumnDef<PlayerDetailsEntry>[]>(
         () => [
+            {
+                accessorKey: "date",
+                header: "Date",
+                cell: info => (
+                    <div className="text-left">
+                        {info.getValue<Date>().toLocaleDateString()}
+                    </div>
+                )
+            },
             {
                 accessorKey: "warid",
                 header: "War",
@@ -100,15 +108,14 @@ function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
         []
     );
 
-    if (error) return <ErrorPage error={error} />
+    //if (error) return <ErrorPage error={error} />
     if (loading) return <span className="text-white" ><Loading /></span>
     if (!details) return <NotFound />
-
 
     return (
         <div className="bg-gray-700">
             <h1 className="text-white font-semibold p-2">War History</h1>
-            <StatsTable columns={columns} data={details.stats} sort={sort} />
+            {details.stats.length > 0 ? (< StatsTable columns={columns} data={details.stats} sort={sort} />) : (<div className='text-gray-500 p-2'>No data</div>)}
         </div>
     );
 }

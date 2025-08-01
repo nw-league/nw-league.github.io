@@ -23,7 +23,7 @@ export function useCompanies(names: string[]) {
         }
         fetchAll();
         return () => { cancelled = true };
-    }, [names]);
+    }, [names.join(',')]);
 
     return { loading, error, companies };
 }

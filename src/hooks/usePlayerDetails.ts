@@ -16,7 +16,6 @@ export function usePlayerDetails(player: string) {
     const loading = wHook.loading || rHook.loading || pHook.loading || lbHook.loading;
 
     const playerDetails = createPlayerDetails(pHook.player, { entries: lbHook.leaderboard }, rHook.rosters, wHook.wars);
-
     useEffect(() => {
         setError(wHook.error || rHook.error || pHook.error || lbHook.error);
     }, [wHook.error, rHook.error, pHook.error, lbHook.error]);
