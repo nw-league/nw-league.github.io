@@ -2,7 +2,7 @@ import type { Role } from "./role";
 
 export interface LeaderboardEntry {
     warid: number;
-    player: string;
+    character: string;
     role: Role;
     score: number;
     kills: number;
@@ -16,11 +16,12 @@ export interface LeaderboardEntry {
 
 export interface GroupsEntry extends LeaderboardEntry {
 }
-export interface PlayerDetailsEntry extends LeaderboardEntry {
+export interface CharacterDetailsEntry extends LeaderboardEntry {
     date: Date;
     attacker: string;
     defender: string;
     isWinner: boolean;
+    duration: number;
 }
 
 export interface Leaderboard {

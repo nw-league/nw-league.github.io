@@ -3,7 +3,7 @@ import { type LeaderboardEntry, type StatTotals } from "../types/leaderboard";
 import { getLeaderboard, summarizeLeaderboard } from "../services/leaderboardservice";
 import { Qop } from "../types/queryparameter";
 
-export function useLeaderboardsByPlayer(player: string) {
+export function useLeaderboardsByCharacters(characters: string[]) {
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [summary, setSummary] = useState<Map<string, StatTotals>>(new Map());
     const [loading, setLoading] = useState<boolean>(true);
@@ -11,11 +11,16 @@ export function useLeaderboardsByPlayer(player: string) {
 
     useEffect(() => {
         let cancelled = false;
+        // console.log('userLeaderboardsByCharacters useEffect triggered');
         async function fetchAll() {
             try {
                 setLoading(true);
-                const qp = { column: "C", fn: Qop.Eq, value: player };
-                const lb = await getLeaderboard([qp]);
+                if (characters.length === 0) {
+                    setLeaderboard([]);
+                    return;
+                }
+                const qp = characters.map(v => ({ column: "C", fn: Qop.Eq, value: v }));
+                const lb = await getLeaderboard(qp);
 
                 if (!lb) throw new Error("Problem getting leaderboard.");
 
@@ -34,7 +39,7 @@ export function useLeaderboardsByPlayer(player: string) {
 
         fetchAll();
         return () => { cancelled = true };
-    }, [player]);
+    }, [characters.sort().join(',')]);
 
     return { loading, error, leaderboard, summary };
 }

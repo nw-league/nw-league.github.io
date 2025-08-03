@@ -1,10 +1,10 @@
 import type { JSX } from "react";
-import type { Player } from "../../types/player";
+import type { Character } from "../../types/character";
 
 import PlayerListCard from "../atom/playerlistcard";
 
 interface CompanyMemberProps {
-    members: Player[];
+    members: Character[];
 }
 function CompanyMembersTable({ members }: CompanyMemberProps): JSX.Element {
     // const columns = useMemo<ColumnDef<Player>[]>(() => [

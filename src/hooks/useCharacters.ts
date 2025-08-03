@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { getPlayers } from "../services/playerservice";
-import type { Player } from "../types/player";
+import type { Character } from "../types/character";
 
-export function usePlayers() {
-    const [players, setPlayers] = useState<Player[] | null>(null);
+export function useCharacters() {
+    const [players, setPlayers] = useState<Character[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null);
 

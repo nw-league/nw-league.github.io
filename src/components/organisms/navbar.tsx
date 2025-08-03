@@ -109,7 +109,6 @@ const Navbar: React.FC = () => {
 
     const location = useLocation();
     const fromPath = encodeURIComponent(location.pathname);
-    console.log(fromPath);
     return (
         <nav className="bg-gray-800 p-4 text-white w-full top-0 z-10 fixed shadow-md">
             <div className="container mx-auto flex justify-between items-center">

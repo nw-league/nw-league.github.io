@@ -1,39 +1,52 @@
 import { useParams } from "react-router-dom";
 import NotFound from "./notfound";
 
-import PlayerWarHistory from "../components/organisms/playerwarhistory";
-import PlayerCard from "../components/organisms/playercard";
-import { usePlayer } from "../hooks2/usePlayer";
 import Loading from "../components/atom/loading";
-import type { Player } from "../types/player";
-import PlayerSummary from "../components/molecules/playersummary";
-// import Construction from "../components/molecules/construction";
+import Dropdown from "../components/atom/dropdown";
+import { useState } from "react";
+import CharacterDetailsDisplay from "../components/organisms/characterdetails";
+import { usePlayerDetails } from "../hooks/usePlayerFull";
+import { usePlayerNameFromAlt } from "../hooks/usePlayerNameFromAlt";
+import ErrorPage from "./errorpage";
 
 function PlayerDetails() {
-    const { playerName } = useParams<{ playerName: string }>();
-    if (!playerName) return <NotFound />
+    const { characterName } = useParams<{ characterName: string }>();
+    if (!characterName) return <NotFound></NotFound>
+    const [selectedAlt, setSelectedAlt] = useState(characterName);
 
-    const { loading, error, player } = usePlayer(playerName);
+    if (!characterName) return <ErrorPage error={characterName} />;
+    const { loading: loadingPlayerName, error: errorPlayerName, playerName } = usePlayerNameFromAlt(characterName);
+    console.log('Player name:', playerName);
+    const { loading, error, details } = usePlayerDetails(playerName);
 
-    if (loading) return <Loading />;
-    if (error) return <NotFound />;
+    if (loading || loadingPlayerName) return <Loading />;
+    if (error || errorPlayerName || !playerName || !details) return <NotFound />;
 
-    const useablePlayer = player || {
-        id: -1,
-        name: playerName,
-        server: 'Glass City',
-        role: '',
-        faction: 'Gray',
-        company: ''
-    } as Player;
+    let options = [...(details.keys() || [])];
+    options = options.sort((a, b) => {
+        if (a === 'All') return -1; // 'All' goes first
+        if (b === 'All') return 1;  // 'All' goes first
+        return a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase()); // alphabetical order
+    });
+
+    let charDetails = null;
+    if (details.has(selectedAlt)) {
+        charDetails = details.get(selectedAlt)!;
+    } else {
+        console.log('Details', details);
+    }
 
     return (
-        <div className="flex flex-col max-w-6xl mx-auto mt-4 gap-2s">
-            <PlayerCard player={useablePlayer} />
-            <PlayerSummary player={useablePlayer} />
-            <PlayerWarHistory playerName={playerName} />
-        </div >
+        <div>
+            <div className="mx-auto max-w-6xl pt-6">
+                <Dropdown options={options} value={selectedAlt} onChange={setSelectedAlt} />
+            </div>
+            {charDetails ?
+                <CharacterDetailsDisplay details={charDetails} /> :
+                <div className="text-gray-400">No Data</div>
+            }
+        </div>
     );
 }
 
-export default PlayerDetails
+export default PlayerDetails;

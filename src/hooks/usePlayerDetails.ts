@@ -1,21 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRostersByPlayer } from "./useRostersByPlayer";
-import { createPlayerDetails } from "../utils/player";
-import { usePlayer } from "./usePlayer";
-import { useLeaderboardsByPlayer } from "./useLeaderboardsByPlayer";
+import { createCharacterDetails } from "../utils/player";
+import { useCharacter } from "./useCharacter";
+import { useLeaderboardsByCharacters } from "./useLeaderboardsByCharacter";
 import { useWarsById } from "./useWarsById";
 
-export function usePlayerDetails(player: string) {
+export function usePlayerDetails(playerName: string) {
     const [error, setError] = useState<any>(null);
 
-    const pHook = usePlayer(player);
-    const rHook = useRostersByPlayer(player);
-    const lbHook = useLeaderboardsByPlayer(player);
+    const pHook = useCharacter(playerName);
+    const rHook = useRostersByPlayer(playerName);
+    const lbHook = useLeaderboardsByCharacters([playerName]);
     const warIds = useMemo(() => lbHook.leaderboard.map(v => v.warid), [lbHook.leaderboard]);
     const wHook = useWarsById(warIds);
     const loading = wHook.loading || rHook.loading || pHook.loading || lbHook.loading;
 
-    const playerDetails = createPlayerDetails(pHook.player, { entries: lbHook.leaderboard }, rHook.rosters, wHook.wars);
+    const playerDetails = createCharacterDetails(lbHook.leaderboard, rHook.rosters, wHook.wars);
     useEffect(() => {
         setError(wHook.error || rHook.error || pHook.error || lbHook.error);
     }, [wHook.error, rHook.error, pHook.error, lbHook.error]);

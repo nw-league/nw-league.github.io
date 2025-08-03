@@ -18,7 +18,7 @@ export function normalize(toNormalize: LeaderboardEntry[], wars: War[]): StatTot
         if (!war) continue;
 
         const normalizeFactor = kThirtyMinutesInSeconds / war.duration;
-        name = entry.player;
+        name = entry.character;
         score += entry.score * normalizeFactor;
         kills += entry.kills * normalizeFactor;
         deaths += entry.deaths * normalizeFactor;

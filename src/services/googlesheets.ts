@@ -14,17 +14,22 @@ export async function fetchTableFromGoogleSheets(
     sheetName: string,
     query: string
 ): Promise<DataType[][]> {
-    const encodedQuery = encodeURI(query);
-    const fullurl = kBaseUrl
-        .replace(kSheetId, sheetId)
-        .replace(kSheetName, sheetName)
-        .replace(kQuery, encodedQuery);
-    const response = await fetch(fullurl);
-    const text = await response.text();
-    const json = JSON.parse(text.substring(47).slice(0, -2));
-    const rows: DataType[][] = json.table.rows.map((row: any) =>
-        row.c.map((cell: any) => cell?.v ?? null)
-    );
-
-    return rows;
+    try {
+        const encodedQuery = encodeURI(query);
+        const fullurl = kBaseUrl
+            .replace(kSheetId, sheetId)
+            .replace(kSheetName, sheetName)
+            .replace(kQuery, encodedQuery);
+        const response = await fetch(fullurl);
+        const text = await response.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const rows: DataType[][] = json.table.rows.map((row: any) =>
+            row.c.map((cell: any) => cell?.v ?? null)
+        );
+        console.log(rows);
+        return rows;
+    } catch (err) {
+        console.log('problem fetching');
+        return [];
+    }
 }

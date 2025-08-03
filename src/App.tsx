@@ -9,10 +9,10 @@ import Players from './pages/players';
 import NotFound from './pages/notfound';
 import Home from './pages/home';
 import CompanyDetail from './pages/company-detail';
-import PlayerDetails from './pages/playerdetails';
 import Feedback from './pages/feedback';
 import Rankings from './pages/rankings';
 import Inaccuracy from './pages/inaccuracy';
+import PlayerDetails from './pages/playerdetails';
 
 const App: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/players" element={<Players />} />
-            <Route path="/players/:playerName" element={<PlayerDetails />} />
+            <Route path="/players/:characterName" element={<PlayerDetails />} />
             <Route path="/companies" element={<Companies />} />
             <Route path="/companies/:companyName" element={<CompanyDetail />} />
             <Route path="/wars" element={<Wars />} />

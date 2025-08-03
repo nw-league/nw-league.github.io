@@ -10,9 +10,14 @@ export function useWarsById(withIds: number[]) {
     const warKey = useMemo(() => [...withIds].sort((a, b) => a - b).join(','), [withIds]);
     useEffect(() => {
         let cancelled = false;
+        //console.log('userWarsById useEffect triggered');
         async function fetchAll() {
             try {
                 setLoading(true);
+                if (withIds.length === 0) {
+                    setWars([]);
+                    return;
+                }
                 const query: QueryParameter[] = [];
                 for (const wid of withIds) {
                     query.push({ column: "A", fn: Qop.Eq, value: wid });

@@ -1,7 +1,7 @@
 import type { Faction } from "./faction";
 import type { Role } from "./role";
 
-export interface Player {
+export interface Character {
     id: number,
     name: string;
     server: string;

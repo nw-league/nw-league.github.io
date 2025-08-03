@@ -9,6 +9,7 @@ import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
 export async function getRosters(params: QueryParameter[]): Promise<Map<number, Map<string, Roster>>> {
     const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F', 'G'], params);
     let data: DataType[][] = [];
+
     try {
         data = await fetchTableFromGoogleSheets(kSheetId, 'rosters', query);
     } catch (err) {

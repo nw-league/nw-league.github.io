@@ -1,13 +1,13 @@
 import { constructQuery } from "../utils/querybuilder";
 import { Qop, type Ordering, type QueryParameter } from "../types/queryparameter";
 import { fetchTableFromGoogleSheets, type DataType } from "./googlesheets";
-import type { Player } from "../types/player";
+import type { Character } from "../types/character";
 import type { Role } from "../types/role";
 import type { Faction } from "../types/faction";
 
 const kPlayerDbSheetId: string = '1Zpmwiu2M3AHdPVwaZ8A-nIPN5eKGclLSfnLl_Xn10PA';
 
-export async function getPlayer(playerName: string): Promise<Player | null> {
+export async function getPlayer(playerName: string): Promise<Character | null> {
     const params = [{ column: 'B', fn: Qop.Eq, value: playerName }];
     const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F'], params);
     let data: DataType[][] = [];
@@ -31,7 +31,7 @@ export async function getPlayer(playerName: string): Promise<Player | null> {
     return null;
 }
 
-export async function getPlayers(params?: QueryParameter[], order?: Ordering, limit?: number): Promise<Player[]> {
+export async function getPlayers(params?: QueryParameter[], order?: Ordering, limit?: number): Promise<Character[]> {
     const query = constructQuery(['A', 'B', 'C', 'D', 'E', 'F'], params, order, limit);
     const data = await fetchTableFromGoogleSheets(kPlayerDbSheetId, 'players', query);
 

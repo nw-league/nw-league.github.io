@@ -1,24 +1,21 @@
 import { Link } from "react-router-dom";
-import NotFound from "../../pages/notfound";
-import type { PlayerDetailsEntry } from "../../types/leaderboard";
+import type { CharacterDetailsEntry } from "../../types/leaderboard";
 import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import NumberCell from "../atom/numbercell";
-import Loading from "../atom/loading";
 import StatsTable from "../atom/statstble";
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
-import { usePlayerDetails } from "../../hooks/usePlayerDetails";
+import { formatSeconds } from "../../utils/time";
 
 
-export interface PlayerWarHistoryProps {
-    playerName: string;
+export interface CharacterWarHistoryProps {
+    history: CharacterDetailsEntry[];
 }
-function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
+function CharacterWarHistory({ history }: CharacterWarHistoryProps) {
     const sort = [{ id: "date", desc: true }];
 
 
-    const { loading, details } = usePlayerDetails(playerName);
-    const columns = useMemo<ColumnDef<PlayerDetailsEntry>[]>(
+    const columns = useMemo<ColumnDef<CharacterDetailsEntry>[]>(
         () => [
             {
                 accessorKey: "date",
@@ -48,6 +45,13 @@ function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
                     <div className="flex justify-center items-center">
                         {info.getValue<boolean>() ? <CheckCircleIcon weight="bold" className="text-green-500" /> : <XCircleIcon weight="bold" className="text-red-500" />}
                     </div>
+                ),
+            },
+            {
+                accessorKey: "duration",
+                header: "Duration",
+                cell: info => (
+                    <div className="text-right">{formatSeconds(info.getValue<number>())}</div>
                 ),
             },
             {
@@ -108,16 +112,13 @@ function PlayerWarHistory({ playerName }: PlayerWarHistoryProps) {
         []
     );
 
-    //if (error) return <ErrorPage error={error} />
-    if (loading) return <span className="text-white" ><Loading /></span>
-    if (!details) return <NotFound />
 
     return (
         <div className="bg-gray-700">
             <h1 className="text-white font-semibold p-2">War History</h1>
-            {details.stats.length > 0 ? (< StatsTable columns={columns} data={details.stats} sort={sort} />) : (<div className='text-gray-500 p-2'>No data</div>)}
+            {history.length > 0 ? (< StatsTable columns={columns} data={history} sort={sort} />) : (<div className='text-gray-500 p-2'>No data</div>)}
         </div>
     );
 }
 
-export default PlayerWarHistory
+export default CharacterWarHistory

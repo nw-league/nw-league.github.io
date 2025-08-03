@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { getPlayers } from "../services/playerservice";
 import { Qop } from "../types/queryparameter";
-import type { Player } from "../types/player";
+import type { Character } from "../types/character";
 
 export function useMembers(company: string) {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<any>(null);
-    const [members, setMemebrs] = useState<Player[]>([]);
+    const [members, setMemebrs] = useState<Character[]>([]);
 
     useEffect(() => {
         let cancelled = false;

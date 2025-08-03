@@ -54,7 +54,7 @@ export async function getLeaderboard(params: QueryParameter[]): Promise<Leaderbo
     const entries: LeaderboardEntry[] = data.map((row: any[]) => ({
         warid: row[1] as number,
         role: '' as Role,
-        player: row[2] as string,
+        character: row[2] as string,
         score: row[3] as number,
         kills: row[4] as number,
         deaths: row[5] as number,

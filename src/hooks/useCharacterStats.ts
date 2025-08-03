@@ -5,7 +5,7 @@ import { normalize, summarize } from "../utils/leaderboard";
 import { getLeaderboard } from "../services/leaderboardservice";
 import { getWars } from "../services/wardbservice";
 
-export function usePlayerStats(playerName: string) {
+export function useCharacterStats(playerName: string) {
     const [summary, setSummary] = useState<StatTotals | null>(null);
     const [averages, setAverages] = useState<StatTotals | null>(null);
     const [loading, setLoading] = useState(true);
@@ -22,11 +22,6 @@ export function usePlayerStats(playerName: string) {
 
                 const wqp = lb?.entries.map(v => ({ column: 'A', fn: Qop.Eq, value: v.warid })) || [];
                 const w = await getWars([...wqp, { column: 'N', fn: Qop.Neq, value: true }]);
-                // if (!lb) {
-                //     setSummary(null);
-                //     setAverages(null);
-                //     return;
-                // }
 
                 const s = summarize(lb?.entries.filter(v => w.findIndex(w => w.id === v.warid) >= 0) || []);
 

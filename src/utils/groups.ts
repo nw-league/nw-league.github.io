@@ -20,7 +20,7 @@ export function getGroupDetails(leaderboard: Leaderboard, rosters: Map<string, R
 
             for (const entry of leaderboard.entries) {
                 for (const player of players) {
-                    if (player.name === entry.player) {
+                    if (player.name === entry.character) {
                         entry.role = player.role;
                         groupPerformance.stats.push({ ...entry, role: player.role });
                     }

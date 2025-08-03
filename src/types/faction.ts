@@ -1,1 +1,1 @@
-export type Faction = 'Marauder' | 'Syndicate' | 'Covenant' | 'Gray';
+export type Faction = 'Marauder' | 'Syndicate' | 'Covenant' | 'Gray' | 'Many';

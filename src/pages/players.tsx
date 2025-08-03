@@ -1,11 +1,11 @@
 import Loading from "../components/atom/loading";
 import PlayerListCard from "../components/atom/playerlistcard";
 import Construction from "../components/molecules/construction";
-import { usePlayers } from "../hooks/usePlayers";
+import { useCharacters } from "../hooks/useCharacters";
 import { useState } from "react";
 
 const Players: React.FC = () => {
-    const { loading, error, players } = usePlayers();
+    const { loading, error, players } = useCharacters();
     const [search, setSearch] = useState("");
 
     if (loading) return <Loading></Loading>

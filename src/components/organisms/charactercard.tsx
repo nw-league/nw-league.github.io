@@ -1,15 +1,14 @@
 import type { JSX } from "react";
 import ProfilePicture from "../atom/profilepicture";
-import type { Player } from "../../types/player";
+import type { Character } from "../../types/character";
 import { factionBgPrimary } from "../../utils/factions";
 
 
 export interface PlayerCardProps {
-    player: Player
+    player: Character
 }
-function PlayerCard({ player }: PlayerCardProps): JSX.Element {
+function CharacterCard({ player }: PlayerCardProps): JSX.Element {
     let color = factionBgPrimary(player.faction)
-
 
     return (
         <div className="flex flex-row">
@@ -32,4 +31,4 @@ function PlayerCard({ player }: PlayerCardProps): JSX.Element {
     );
 }
 
-export default PlayerCard;
+export default CharacterCard;
