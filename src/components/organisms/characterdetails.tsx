@@ -9,7 +9,7 @@ interface CharacterDetailsProps {
 }
 function CharacterDetailsDisplay({ details }: CharacterDetailsProps): JSX.Element {
     return (
-        <div className="flex flex-col max-w-6xl mx-auto mt-4 gap-2s">
+        <div className="flex flex-col max-w-6xl mx-auto gap-2s">
             <CharacterCard player={details.character} />
             <CharacterSummary character={details.character} summary={details.totals} averages={details.normalized} />
             <CharacterWarHistory history={details.history} />

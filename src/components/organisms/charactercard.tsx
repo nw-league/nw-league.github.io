@@ -12,7 +12,7 @@ function CharacterCard({ player }: PlayerCardProps): JSX.Element {
 
     return (
         <div className="flex flex-row">
-            <div className={`${color} rounded-tl-lg p-4`}></div>
+            <div className={`${color} p-4`}></div>
             <div className={`flex items-center bg-gray-700 rounded-tr-lg p-2 gap-2 w-full`}>
                 <ProfilePicture pictureUrl="https://dqzvgunkova5o.cloudfront.net/statics/2025-06-20/images/NW-bug.svg" size={32} />
                 <div className="flex flex-col">

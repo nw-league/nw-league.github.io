@@ -36,7 +36,10 @@ function PlayerDetails() {
     return (
         <div>
             <div className="mx-auto max-w-6xl pt-6">
-                <Dropdown options={options} value={selectedAlt} onChange={setSelectedAlt} />
+                <div className="inline-flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-t-lg">
+                    <div className="text-white font-bold">Alt</div>
+                    <Dropdown options={options} value={selectedAlt} onChange={setSelectedAlt} />
+                </div>
             </div>
             {charDetails ?
                 <CharacterDetailsDisplay details={charDetails} /> :
