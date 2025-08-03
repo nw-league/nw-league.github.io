@@ -10,13 +10,12 @@ import { usePlayerNameFromAlt } from "../hooks/usePlayerNameFromAlt";
 import ErrorPage from "./errorpage";
 
 function PlayerDetails() {
-    const { characterName } = useParams<{ characterName: string }>();
+    const { characterName, mode } = useParams<{ characterName: string, mode?: string }>();
     if (!characterName) return <NotFound></NotFound>
-    const [selectedAlt, setSelectedAlt] = useState(characterName);
+    const [selectedAlt, setSelectedAlt] = useState(mode?.toLocaleLowerCase() === 'all' ? 'All' : characterName);
 
     if (!characterName) return <ErrorPage error={characterName} />;
     const { loading: loadingPlayerName, error: errorPlayerName, playerName } = usePlayerNameFromAlt(characterName);
-    console.log('Player name:', playerName);
     const { loading, error, details } = usePlayerDetails(playerName);
 
     if (loading || loadingPlayerName) return <Loading />;
@@ -32,8 +31,6 @@ function PlayerDetails() {
     let charDetails = null;
     if (details.has(selectedAlt)) {
         charDetails = details.get(selectedAlt)!;
-    } else {
-        console.log('Details', details);
     }
 
     return (

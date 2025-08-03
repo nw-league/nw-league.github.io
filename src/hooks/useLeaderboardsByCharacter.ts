@@ -11,7 +11,6 @@ export function useLeaderboardsByCharacters(characters: string[]) {
 
     useEffect(() => {
         let cancelled = false;
-        // console.log('userLeaderboardsByCharacters useEffect triggered');
         async function fetchAll() {
             try {
                 setLoading(true);

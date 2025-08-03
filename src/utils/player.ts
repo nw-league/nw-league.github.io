@@ -60,7 +60,6 @@ export function createPlayerDetailsAndSummary(
     const details = new Map<string, CharacterDetails>();
 
     if (characters.length === 0) {
-        console.log('characters is length 0');
         return details;
     }
 

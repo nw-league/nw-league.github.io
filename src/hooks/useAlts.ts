@@ -12,7 +12,6 @@ export function useAlts(owner: string) {
 
     useEffect(() => {
         let cancelled = false;
-        // console.log('useAlts useEffect triggered');
         async function fetchData() {
 
             try {

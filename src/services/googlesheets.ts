@@ -26,10 +26,8 @@ export async function fetchTableFromGoogleSheets(
         const rows: DataType[][] = json.table.rows.map((row: any) =>
             row.c.map((cell: any) => cell?.v ?? null)
         );
-        console.log(rows);
         return rows;
     } catch (err) {
-        console.log('problem fetching');
         return [];
     }
 }

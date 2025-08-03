@@ -10,7 +10,6 @@ export function useWarsById(withIds: number[]) {
     const warKey = useMemo(() => [...withIds].sort((a, b) => a - b).join(','), [withIds]);
     useEffect(() => {
         let cancelled = false;
-        //console.log('userWarsById useEffect triggered');
         async function fetchAll() {
             try {
                 setLoading(true);
