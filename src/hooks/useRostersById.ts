@@ -15,14 +15,12 @@ export function useRosters(warIds: number[]) {
         async function fetchAll() {
             try {
                 setLoading(true);
-                if (warIds.length === 0) {
-                    setRosters(new Map());
-                } else {
-                    const qp = warIds.map(v => ({ column: "B", fn: Qop.Eq, value: v }));
-                    const r = await getRosters(qp);
-                    if (cancelled) return;
-                    setRosters(r);
-                }
+
+                const qp = warIds.map(v => ({ column: "B", fn: Qop.Eq, value: v }));
+                const r = await getRosters(qp);
+                if (cancelled) return;
+                setRosters(r);
+
             } catch (err) {
                 if (!cancelled) setError(err);
             } finally {

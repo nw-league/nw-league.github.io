@@ -5,10 +5,8 @@ export function usePlayerNameFromAlt(altName: string) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null);
     const [playerName, setPlayerName] = useState<string>(altName);
-    // console.log('usePlayerNameFromAlt', altName)
     useEffect(() => {
         let cancelled = false;
-        // console.log('usePlayerNameFromAlt use effect triggered', altName)
         async function fetchAll() {
             try {
                 if (!altName) {

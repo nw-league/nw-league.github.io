@@ -37,7 +37,7 @@ const LeaderboardDisplay: React.FC<LeaderboardProps> = ({ leaderboard, companies
     const columns = React.useMemo<ColumnDef<LeaderboardEntry>[]>(
         () => [
             {
-                accessorKey: 'player',
+                accessorKey: 'character',
                 header: () => (<LabelIcon text={"Player"} icon={<UserListIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-left hover:underline">

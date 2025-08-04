@@ -22,7 +22,7 @@ const GroupDisplay: React.FC<GroupDisplayProps> = ({ groupId, group }) => {
     const columns = React.useMemo<ColumnDef<LeaderboardEntry>[]>(
         () => [
             {
-                accessorKey: 'player',
+                accessorKey: 'character',
                 header: () => (<LabelIcon text={"Player"} icon={<UsersIcon weight="fill" />} />),
                 cell: info => (
                     <div className="text-left hover:underline">

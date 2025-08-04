@@ -13,10 +13,7 @@ export function useWarsById(withIds: number[]) {
         async function fetchAll() {
             try {
                 setLoading(true);
-                if (withIds.length === 0) {
-                    setWars([]);
-                    return;
-                }
+
                 const query: QueryParameter[] = [];
                 for (const wid of withIds) {
                     query.push({ column: "A", fn: Qop.Eq, value: wid });
@@ -25,6 +22,7 @@ export function useWarsById(withIds: number[]) {
                 const w = (await getWars(query)).sort((a, b) => b.date.getTime() - a.date.getTime());
                 if (cancelled) return;
                 setWars(w)
+
             } catch (err) {
                 if (!cancelled) setError(err);
             } finally {
