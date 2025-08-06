@@ -7,7 +7,6 @@ import { getGroupDetails, getGroupSummaries } from "../utils/groups";
 import { type GroupKey } from "../types/roster";
 import type { GroupPerformance } from "../types/leaderboard";
 import type { Company } from "../types/company";
-import { summarize } from "../utils/leaderboard";
 
 export function useWarData(warId: number) {
     const [error, setError] = useState<any>(null);
@@ -39,7 +38,7 @@ export function useWarData(warId: number) {
         setError(lbHook.error || wHook.error || rHook.error || cHook.error);
     }, [lbHook.error, wHook.error, rHook.error, cHook.error]);
 
-    console.log(lbHook.leaderboard);
+
 
     return {
         loading,
